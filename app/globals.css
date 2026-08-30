@@ -28,9 +28,9 @@
 }
 
 * { box-sizing: border-box; }
-html { min-width: 393px; background: #dedede; scroll-behavior: smooth; scrollbar-width: none; }
+html { min-width: 393px; max-width: 100%; overflow-x: hidden; overflow-x: clip; overscroll-behavior-x: none; background: #dedede; scroll-behavior: smooth; scrollbar-width: none; }
 html::-webkit-scrollbar { display: none; }
-body { margin: 0; min-width: 393px; background: #dedede; color: var(--ink); font-family: 'Gilroy', Arial, sans-serif; }
+body { width: 100%; max-width: 100%; margin: 0; min-width: 393px; overflow-x: hidden; overflow-x: clip; overscroll-behavior-x: none; touch-action: pan-y pinch-zoom; background: #dedede; color: var(--ink); font-family: 'Gilroy', Arial, sans-serif; }
 button, input { font: inherit; }
 button { cursor: pointer; }
 img { display: block; max-width: 100%; }
