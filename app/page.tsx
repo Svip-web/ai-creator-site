@@ -585,7 +585,7 @@ export default function Home() {
           <div className="application-hero">
             <div className="application-title"><i className="plaque-text">Оставь</i></div>
             <div className="application-request">ЗАЯВКУ</div>
-            <div className="application-copy"><img src="/assets/images/application-copy-shape.svg" alt="" /><span className="application-copy-icon" aria-hidden="true"><i /><i /><i /></span><p><b>Освой востребованную профессию AI-креатора</b>, создавай фото и видео для брендов и работай онлайн из любой точки мира.</p></div>
+            <div className="application-copy"><img src="/assets/images/application-copy-shape.svg" alt="" /><span className="hero-corner" aria-hidden="true" /><p><b>Освой востребованную профессию AI-креатора</b>, создавай фото и видео для брендов и работай онлайн из любой точки мира.</p></div>
             <div className="application-thumb application-thumb--one"><img src="/assets/images/application-thumb-1.webp" alt="" loading="lazy" decoding="async" /></div>
             <div className="application-thumb application-thumb--two"><img src="/assets/images/application-thumb-2.webp" alt="" loading="lazy" decoding="async" /></div>
             <div className="application-woman"><img src="/assets/images/application-woman.webp" alt="Женя Коваленко" loading="lazy" decoding="async" /></div>
