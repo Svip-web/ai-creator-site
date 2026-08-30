@@ -111,7 +111,7 @@ function ServiceCard({ item, index }: { item: (typeof services)[number]; index: 
         setTouchStart(null);
       }}
     >
-      <div className="service-card-media">{item.image && <img src={item.image} alt="" />}</div>
+      <div className="service-card-media">{item.image && <img src={item.image} alt="" loading="lazy" decoding="async" />}</div>
       <span className="service-card-title">{item.title}</span>
       <b className="service-card-price">{item.price}</b>
       <div className="service-card-arrows">
@@ -139,7 +139,7 @@ function ReviewMediaCarousel({ image, label }: { image?: string; label: string }
         setTouchStart(null);
       }}
     >
-      <div className="review-media">{image && <img src={image} alt="" />}</div>
+      <div className="review-media">{image && <img src={image} alt="" loading="lazy" decoding="async" />}</div>
       <div className="review-navigation">
         <button type="button" className="service-arrow service-arrow--prev service-arrow--outline" onClick={changeSlide} aria-label="Предыдущий слайд" />
         <button type="button" className="service-arrow service-arrow--next" onClick={changeSlide} aria-label="Следующий слайд" />
@@ -297,7 +297,7 @@ export default function Home() {
           <p>Создавай фото и видео для брендов с помощью нейросетей и <b>собери портфолио из 10+ проектов за 6–8 недель.</b></p>
         </div>
         <div className="hero-art-window" aria-hidden="true">
-          <img className="hero-art" src="/assets/images/hero-composite.png" alt="" />
+          <img className="hero-art" src="/assets/images/hero-composite.webp" alt="" fetchPriority="high" />
         </div>
         <button type="button" className="hero-button" onClick={() => setDialogOpen(true)}>
           <span><CourseLabel /></span>
@@ -309,8 +309,8 @@ export default function Home() {
         <div className="bonus-badge">Твой бонус <img className="bonus-badge-icon" src="/assets/images/bonus-badge.svg" alt="" /></div>
         <h2>Вводных урока<br />об AI-креаторстве</h2>
         <div className="bonus-lessons">
-          <article><img src="/assets/images/lesson-1.png" alt="Вводный урок" /><div><span>Урок 1</span><h3>Кто такие<br />AI-креаторы</h3></div></article>
-          <article><img src="/assets/images/lesson-2.png" alt="Вводный урок" /><div><span>Урок 2</span><h3>Кто и за что<br />платит AI-креаторам</h3></div></article>
+          <article><img src="/assets/images/lesson-1.webp" alt="Вводный урок" loading="lazy" decoding="async" /><div><span>Урок 1</span><h3>Кто такие<br />AI-креаторы</h3></div></article>
+          <article><img src="/assets/images/lesson-2.webp" alt="Вводный урок" loading="lazy" decoding="async" /><div><span>Урок 2</span><h3>Кто и за что<br />платит AI-креаторам</h3></div></article>
         </div>
         <p>Разберись, как устроена<br />профессия и на чём<br />зарабатывают AI-креаторы.</p>
         <PrimaryButton onClick={() => setDialogOpen(true)}><CourseLabel /></PrimaryButton>
@@ -325,9 +325,9 @@ export default function Home() {
           <h3>AI-креатор</h3>
           <p>это специалист, <b>который создаёт изображения, видео, рекламу</b> и контент для брендов с помощью нейросетей.</p>
           <div className="profession-card-media" aria-hidden="true">
-            <img className="profession-card-visual profession-card-visual--1" src="/assets/images/profession-visual-1.png" alt="" />
-            <img className="profession-card-visual profession-card-visual--2" src="/assets/images/profession-visual-2.png" alt="" />
-            <img className="profession-card-visual profession-card-visual--3" src="/assets/images/profession-visual-3.png" alt="" />
+            <img className="profession-card-visual profession-card-visual--1" src="/assets/images/profession-visual-1.webp" alt="" loading="lazy" decoding="async" />
+            <img className="profession-card-visual profession-card-visual--2" src="/assets/images/profession-visual-2.webp" alt="" loading="lazy" decoding="async" />
+            <img className="profession-card-visual profession-card-visual--3" src="/assets/images/profession-visual-3.webp" alt="" loading="lazy" decoding="async" />
           </div>
           <p>От AI-фотосессий и карточек товаров до Reels и рекламных роликов — <b>везде, где бренду нужен визуальный контент,</b> работает AI-креатор.</p>
         </article>
@@ -349,10 +349,10 @@ export default function Home() {
         </article>
         <article className="profession-card profession-card--course">
           <div className="profession-course-visual" aria-hidden="true">
-            <img className="profession-course-image" src="/assets/images/creator-collage.png" alt="" />
-            <span className="profession-course-layer profession-course-layer--fairy"><img src="/assets/images/creator-collage.png" alt="" /></span>
-            <span className="profession-course-layer profession-course-layer--scheme"><img src="/assets/images/creator-collage.png" alt="" /></span>
-            <span className="profession-course-layer profession-course-layer--bag"><img src="/assets/images/creator-collage.png" alt="" /></span>
+            <img className="profession-course-image" src="/assets/images/creator-collage.webp" alt="" loading="lazy" decoding="async" />
+            <span className="profession-course-layer profession-course-layer--fairy"><img src="/assets/images/creator-collage.webp" alt="" loading="lazy" decoding="async" /></span>
+            <span className="profession-course-layer profession-course-layer--scheme"><img src="/assets/images/creator-collage.webp" alt="" loading="lazy" decoding="async" /></span>
+            <span className="profession-course-layer profession-course-layer--bag"><img src="/assets/images/creator-collage.webp" alt="" loading="lazy" decoding="async" /></span>
           </div>
           <div className="profession-course-copy">
             <p className="profession-course-highlight"><b>На нашем курсе ты <span>научишься создавать контент,</span> который бренды готовы покупать.</b></p>
@@ -373,10 +373,10 @@ export default function Home() {
       <section className="audience section-pad">
         <div className="audience-heading"><h2>Для кого курс<br /><span><i className="plaque-text">MUST-HAVE</i></span></h2><b>В 2026 ГОДУ</b></div>
         <div className="audience-cards">
-          <article><div className="audience-card-media"><span /><img src="/assets/images/audience-figma-1.png" alt="" /></div><div className="audience-card-copy"><h3>Новичкам в нейросетях</h3><p>Освой востребованную онлайн-профессию с нуля — <b>без опыта в дизайне и технических знаний.</b></p></div></article>
-          <article><div className="audience-card-media"><span /><img src="/assets/images/audience-figma-2.png" alt="" /></div><div className="audience-card-copy"><h3>Женщинам в эмиграции</h3><p>Создавай контент для брендов и <b>зарабатывай удалённо</b> без знания местного языка и подтверждения диплома.</p></div></article>
-          <article><div className="audience-card-media"><span /><img src="/assets/images/audience-figma-3.png" alt="" /></div><div className="audience-card-copy"><h3>Мамам в декрете</h3><p>Обучайся в удобном темпе и развивай новый источник дохода, <b>совмещая его с семьёй и детьми.</b></p></div></article>
-          <article><div className="audience-card-media"><span /><img src="/assets/images/audience-figma-4.png" alt="" /></div><div className="audience-card-copy"><h3>Блогерам, фрилансерам и smm-специалистам</h3><p>Усиль свои проекты с помощью AI, <b>создавай контент быстрее</b> и предлагай клиентам новые услуги.</p></div></article>
+          <article><div className="audience-card-media"><span /><img src="/assets/images/audience-figma-1.webp" alt="" loading="lazy" decoding="async" /></div><div className="audience-card-copy"><h3>Новичкам в нейросетях</h3><p>Освой востребованную онлайн-профессию с нуля — <b>без опыта в дизайне и технических знаний.</b></p></div></article>
+          <article><div className="audience-card-media"><span /><img src="/assets/images/audience-figma-2.webp" alt="" loading="lazy" decoding="async" /></div><div className="audience-card-copy"><h3>Женщинам в эмиграции</h3><p>Создавай контент для брендов и <b>зарабатывай удалённо</b> без знания местного языка и подтверждения диплома.</p></div></article>
+          <article><div className="audience-card-media"><span /><img src="/assets/images/audience-figma-3.webp" alt="" loading="lazy" decoding="async" /></div><div className="audience-card-copy"><h3>Мамам в декрете</h3><p>Обучайся в удобном темпе и развивай новый источник дохода, <b>совмещая его с семьёй и детьми.</b></p></div></article>
+          <article><div className="audience-card-media"><span /><img src="/assets/images/audience-figma-4.webp" alt="" loading="lazy" decoding="async" /></div><div className="audience-card-copy"><h3>Блогерам, фрилансерам и smm-специалистам</h3><p>Усиль свои проекты с помощью AI, <b>создавай контент быстрее</b> и предлагай клиентам новые услуги.</p></div></article>
         </div>
       </section>
 
@@ -404,18 +404,18 @@ export default function Home() {
                     <h3 className="clients-title">Клиентов можно находить</h3>
                     <div className="client-sources">
                       <div className="platform-row">
-                        <div><img src="/assets/images/platform-instagram.png" alt="Instagram" /></div>
-                        <div><img src="/assets/images/platform-upwork.png" alt="Upwork" /></div>
-                        <div><img src="/assets/images/platform-linkedin.png" alt="LinkedIn" /></div>
+                        <div><img src="/assets/images/platform-instagram.webp" alt="Instagram" loading="lazy" decoding="async" /></div>
+                        <div><img src="/assets/images/platform-upwork.webp" alt="Upwork" loading="lazy" decoding="async" /></div>
+                        <div><img src="/assets/images/platform-linkedin.webp" alt="LinkedIn" loading="lazy" decoding="async" /></div>
                       </div>
                       <div className="client-source-row">
                         <article><span><img src="/assets/images/bulb-icon.svg" alt="" /></span><p>Прямые обращения к брендам</p></article>
-                        <article><span><img src="/assets/images/agency-icon.png" alt="" /></span><p>Заказы от агентства после прохождения курса</p></article>
+                        <article><span><img src="/assets/images/agency-icon.webp" alt="" loading="lazy" decoding="async" /></span><p>Заказы от агентства после прохождения курса</p></article>
                       </div>
                     </div>
                   </div>
                   <div className="course-promo">
-                    <div className="course-promo-image"><img src="/assets/images/course-promo.png" alt="" /></div>
+                    <div className="course-promo-image"><img src="/assets/images/course-promo.webp" alt="" loading="lazy" decoding="async" /></div>
                     <div className="course-promo-arrows">
                       <button type="button" className="service-arrow service-arrow--prev service-arrow--outline" aria-label="Предыдущий слайд" />
                       <button type="button" className="service-arrow service-arrow--next" aria-label="Следующий слайд" />
@@ -437,7 +437,7 @@ export default function Home() {
         <div className="expert-content">
           <div className="expert-photo">
             <span className="expert-name-bg" aria-hidden="true" />
-            <img src="/assets/images/expert-figma.png" alt="Женя Коваленко" />
+            <img src="/assets/images/expert-figma.webp" alt="Женя Коваленко" loading="lazy" decoding="async" />
             <div className="expert-name"><i aria-hidden="true" /><span>Женя Коваленко</span></div>
           </div>
           <div className="expert-facts">
@@ -481,7 +481,7 @@ export default function Home() {
             <div className="skills-main">
               <div className="skills-profile">
                 <div className="skills-profile-row">
-                  <div className="skills-avatar"><img src="/assets/images/skills-profile.png" alt="" /><img className="skills-status" src="/assets/images/skills-status.svg" alt="" /></div>
+                  <div className="skills-avatar"><img src="/assets/images/skills-profile.webp" alt="" loading="lazy" decoding="async" /><img className="skills-status" src="/assets/images/skills-status.svg" alt="" /></div>
                   <h3>AI-креатор для<br />брендов</h3>
                 </div>
                 <img className="skills-divider" src="/assets/images/skills-divider.svg" alt="" />
@@ -509,7 +509,7 @@ export default function Home() {
       <section className="process">
         <div className="process-heading"><h2>Как проходит</h2><strong><i className="plaque-text">обучение</i></strong></div>
         <div className="process-card">
-          <div className="process-video"><img src="/assets/images/process-video-figma.png" alt="" /></div>
+          <div className="process-video"><img src="/assets/images/process-video-figma.webp" alt="" loading="lazy" decoding="async" /></div>
           <div className="process-steps">
             <div className="step-tabs" role="tablist" aria-label="Этапы обучения">{steps.map((step, index) => <button key={step.number} type="button" role="tab" aria-selected={activeStep === index} aria-controls="process-details" onClick={() => setActiveStep(index)}>Шаг {index + 1}</button>)}</div>
             <div className="process-details" role="tabpanel" id="process-details" tabIndex={0}><h3>{steps[activeStep].title}</h3><p><EmphasizedText text={steps[activeStep].text} emphasis={steps[activeStep].emphasis} /></p></div>
@@ -525,7 +525,7 @@ export default function Home() {
           <div className="reviews-heading"><h2>Что говорят</h2><strong><i className="plaque-text">выпускницы,</i></strong><p>которые уже зарабатывают<br />на AI-контенте?</p></div>
           <div className="reviews-content">
             <ReviewMediaCarousel label="Видеоотзыв" />
-            <ReviewMediaCarousel image="/assets/images/review-figma.png" label="Отзыв выпускницы" />
+            <ReviewMediaCarousel image="/assets/images/review-figma.webp" label="Отзыв выпускницы" />
           </div>
         </div>
       </section>
@@ -546,7 +546,7 @@ export default function Home() {
               </div>
               <p>После успешного завершения обучения ты <b>получишь сертификат, подтверждающий прохождение курса и полученные навыки.</b><br />Его можно добавить в портфолио, резюме или профиль LinkedIn.</p>
             </div>
-            <img className="certificate-image" src="/assets/images/certificate-figma.png" alt="Сертификат AI Creator" />
+            <img className="certificate-image" src="/assets/images/certificate-figma.webp" alt="Сертификат AI Creator" loading="lazy" decoding="async" />
           </div>
         </div>
       </section>
@@ -586,17 +586,17 @@ export default function Home() {
             <div className="application-title"><i className="plaque-text">Оставь</i></div>
             <div className="application-request">ЗАЯВКУ</div>
             <div className="application-copy"><img src="/assets/images/application-copy-shape.svg" alt="" /><span className="application-copy-icon" aria-hidden="true"><i /><i /><i /></span><p><b>Освой востребованную профессию AI-креатора</b>, создавай фото и видео для брендов и работай онлайн из любой точки мира.</p></div>
-            <div className="application-thumb application-thumb--one"><img src="/assets/images/application-thumb-1.png" alt="" /></div>
-            <div className="application-thumb application-thumb--two"><img src="/assets/images/application-thumb-2.png" alt="" /></div>
-            <div className="application-woman"><img src="/assets/images/application-woman.png" alt="Женя Коваленко" /></div>
+            <div className="application-thumb application-thumb--one"><img src="/assets/images/application-thumb-1.webp" alt="" loading="lazy" decoding="async" /></div>
+            <div className="application-thumb application-thumb--two"><img src="/assets/images/application-thumb-2.webp" alt="" loading="lazy" decoding="async" /></div>
+            <div className="application-woman"><img src="/assets/images/application-woman.webp" alt="Женя Коваленко" loading="lazy" decoding="async" /></div>
           </div>
           <div className="application-panel">
             <div className="application-panel-inner">
               <div className="application-bonus">
                 <div className="application-bonus-badge"><span>Твой бонус</span><img src="/assets/images/application-gift.svg" alt="" /><i>х2</i></div>
                 <div className="application-lessons">
-                  <figure><span>Урок 1</span><img className="application-laptop-base" src="/assets/images/application-laptop-base.svg" alt="" /><img className="application-laptop-shadow" src="/assets/images/application-laptop-shadow.png" alt="" /><img className="application-laptop" src="/assets/images/application-laptop.png" alt="" /><img className="application-lesson-screen" src="/assets/images/application-lesson-2.png" alt="" /></figure>
-                  <figure><span>Урок 2</span><img className="application-laptop-base" src="/assets/images/application-laptop-base.svg" alt="" /><img className="application-laptop-shadow" src="/assets/images/application-laptop-shadow.png" alt="" /><img className="application-laptop" src="/assets/images/application-laptop.png" alt="" /><img className="application-lesson-screen" src="/assets/images/application-lesson-1.png" alt="" /></figure>
+                  <figure><span>Урок 1</span><img className="application-laptop-base" src="/assets/images/application-laptop-base.svg" alt="" /><img className="application-laptop-shadow" src="/assets/images/application-laptop-shadow.webp" alt="" loading="lazy" decoding="async" /><img className="application-laptop" src="/assets/images/application-laptop.webp" alt="" loading="lazy" decoding="async" /><img className="application-lesson-screen" src="/assets/images/application-lesson-2.webp" alt="" loading="lazy" decoding="async" /></figure>
+                  <figure><span>Урок 2</span><img className="application-laptop-base" src="/assets/images/application-laptop-base.svg" alt="" /><img className="application-laptop-shadow" src="/assets/images/application-laptop-shadow.webp" alt="" loading="lazy" decoding="async" /><img className="application-laptop" src="/assets/images/application-laptop.webp" alt="" loading="lazy" decoding="async" /><img className="application-lesson-screen" src="/assets/images/application-lesson-1.webp" alt="" loading="lazy" decoding="async" /></figure>
                 </div>
                 <div className="application-timer"><div className="application-timer-track"><p>Текущая стоимость действует ещё: <OfferTimer /></p><img src="/assets/images/application-ticker-divider.svg" alt="" /><p>Текущая стоимость действует ещё: <OfferTimer /></p></div></div>
               </div>
@@ -623,7 +623,7 @@ export default function Home() {
         <footer>
           <a className="footer-logo" href="#top"><span><i>AI </i>CREATOR</span><b>by ЖЕНЯ КОВАЛЕНКО</b></a>
           <div className="legal"><LegalLabel href={legalLinks.offer}>публичная оферта</LegalLabel><span>info@luna13.academy</span><LegalLabel href={legalLinks.refunds}>Copyright © 2026. AI CREATOR.</LegalLabel></div>
-          <div className="application-payment-logos"><img src="/assets/images/application-payment-logos.png" alt="Visa, Stripe, Mastercard, Revolut и Wise" /></div>
+          <div className="application-payment-logos"><img src="/assets/images/application-payment-logos.webp" alt="Visa, Stripe, Mastercard, Revolut и Wise" loading="lazy" decoding="async" /></div>
         </footer>
       </section>
       <div className="end-strip"><span>AI CREATOR</span><span>AI CREATOR</span><span>AI CREATOR</span></div>

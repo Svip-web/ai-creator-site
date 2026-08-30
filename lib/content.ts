@@ -109,8 +109,8 @@ export const faq: FaqItem[] = [
 
 export const services: ServiceItem[] = [
   { title: 'AI-визуал', price: 'от 50€' },
-  { title: 'AI-фотосессия', price: '125–150€', image: '/assets/images/service-figma.png' },
-  { title: 'SMM', price: '400–800€', image: '/assets/images/service-figma.png' },
+  { title: 'AI-фотосессия', price: '125–150€', image: '/assets/images/service-figma.webp' },
+  { title: 'SMM', price: '400–800€', image: '/assets/images/service-figma.webp' },
   { title: 'Мультфільми для брендів', price: '400–800€' },
 ];
 
@@ -119,13 +119,13 @@ export const reviews: ReviewItem[] = [
     name: 'Анастасия',
     role: 'Начинающий AI-креатор',
     quote: 'Я пришла без опыта и уже во время обучения собрала первое портфолио. Самое ценное — понятные шаги и ощущение, что у меня действительно получается.',
-    image: '/assets/images/review-chat.png',
+    image: '/assets/images/review-chat.webp',
   },
   {
     name: 'Мария',
     role: 'Контент-менеджер',
     quote: 'Теперь я делаю визуалы в несколько раз быстрее и могу предлагать клиентам новые форматы. Курс дал систему вместо хаотичных попыток.',
-    image: '/assets/images/review-chat.png',
+    image: '/assets/images/review-chat.webp',
   },
 ];
 
