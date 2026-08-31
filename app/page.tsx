@@ -35,10 +35,10 @@ const INTEGRALEAP_CONFIG = {
   ssDomain: 'aipashamik',
   presets: {
     smartsender: {
-      title: 'Регистрация AI Creator — сайт №2',
+      title: 'Реєстрація на веб {{tomorrowDate}} — сайт №2',
       stage: '97482948',
       tag: 'Регистрация',
-      product: 'AI Creator — сайт №2',
+      product: 'Ai-creator',
       type_lead: 'Реєстрація',
       req: 'reg-web',
     },
@@ -167,7 +167,12 @@ function LeadCaptureForm() {
     const instance = intlTelInput(input, {
       initialCountry: 'auto',
       useFullscreenPopup: false,
-      separateDialCode: false,
+      countryOrder: ['ua'],
+      excludeCountries: ['ru', 'by'],
+      separateDialCode: true,
+      nationalMode: true,
+      autoPlaceholder: 'aggressive',
+      formatAsYouType: true,
       geoIpLookup: (success) => {
         void detectCountryByIp().then(success).catch(() => success('ua'));
       },
@@ -175,7 +180,15 @@ function LeadCaptureForm() {
     });
     phoneInstanceRef.current = instance;
 
+    const resetPhoneForCountry = () => {
+      input.value = '';
+      if (hiddenPhoneRef.current) hiddenPhoneRef.current.value = '';
+      setPhoneError('');
+    };
+    input.addEventListener('countrychange', resetPhoneForCountry);
+
     return () => {
+      input.removeEventListener('countrychange', resetPhoneForCountry);
       instance.destroy();
       phoneInstanceRef.current = null;
     };
@@ -197,6 +210,11 @@ function LeadCaptureForm() {
     }
 
     if (hiddenPhone) hiddenPhone.value = phone;
+    const selectedCountry = instance.getSelectedCountryData();
+    const dialPrefix = selectedCountry?.dialCode ? `+${selectedCountry.dialCode}` : '';
+    if (phoneInputRef.current && dialPrefix && phone.startsWith(dialPrefix)) {
+      phoneInputRef.current.value = phone.slice(dialPrefix.length);
+    }
     setPhoneError('');
   };
 
@@ -206,7 +224,7 @@ function LeadCaptureForm() {
         <div className="lead-inputs">
           <label>
             <span className="phone-field">
-              <input ref={phoneInputRef} type="tel" name="phone_intltelinput" autoComplete="tel-national" inputMode="tel" required aria-invalid={Boolean(phoneError)} aria-describedby={phoneError ? phoneErrorId : undefined} aria-label="Номер телефона" placeholder="Номер телефона" onInput={() => setPhoneError('')} />
+              <input ref={phoneInputRef} type="tel" name="phone_intlTelInput" autoComplete="off" inputMode="tel" required aria-invalid={Boolean(phoneError)} aria-describedby={phoneError ? phoneErrorId : undefined} aria-label="Номер телефона" onInput={() => setPhoneError('')} />
             </span>
             <input ref={hiddenPhoneRef} type="hidden" name="phone" />
             {phoneError && <small id={phoneErrorId}>{phoneError}</small>}
