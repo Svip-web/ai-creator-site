@@ -1,15 +1,95 @@
 'use client';
 /* oxlint-disable next/no-img-element */
 
-import { type Dispatch, type ReactNode, type SetStateAction, useEffect, useRef, useState } from 'react';
+import { type Dispatch, type ReactNode, type SetStateAction, type SubmitEvent, useEffect, useId, useRef, useState } from 'react';
+import intlTelInput, { type Iso2, type Iti } from 'intl-tel-input';
+import 'intl-tel-input/styles';
+import { ArrowDownRight, GraduationCap, Handshake, Laptop, Settings, UserPlus } from 'lucide-react';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { advancedProgram, faq, legalLinks, program, reviewScreenshots, services, steps, videoReviews, type VideoReviewItem } from '@/lib/content';
 
-const DEADLINE_KEY = 'ai-creator-offer-deadline';
-const OFFER_DURATION_MS = 4 * 60 * 60 * 1000;
+const DEADLINE_KEY = 'ai-creator-registration-deadline-v2';
+const OFFER_DURATION_MS = ((1 * 60 + 33) * 60 + 2) * 1000;
 const professionTags = ['AI-фото', 'AI-видео', 'Reels', 'Реклама', 'Соцсети'] as const;
 const professionMarqueeTags = [...professionTags, ...professionTags];
 const CAROUSEL_INTERVAL_MS = 3000;
+const marketExampleImages = [
+  '/assets/images/market-example-1.jpg',
+  '/assets/images/market-example-2.jpg',
+  '/assets/images/market-example-3.jpg',
+  '/assets/images/market-example-4.jpg',
+  '/assets/images/market-example-5.jpg',
+  '/assets/images/market-example-6.jpg',
+] as const;
+const processStepImages = [
+  '/assets/images/process-video-figma.webp',
+  '/assets/images/process-step-2.webp?v=2',
+  '/assets/images/process-step-3.webp?v=2',
+  '/assets/images/process-step-4.webp?v=2',
+] as const;
+const INTEGRALEAP_SCRIPT_ID = 'integraleap-sf';
+const INTEGRALEAP_SCRIPT_URL = 'https://client.integraleap.com/js/sf.js';
+const INTEGRALEAP_CONFIG = {
+  url: 'https://mufiksoft.com/shopifyband/amo-panel/forms.php',
+  ssLink: 'https://telegram.me/aicreatorjenny_bot?start=ZGw6MzM4NzU2',
+  ssDomain: 'aipashamik',
+  presets: {
+    smartsender: {
+      title: 'Регистрация AI Creator — сайт №2',
+      stage: '97482948',
+      tag: 'Регистрация',
+      product: 'AI Creator — сайт №2',
+      type_lead: 'Реєстрація',
+      req: 'reg-web',
+    },
+  },
+} as const;
+
+function BrandText({ text }: { text: string }) {
+  return <>{text.split(/(AI|ChatGPT)/gi).map((part, index) => {
+    if (/^ai$/i.test(part)) return <span className="ai-uppercase" key={`${part}-${index}`}>AI</span>;
+    if (/^chatgpt$/i.test(part)) return <span className="chatgpt-case" key={`${part}-${index}`}>ChatGPT</span>;
+    return part;
+  })}</>;
+}
+
+async function detectCountryByIp(): Promise<Iso2> {
+  try {
+    const response = await fetch('https://get.geojs.io/v1/ip/geo.json');
+    if (!response.ok) throw new Error('GeoJS lookup failed');
+    const data = await response.json() as { country_code?: string };
+    const countryCode = data.country_code?.trim().toLowerCase();
+    if (countryCode && /^[a-z]{2}$/.test(countryCode)) return countryCode as Iso2;
+  } catch {
+    // Use the fallback service below.
+  }
+
+  try {
+    const response = await fetch('https://ipapi.co/country_code/');
+    if (!response.ok) throw new Error('ipapi lookup failed');
+    const countryCode = (await response.text()).trim().toLowerCase();
+    if (/^[a-z]{2}$/.test(countryCode)) return countryCode as Iso2;
+  } catch {
+    // Fall back to Ukraine when neither lookup is available.
+  }
+
+  return 'ua';
+}
+
+function useIntegraLeap() {
+  useEffect(() => {
+    const integraLeapWindow = window as Window & { ilfConfig?: typeof INTEGRALEAP_CONFIG };
+    integraLeapWindow.ilfConfig = INTEGRALEAP_CONFIG;
+
+    if (document.getElementById(INTEGRALEAP_SCRIPT_ID) || document.querySelector(`script[src="${INTEGRALEAP_SCRIPT_URL}"]`)) return;
+
+    const script = document.createElement('script');
+    script.id = INTEGRALEAP_SCRIPT_ID;
+    script.src = INTEGRALEAP_SCRIPT_URL;
+    script.async = true;
+    document.head.appendChild(script);
+  }, []);
+}
 const REVEAL_SELECTOR = [
   '.hero-copy', '.hero-level', '.hero-description', '.hero-art-window', '.hero-button',
   '.bonus-badge', '.bonus > h2', '.bonus-lessons article', '.bonus > p', '.bonus .primary-button',
@@ -30,7 +110,7 @@ const REVEAL_SELECTOR = [
 ].join(', ');
 
 function OfferTimer({ dark = false }: { dark?: boolean }) {
-  const [value, setValue] = useState('04:00:00');
+  const [value, setValue] = useState('01:33:02');
 
   useEffect(() => {
     const now = Date.now();
@@ -73,29 +153,89 @@ function OfferTimer({ dark = false }: { dark?: boolean }) {
   return <span className={dark ? 'timer timer--dark' : 'timer'}>{value}</span>;
 }
 
-function WidgetMount() {
+function LeadCaptureForm() {
+  const phoneErrorId = useId();
+  const phoneInputRef = useRef<HTMLInputElement>(null);
+  const hiddenPhoneRef = useRef<HTMLInputElement>(null);
+  const phoneInstanceRef = useRef<Iti | null>(null);
+  const [phoneError, setPhoneError] = useState('');
+
+  useEffect(() => {
+    const input = phoneInputRef.current;
+    if (!input) return;
+
+    const instance = intlTelInput(input, {
+      initialCountry: 'auto',
+      useFullscreenPopup: false,
+      separateDialCode: false,
+      geoIpLookup: (success) => {
+        void detectCountryByIp().then(success).catch(() => success('ua'));
+      },
+      loadUtils: () => import('intl-tel-input/utils'),
+    });
+    phoneInstanceRef.current = instance;
+
+    return () => {
+      instance.destroy();
+      phoneInstanceRef.current = null;
+    };
+  }, []);
+
+  const preparePhone = (event: SubmitEvent<HTMLFormElement>) => {
+    const instance = phoneInstanceRef.current;
+    const hiddenPhone = hiddenPhoneRef.current;
+    const phone = instance?.getNumber() ?? '';
+
+    if (!instance || !instance.isValidNumber() || !/^\+[1-9]\d{7,14}$/.test(phone)) {
+      event.preventDefault();
+      event.stopPropagation();
+      event.nativeEvent.stopImmediatePropagation();
+      if (hiddenPhone) hiddenPhone.value = '';
+      setPhoneError('Введите корректный номер телефона');
+      phoneInputRef.current?.focus();
+      return;
+    }
+
+    if (hiddenPhone) hiddenPhone.value = phone;
+    setPhoneError('');
+  };
+
   return (
-    <output className="widget-mount" data-widget-mount="lead-form">
-      <span className="widget-icon" aria-hidden="true">✦</span>
-      <p>Форма заявки будет подключена позже</p>
-    </output>
+    <form data-name="smartsender" onSubmitCapture={preparePhone} noValidate className="lead-form">
+      <div className="lead-form-main">
+        <div className="lead-inputs">
+          <label>
+            <span className="phone-field">
+              <input ref={phoneInputRef} type="tel" name="phone_intltelinput" autoComplete="tel-national" inputMode="tel" required aria-invalid={Boolean(phoneError)} aria-describedby={phoneError ? phoneErrorId : undefined} aria-label="Номер телефона" placeholder="Номер телефона" onInput={() => setPhoneError('')} />
+            </span>
+            <input ref={hiddenPhoneRef} type="hidden" name="phone" />
+            {phoneError && <small id={phoneErrorId}>{phoneError}</small>}
+          </label>
+        </div>
+        <button type="submit" className="form-submit"><span><CourseLabel /></span><b><img src="/assets/images/application-submit-like.svg" alt="" /></b></button>
+      </div>
+    </form>
   );
 }
 
-function LeadDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
+function LeadDialog({ open, onOpenChange, children }: { open: boolean; onOpenChange: (open: boolean) => void; children: ReactNode }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="lead-dialog" showCloseButton={false}>
-        <div className="dialog-topline"><span>AI CREATOR</span><DialogClose className="dialog-close" aria-label="Закрыть окно">×</DialogClose></div>
-        <DialogTitle>Заявка на курс</DialogTitle>
-        <DialogDescription>Оставить заявку можно будет на следующем этапе проекта.</DialogDescription>
-        <WidgetMount />
+        <DialogTitle className="sr-only">Оставить заявку</DialogTitle>
+        <DialogDescription className="sr-only">Регистрация на бесплатный вебинар по профессии AI-креатора.</DialogDescription>
+        <img className="lead-dialog-visual" src="/assets/images/lead-dialog-figma.png" alt="Оставь заявку на курс AI-креатора и получи два бонусных урока" />
+        <DialogClose className="dialog-close" aria-label="Закрыть окно">×</DialogClose>
+        <div className="lead-dialog-body">
+          <h2>Зарегистрируйся бесплатно</h2>
+          {children}
+        </div>
       </DialogContent>
     </Dialog>
   );
 }
 
-function useAutoplayCarousel<T extends HTMLElement>(slideCount: number, staggerIndex: number, isPaused: boolean, setActiveSlide: Dispatch<SetStateAction<number>>) {
+function useAutoplayCarousel<T extends HTMLElement>(slideCount: number, staggerIndex: number, isPaused: boolean, setActiveSlide: Dispatch<SetStateAction<number>>, setSlideDirection: Dispatch<SetStateAction<-1 | 1>>) {
   const carouselRef = useRef<T>(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -116,7 +256,10 @@ function useAutoplayCarousel<T extends HTMLElement>(slideCount: number, staggerI
 
     let intervalId: number | undefined;
     const staggerDelay = (staggerIndex * 137) % 1200;
-    const advance = () => setActiveSlide((current) => (current + 1) % slideCount);
+    const advance = () => {
+      setSlideDirection(1);
+      setActiveSlide((current) => (current + 1) % slideCount);
+    };
     const timeoutId = window.setTimeout(() => {
       advance();
       intervalId = window.setInterval(advance, CAROUSEL_INTERVAL_MS);
@@ -126,7 +269,7 @@ function useAutoplayCarousel<T extends HTMLElement>(slideCount: number, staggerI
       window.clearTimeout(timeoutId);
       if (intervalId !== undefined) window.clearInterval(intervalId);
     };
-  }, [isPaused, isVisible, setActiveSlide, slideCount, staggerIndex]);
+  }, [isPaused, isVisible, setActiveSlide, setSlideDirection, slideCount, staggerIndex]);
 
   return carouselRef;
 }
@@ -135,13 +278,15 @@ function ServiceCard({ item, index }: { item: (typeof services)[number]; index: 
   const slides = item.images?.length ? item.images : item.image ? [item.image] : [];
   const displaySlides = slides.map((image) => `${image}?v=2`);
   const [activeSlide, setActiveSlide] = useState(0);
+  const [slideDirection, setSlideDirection] = useState<-1 | 1>(1);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [autoplayPaused, setAutoplayPaused] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
-  const carouselRef = useAutoplayCarousel<HTMLElement>(slides.length, index, autoplayPaused, setActiveSlide);
+  const carouselRef = useAutoplayCarousel<HTMLElement>(slides.length, index, autoplayPaused, setActiveSlide, setSlideDirection);
   const changeSlide = (direction: -1 | 1) => {
     if (slides.length < 2) return;
     setAutoplayPaused(true);
+    setSlideDirection(direction);
     setActiveSlide((current) => (current + direction + slides.length) % slides.length);
   };
 
@@ -163,9 +308,9 @@ function ServiceCard({ item, index }: { item: (typeof services)[number]; index: 
         }}
       >
         <button type="button" className="service-card-media" onClick={() => { setAutoplayPaused(true); setPreviewOpen(true); }} aria-label={`Увеличить изображение: ${item.title}`}>
-          {displaySlides.map((image, slideIndex) => <img className={slideIndex === activeSlide ? 'service-slide--active' : undefined} src={image} alt="" loading="lazy" decoding="async" key={image} />)}
+          {displaySlides.map((image, slideIndex) => <img className={slideIndex === activeSlide ? `service-slide--active service-slide--${slideDirection === 1 ? 'next' : 'prev'}` : undefined} src={image} alt="" loading="lazy" decoding="async" key={image} />)}
         </button>
-        <span className="service-card-title">{item.title}</span>
+        <span className="service-card-title"><BrandText text={item.title} /></span>
         {item.price && <b className="service-card-price">{item.price}</b>}
         <div className="service-card-arrows">
           <button type="button" className="service-arrow service-arrow--prev" onClick={() => changeSlide(-1)} aria-label="Предыдущий слайд" disabled={slides.length < 2} />
@@ -179,6 +324,7 @@ function ServiceCard({ item, index }: { item: (typeof services)[number]; index: 
 
 function ReviewMediaCarousel({ images = [], videos = [], label, autoplayIndex }: { images?: readonly string[]; videos?: VideoReviewItem[]; label: string; autoplayIndex: number }) {
   const [activeSlide, setActiveSlide] = useState(0);
+  const [slideDirection, setSlideDirection] = useState<-1 | 1>(1);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [autoplayPaused, setAutoplayPaused] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -186,10 +332,11 @@ function ReviewMediaCarousel({ images = [], videos = [], label, autoplayIndex }:
   const slideCount = videos.length || images.length;
   const activeVideo = videos[activeSlide];
   const activeImage = images[activeSlide];
-  const carouselRef = useAutoplayCarousel<HTMLDivElement>(slideCount, autoplayIndex, autoplayPaused, setActiveSlide);
-  const changeSlide = (direction: number) => {
+  const carouselRef = useAutoplayCarousel<HTMLDivElement>(slideCount, autoplayIndex, autoplayPaused, setActiveSlide, setSlideDirection);
+  const changeSlide = (direction: -1 | 1) => {
     if (slideCount < 2) return;
     setAutoplayPaused(true);
+    setSlideDirection(direction);
     setActiveSlide((current) => (current + direction + slideCount) % slideCount);
   };
 
@@ -226,6 +373,7 @@ function ReviewMediaCarousel({ images = [], videos = [], label, autoplayIndex }:
             <iframe
               ref={iframeRef}
               key={activeVideo.id}
+              className={`review-slide review-slide--${slideDirection === 1 ? 'next' : 'prev'}`}
               src={`https://www.youtube-nocookie.com/embed/${activeVideo.id}?rel=0&playsinline=1`}
               title={activeVideo.title}
               loading="lazy"
@@ -235,8 +383,8 @@ function ReviewMediaCarousel({ images = [], videos = [], label, autoplayIndex }:
             />
           )}
           {activeImage && (
-            <button type="button" onClick={() => { setAutoplayPaused(true); setPreviewOpen(true); }} aria-label={`Увеличить скриншот отзыва ${activeSlide + 1}`}>
-              <img key={activeImage} src={activeImage} alt={`Скриншот отзыва ${activeSlide + 1}`} loading="lazy" decoding="async" />
+            <button key={activeImage} type="button" className={`review-slide review-slide--${slideDirection === 1 ? 'next' : 'prev'}`} onClick={() => { setAutoplayPaused(true); setPreviewOpen(true); }} aria-label={`Увеличить скриншот отзыва ${activeSlide + 1}`}>
+              <img src={activeImage} alt={`Скриншот отзыва ${activeSlide + 1}`} loading="lazy" decoding="async" />
             </button>
           )}
         </div>
@@ -250,14 +398,56 @@ function ReviewMediaCarousel({ images = [], videos = [], label, autoplayIndex }:
   );
 }
 
+function MarketExamplesCarousel() {
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [slideDirection, setSlideDirection] = useState<-1 | 1>(1);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [autoplayPaused, setAutoplayPaused] = useState(false);
+  const carouselRef = useAutoplayCarousel<HTMLDivElement>(marketExampleImages.length, services.length + 2, autoplayPaused, setActiveSlide, setSlideDirection);
+  const changeSlide = (direction: -1 | 1) => {
+    setAutoplayPaused(true);
+    setSlideDirection(direction);
+    setActiveSlide((current) => (current + direction + marketExampleImages.length) % marketExampleImages.length);
+  };
+
+  return (
+    <div
+      ref={carouselRef}
+      className="course-promo"
+      aria-roledescription="carousel"
+      aria-label="Примеры заказов на AI-видео"
+      data-cycle={activeSlide}
+      onTouchStart={(event) => setTouchStart(event.changedTouches[0].clientX)}
+      onTouchEnd={(event) => {
+        if (touchStart !== null) {
+          const distance = event.changedTouches[0].clientX - touchStart;
+          if (Math.abs(distance) > 35) changeSlide(distance > 0 ? -1 : 1);
+        }
+        setTouchStart(null);
+      }}
+    >
+      <div className="course-promo-image">
+        <img key={marketExampleImages[activeSlide]} className={`course-promo-slide course-promo-slide--${slideDirection === 1 ? 'next' : 'prev'}`} src={marketExampleImages[activeSlide]} alt={`Пример предложения услуги AI-видеокреатора ${activeSlide + 1}`} loading="lazy" decoding="async" />
+      </div>
+      <div className="course-promo-arrows">
+        <button type="button" className="service-arrow service-arrow--prev service-arrow--outline" onClick={() => changeSlide(-1)} aria-label="Предыдущий пример" />
+        <button type="button" className="service-arrow service-arrow--next" onClick={() => changeSlide(1)} aria-label="Следующий пример" />
+      </div>
+      <p>При регулярной работе доход AI-<b>креатора может достигать 1 000–2 000 € в месяц и выше.</b> Итог зависит от навыков, стоимости услуг и количества проектов.</p>
+    </div>
+  );
+}
+
 function PrimaryButton({ children, onClick, className = '' }: { children: ReactNode; onClick: () => void; className?: string }) {
   return <button type="button" className={`primary-button ${className}`} onClick={onClick}><span>{children}</span><b aria-hidden="true">↗</b></button>;
 }
 
 function ImageCarouselDialog({ open, onOpenChange, images, activeSlide, setActiveSlide, label }: { open: boolean; onOpenChange: (open: boolean) => void; images: readonly string[]; activeSlide: number; setActiveSlide: Dispatch<SetStateAction<number>>; label: string }) {
+  const [slideDirection, setSlideDirection] = useState<-1 | 1>(1);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const changeSlide = (direction: -1 | 1) => {
     if (images.length < 2) return;
+    setSlideDirection(direction);
     setActiveSlide((current) => (current + direction + images.length) % images.length);
   };
 
@@ -275,7 +465,7 @@ function ImageCarouselDialog({ open, onOpenChange, images, activeSlide, setActiv
         }}
       >
         <DialogTitle className="image-preview-title">{label}</DialogTitle>
-        <img src={images[activeSlide]} alt={`${label}, изображение ${activeSlide + 1}`} />
+        <img key={images[activeSlide]} className={`preview-slide preview-slide--${slideDirection === 1 ? 'next' : 'prev'}`} src={images[activeSlide]} alt={`${label}, изображение ${activeSlide + 1}`} />
         <div className="image-preview-navigation">
           <button type="button" className="service-arrow service-arrow--prev service-arrow--outline" onClick={() => changeSlide(-1)} aria-label="Предыдущее изображение" disabled={images.length < 2} />
           <span>{activeSlide + 1} / {images.length}</span>
@@ -311,7 +501,9 @@ function LegalLabel({ href, children }: { href: string; children: ReactNode }) {
 }
 
 export default function Home() {
+  useIntegraLeap();
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [servicesExpanded, setServicesExpanded] = useState(false);
   const [programExpanded, setProgramExpanded] = useState(false);
   const [openModule, setOpenModule] = useState<number | null>(null);
   const [activeStep, setActiveStep] = useState(0);
@@ -320,10 +512,6 @@ export default function Home() {
   const [pastBonus, setPastBonus] = useState(false);
   const [applicationReached, setApplicationReached] = useState(false);
   const [ctaBlockerVisible, setCtaBlockerVisible] = useState(false);
-  const [form, setForm] = useState({ name: '', phone: '', privacy: false, offer: false });
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [formMessage, setFormMessage] = useState('');
-
   useEffect(() => {
     const sentinel = document.querySelector<HTMLElement>('.sticky-cta-sentinel');
     const applicationTimer = document.querySelector<HTMLElement>('.application-timer');
@@ -377,36 +565,20 @@ export default function Home() {
     };
   }, []);
 
-  const submitForm = (event: { preventDefault: () => void; currentTarget: HTMLFormElement }) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const rawName = data.get('name');
-    const rawPhone = data.get('phone');
-    const name = typeof rawName === 'string' ? rawName.trim() : '';
-    const phone = typeof rawPhone === 'string' ? rawPhone.replace(/[\s()-]/g, '') : '';
-    const nextErrors: Record<string, string> = {};
-    if (name.length < 2) nextErrors.name = 'Введите имя';
-    if (!/^\+[1-9]\d{7,14}$/.test(phone)) nextErrors.phone = 'Введите телефон в международном формате';
-    if (!form.privacy) nextErrors.privacy = 'Необходимо согласие';
-    if (!form.offer) nextErrors.offer = 'Необходимо согласие';
-    setErrors(nextErrors);
-    if (Object.keys(nextErrors).length === 0) setFormMessage('Форма заполнена. Отправка заявок будет подключена позже.');
-  };
-
   return (
     <main className="site-shell">
-      <div className={applicationReached ? 'offer-strip offer-strip--hidden' : 'offer-strip'} aria-label="Текущая стоимость действует ещё" aria-hidden={applicationReached || undefined}>
+      <div className={applicationReached ? 'offer-strip offer-strip--hidden' : 'offer-strip'} aria-label="Бесплатная регистрация закроется через" aria-hidden={applicationReached || undefined}>
         <div className="offer-track">
           <div className="offer-segment">
-            <span>Текущая стоимость действует ещё: <OfferTimer /></span>
+            <span>Бесплатная регистрация закроется через: <OfferTimer /></span>
             <i aria-hidden="true" />
-            <span aria-hidden="true">Текущая стоимость действует ещё: <OfferTimer /></span>
+            <span aria-hidden="true">Бесплатная регистрация закроется через: <OfferTimer /></span>
             <i aria-hidden="true" />
           </div>
           <div className="offer-segment" aria-hidden="true">
-            <span>Текущая стоимость действует ещё: <OfferTimer /></span>
+            <span>Бесплатная регистрация закроется через: <OfferTimer /></span>
             <i />
-            <span>Текущая стоимость действует ещё: <OfferTimer /></span>
+            <span>Бесплатная регистрация закроется через: <OfferTimer /></span>
             <i />
           </div>
         </div>
@@ -447,10 +619,10 @@ export default function Home() {
 
       <section className="bonus section-pad">
         <div className="bonus-badge">Твой бонус <img className="bonus-badge-icon" src="/assets/images/bonus-badge.svg" alt="" /></div>
-        <h2>Вводных урока<br />об AI-креаторстве</h2>
+        <h2>2 вводных урока<br />об AI-креаторстве</h2>
         <div className="bonus-lessons">
           <article><img src="/assets/images/lesson-1.webp" alt="Вводный урок" loading="lazy" decoding="async" /><div><span>Урок 1</span><h3>Кто такие<br />AI-креаторы</h3></div></article>
-          <article><img src="/assets/images/lesson-2.webp" alt="Вводный урок" loading="lazy" decoding="async" /><div><span>Урок 2</span><h3>Кто и за что<br />платит AI-креаторам</h3></div></article>
+          <article><img src="/assets/images/lesson-2.webp" alt="Вводный урок" loading="lazy" decoding="async" /><div><span>Урок 2</span><h3>Кто и за что<br />платит<br />AI-креаторам</h3></div></article>
         </div>
         <p>Разберись, как устроена<br />профессия и на чём<br />зарабатывают AI-креаторы.</p>
         <PrimaryButton onClick={() => setDialogOpen(true)}><CourseLabel /></PrimaryButton>
@@ -513,9 +685,9 @@ export default function Home() {
       <section className="audience section-pad">
         <div className="audience-heading"><h2>Для кого курс<br /><span><i className="plaque-text">MUST-HAVE</i></span></h2><b>В 2026 ГОДУ</b></div>
         <div className="audience-cards">
-          <article><div className="audience-card-media"><span /><img src="/assets/images/audience-figma-1.webp" alt="" loading="lazy" decoding="async" /></div><div className="audience-card-copy"><h3>Новичкам в нейросетях</h3><p>Освой востребованную онлайн-профессию с нуля — <b>без опыта в дизайне и технических знаний.</b></p></div></article>
-          <article><div className="audience-card-media"><span /><img src="/assets/images/audience-figma-2.webp" alt="" loading="lazy" decoding="async" /></div><div className="audience-card-copy"><h3>Женщинам в эмиграции</h3><p>Создавай контент для брендов и <b>зарабатывай удалённо</b> без знания местного языка и подтверждения диплома.</p></div></article>
-          <article><div className="audience-card-media"><span /><img src="/assets/images/audience-figma-3.webp" alt="" loading="lazy" decoding="async" /></div><div className="audience-card-copy"><h3>Мамам в декрете</h3><p>Обучайся в удобном темпе и развивай новый источник дохода, <b>совмещая его с семьёй и детьми.</b></p></div></article>
+          <article><div className="audience-card-media"><span /><img src="/assets/images/audience-beginner-struggle.png" alt="Девушка осваивает сложный интерфейс нейросети" loading="lazy" decoding="async" /></div><div className="audience-card-copy"><h3>Новичкам в нейросетях</h3><p>Освой востребованную онлайн-профессию с нуля — <b>без опыта в дизайне и технических знаний.</b></p></div></article>
+          <article><div className="audience-card-media"><span /><img src="/assets/images/audience-emigrant-struggle.png" alt="Женщина ищет возможности для удалённой работы после переезда" loading="lazy" decoding="async" /></div><div className="audience-card-copy"><h3>Женщинам в эмиграции</h3><p>Создавай контент для брендов и <b>зарабатывай удалённо</b> без знания местного языка и подтверждения диплома.</p></div></article>
+          <article><div className="audience-card-media"><span /><img src="/assets/images/audience-mother-struggle.png" alt="Мама совмещает обучение за ноутбуком с заботой о ребёнке" loading="lazy" decoding="async" /></div><div className="audience-card-copy"><h3>Мамам в декрете</h3><p>Обучайся в удобном темпе и развивай новый источник дохода, <b>совмещая его с семьёй и детьми.</b></p></div></article>
           <article><div className="audience-card-media"><span /><img src="/assets/images/audience-figma-4.webp" alt="" loading="lazy" decoding="async" /></div><div className="audience-card-copy"><h3>Блогерам, фрилансерам и smm-специалистам</h3><p>Усиль свои проекты с помощью AI, <b>создавай контент быстрее</b> и предлагай клиентам новые услуги.</p></div></article>
         </div>
       </section>
@@ -526,27 +698,28 @@ export default function Home() {
         <div className="earnings-content">
           <div className="earnings-heading">
             <h2>Сколько может<br />зарабатывать</h2>
-            <strong><i className="plaque-text">AI-креатор</i></strong>
+            <strong><i className="plaque-text"><span>AI</span><span className="earnings-title-lower">-креатор</span></i></strong>
             <b>примеры стоимости услуг</b>
           </div>
           <div className="earnings-services">
             <div className="services-stack">
-              {services.map((item, index) => <ServiceCard item={item} index={index} key={item.title} />)}
+              {services.slice(0, servicesExpanded ? services.length : 5).map((item, index) => <ServiceCard item={item} index={index} key={item.title} />)}
             </div>
+            <button className={servicesExpanded ? 'show-more show-more--expanded earnings-services-toggle' : 'show-more earnings-services-toggle'} type="button" aria-expanded={servicesExpanded} onClick={() => setServicesExpanded((current) => !current)}><span>{servicesExpanded ? 'Скрыть' : 'Показать больше'}</span><img src="/assets/images/show-more-icon.svg" alt="" /></button>
             <div className="earnings-information">
               <div className="client-card">
-                <span><img src="/assets/images/image-icon.svg" alt="" /></span>
+                <span><Handshake size={29} strokeWidth={2.4} aria-hidden="true" /></span>
                 <p>Брендам постоянно нужны изображения и видео для социальных сетей, сайтов и рекламы. <b>Поэтому AI-креатор может брать разовые проекты</b> или выстраивать постоянное сотрудничество.</p>
               </div>
               <div className="earnings-details">
                 <div className="clients-block">
                   <div className="clients-header">
-                    <h3 className="clients-title">Клиентов можно находить</h3>
+                    <h3 className="clients-title">Клиентов можно<br /><span><i className="plaque-text">находить</i></span></h3>
                     <div className="client-sources">
                       <div className="platform-row">
                         <div><img src="/assets/images/platform-instagram.webp" alt="Instagram" loading="lazy" decoding="async" /></div>
                         <div><img src="/assets/images/platform-upwork.webp" alt="Upwork" loading="lazy" decoding="async" /></div>
-                        <div><img src="/assets/images/platform-linkedin.webp" alt="LinkedIn" loading="lazy" decoding="async" /></div>
+                        <div><img src="/assets/images/platform-tiktok.svg" alt="TikTok" loading="lazy" decoding="async" /></div>
                       </div>
                       <div className="client-source-row">
                         <article><span><img src="/assets/images/bulb-icon.svg" alt="" /></span><p>Прямые обращения к брендам</p></article>
@@ -554,14 +727,7 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
-                  <div className="course-promo">
-                    <div className="course-promo-image"><img src="/assets/images/course-promo.webp" alt="" loading="lazy" decoding="async" /></div>
-                    <div className="course-promo-arrows">
-                      <button type="button" className="service-arrow service-arrow--prev service-arrow--outline" aria-label="Предыдущий слайд" />
-                      <button type="button" className="service-arrow service-arrow--next" aria-label="Следующий слайд" />
-                    </div>
-                    <p>При регулярной работе доход AI-<b>креатора может достигать 1 000–2 000 € в месяц и выше.</b> Итог зависит от навыков, стоимости услуг и количества проектов.</p>
-                  </div>
+                  <MarketExamplesCarousel />
                 </div>
                 <button type="button" className="earnings-cta" onClick={() => setDialogOpen(true)}><span><CourseLabel /></span><i><img src="/assets/images/like-icon.svg" alt="" /></i></button>
               </div>
@@ -599,7 +765,7 @@ export default function Home() {
               <article key={`${module.number}-${index}`} className={expanded ? 'module module--open' : 'module'}>
                 <button type="button" className="module-toggle" aria-label={`${expanded ? 'Скрыть' : 'Показать'} ${module.title}`} aria-expanded={expanded} aria-controls={`module-details-${index}`} onClick={() => setOpenModule(expanded ? null : index)}>
                   <span className="module-meta"><b>модуль {index + 1}</b><img src="/assets/images/module-line.svg" alt="" /></span>
-                  <span className="module-title-row"><h3 className={module.title.length > 32 ? 'module-title--long' : undefined}>{module.title}</h3><b className="module-plus" aria-hidden="true"><i /><i /></b></span>
+                  <span className="module-title-row"><h3 className={module.title.length > 32 ? 'module-title--long' : undefined}><BrandText text={module.title} /></h3><b className="module-plus" aria-hidden="true"><i /><i /></b></span>
                 </button>
                 {expanded && <div className="module-details" id={`module-details-${index}`}><p>{module.description}</p></div>}
               </article>
@@ -621,7 +787,7 @@ export default function Home() {
             <div className="skills-main">
               <div className="skills-profile">
                 <div className="skills-profile-row">
-                  <div className="skills-avatar"><img src="/assets/images/skills-profile.webp" alt="" loading="lazy" decoding="async" /><img className="skills-status" src="/assets/images/skills-status.svg" alt="" /></div>
+                  <div className="skills-avatar"><span className="skills-avatar-photo"><img src="/assets/images/skills-profile-v2.png" alt="" loading="lazy" decoding="async" /></span><img className="skills-status" src="/assets/images/skills-status.svg" alt="" /></div>
                   <h3>AI-креатор для<br />брендов</h3>
                 </div>
                 <img className="skills-divider" src="/assets/images/skills-divider.svg" alt="" />
@@ -649,20 +815,23 @@ export default function Home() {
       <section className="process">
         <div className="process-heading"><h2>Как проходит</h2><strong><i className="plaque-text">обучение</i></strong></div>
         <div className="process-card">
-          <div className="process-video"><img src="/assets/images/process-video-figma.webp" alt="" loading="lazy" decoding="async" /></div>
+          <div className="process-video"><img key={processStepImages[activeStep]} className={`process-step-image process-step-image--${activeStep + 1}`} src={processStepImages[activeStep]} alt={steps[activeStep].title} loading="lazy" decoding="async" /></div>
           <div className="process-steps">
             <div className="step-tabs" role="tablist" aria-label="Этапы обучения">{steps.map((step, index) => <button key={step.number} type="button" role="tab" aria-selected={activeStep === index} aria-controls="process-details" onClick={() => setActiveStep(index)}>Шаг {index + 1}</button>)}</div>
             <div className="process-details" role="tabpanel" id="process-details" tabIndex={0}><h3>{steps[activeStep].title}</h3><p><EmphasizedText text={steps[activeStep].text} emphasis={steps[activeStep].emphasis} /></p></div>
           </div>
         </div>
-        <p className="process-note">⭐ Лучшим ученицам мы передаём реальные заказы и предлагаем работу в нашей AI-агенции в Испании.</p>
+        <aside className="process-note">
+          <span className="process-note-icon" aria-hidden="true">★</span>
+          <p><b>Лучшим ученицам</b> мы передаём <b>реальные заказы</b> и предлагаем <b>работу в нашей AI-агенции в Испании.</b></p>
+        </aside>
       </section>
 
       <div className="spacer spacer--60" aria-hidden="true" />
 
       <section className="reviews">
         <div className="reviews-inner">
-          <div className="reviews-heading"><h2>Что говорят</h2><strong><i className="plaque-text">выпускницы,</i></strong><p>которые уже зарабатывают<br />на AI-контенте?</p></div>
+          <div className="reviews-heading"><h2>Что говорят</h2><strong><i className="plaque-text">выпускницы,</i></strong><p><span>которые уже зарабатывают</span><span>на AI-контенте?</span></p></div>
           <div className="reviews-content">
             <ReviewMediaCarousel videos={videoReviews} label="Видеоотзывы выпускниц" autoplayIndex={services.length} />
             <ReviewMediaCarousel images={reviewScreenshots} label="Скриншоты отзывов выпускниц" autoplayIndex={services.length + 1} />
@@ -681,7 +850,7 @@ export default function Home() {
           <div className="certificate-info">
             <div className="certificate-description">
               <div className="certificate-title">
-                <h3>Сертификат<br />ai-креатора</h3>
+                <h3>Сертификат<br />AI-креатора</h3>
                 <span><img src="/assets/images/certificate-document.svg" alt="" /></span>
               </div>
               <p>После успешного завершения обучения ты <b>получишь сертификат, подтверждающий прохождение курса и полученные навыки.</b><br />Его можно добавить в портфолио, резюме или профиль LinkedIn.</p>
@@ -703,16 +872,16 @@ export default function Home() {
 
       <section className="payment">
         <div className="payment-content">
-          <div className="payment-heading"><h2>Как можно<br />оплатить</h2><strong><i className="plaque-text">обучение?</i></strong></div>
+          <div className="payment-heading"><h2>Как попасть на<br />бесплатный</h2><strong><i className="plaque-text">вебинар?</i></strong></div>
           <div className="payment-steps">
             <div className="payment-steps-inner">
-              <article className="payment-step payment-step--one"><div><span>шаг 1</span><img src="/assets/images/payment-document.svg" alt="" /></div><p><b>Оставь заявку,</b> заполнив короткую форму ниже.</p></article>
+              <article className="payment-step payment-step--one"><div><span>Шаг 1</span><img src="/assets/images/payment-document.svg" alt="" /></div><h3>Зарегистрируйся бесплатно</h3><p>Заполни короткую форму ниже, пока регистрация открыта.</p></article>
               <span className="payment-divider"><img src="/assets/images/payment-divider.svg" alt="" /></span>
-              <article className="payment-step payment-step--two"><div><span>шаг 2</span><img src="/assets/images/payment-user.svg" alt="" /></div><p><b>Менеджер расскажет о тарифах и доступных для твоей страны вариантах оплаты:</b> полной оплате, рассрочке или разделении суммы на несколько платежей.</p></article>
+              <article className="payment-step payment-step--two"><div><span>Шаг 2</span><img src="/assets/images/payment-user.svg" alt="" /></div><h3>Забери 2 бесплатных урока и бонусы</h3><p>Сразу после регистрации ты получишь доступ к полезным материалам по AI-креаторству.</p></article>
               <span className="payment-divider"><img src="/assets/images/payment-divider.svg" alt="" /></span>
-              <article className="payment-step payment-step--three"><div><span>шаг 3</span><img src="/assets/images/payment-like.svg" alt="" /></div><p><b>Выбери удобный вариант,</b> подтверди участие и получи доступ к обучению.</p></article>
+              <article className="payment-step payment-step--three"><div><span>Шаг 3</span><img src="/assets/images/payment-like.svg" alt="" /></div><h3>Приходи на живой вебинар</h3><p>В тёплой атмосфере пообщаемся, разберём профессию AI-креатора и поймём, как на ней можно зарабатывать.</p></article>
               <span className="payment-divider"><img src="/assets/images/payment-divider.svg" alt="" /></span>
-              <button type="button" className="payment-button" onClick={() => setDialogOpen(true)}><span>Узнать варианты оплаты</span><i><img src="/assets/images/payment-chat.svg" alt="" /></i></button>
+              <button type="button" className="payment-button" onClick={() => setDialogOpen(true)}><span>Зарегистрироваться бесплатно</span><i><UserPlus size={22} strokeWidth={2.4} aria-hidden="true" /></i></button>
             </div>
           </div>
         </div>
@@ -723,46 +892,42 @@ export default function Home() {
       <section className="application">
         <div className="application-main">
           <div className="application-hero">
-            <div className="application-title"><i className="plaque-text">Оставь</i></div>
-            <div className="application-request">ЗАЯВКУ</div>
-            <div className="application-copy"><img src="/assets/images/application-copy-shape.svg" alt="" /><span className="hero-corner" aria-hidden="true" /><p><b>Освой востребованную профессию AI-креатора</b>, создавай фото и видео для брендов и работай онлайн из любой точки мира.</p></div>
-            <div className="application-thumb application-thumb--one"><img src="/assets/images/application-thumb-1.webp" alt="" loading="lazy" decoding="async" /></div>
-            <div className="application-thumb application-thumb--two"><img src="/assets/images/application-thumb-2.webp" alt="" loading="lazy" decoding="async" /></div>
+            <h2>Как новичку<br />зарабатывать на<br /><mark>AI-контенте для брендов</mark></h2>
+            <div className="application-benefits" aria-label="Преимущества обучения">
+              <span><GraduationCap aria-hidden="true" />С полного нуля</span>
+              <span><Settings aria-hidden="true" />Без технических знаний</span>
+              <span><Laptop aria-hidden="true" />Из любой точки мира</span>
+            </div>
+            <div className="application-copy"><ArrowDownRight aria-hidden="true" /><p><b>Освой востребованную профессию AI-креатора</b>, создавай фото и видео для брендов и работай онлайн из любой точки мира.</p></div>
             <div className="application-woman"><img src="/assets/images/application-woman.webp" alt="Женя Коваленко" loading="lazy" decoding="async" /></div>
           </div>
           <div className="application-panel">
             <div className="application-panel-inner">
               <div className="application-bonus">
                 <div className="application-bonus-badge"><span>Твой бонус</span><img src="/assets/images/application-gift.svg" alt="" /><i>х2</i></div>
+                <h3>2 вводных урока<br />об AI-креаторстве</h3>
                 <div className="application-lessons">
-                  <figure><span>Урок 1</span><img className="application-laptop-base" src="/assets/images/application-laptop-base.svg" alt="" /><img className="application-laptop-shadow" src="/assets/images/application-laptop-shadow.webp" alt="" loading="lazy" decoding="async" /><img className="application-laptop" src="/assets/images/application-laptop.webp" alt="" loading="lazy" decoding="async" /><img className="application-lesson-screen" src="/assets/images/application-lesson-2.webp" alt="" loading="lazy" decoding="async" /></figure>
-                  <figure><span>Урок 2</span><img className="application-laptop-base" src="/assets/images/application-laptop-base.svg" alt="" /><img className="application-laptop-shadow" src="/assets/images/application-laptop-shadow.webp" alt="" loading="lazy" decoding="async" /><img className="application-laptop" src="/assets/images/application-laptop.webp" alt="" loading="lazy" decoding="async" /><img className="application-lesson-screen" src="/assets/images/application-lesson-1.webp" alt="" loading="lazy" decoding="async" /></figure>
+                  <article>
+                    <figure><img className="application-laptop-base" src="/assets/images/application-laptop-base.svg" alt="" /><img className="application-laptop-shadow" src="/assets/images/application-laptop-shadow.webp" alt="" loading="lazy" decoding="async" /><img className="application-laptop" src="/assets/images/application-laptop.webp" alt="" loading="lazy" decoding="async" /><img className="application-lesson-screen" src="/assets/images/application-lesson-2.webp" alt="" loading="lazy" decoding="async" /></figure>
+                    <div><span>Урок 1</span><p>Кто такие<br />AI-креаторы</p></div>
+                  </article>
+                  <article>
+                    <figure><img className="application-laptop-base" src="/assets/images/application-laptop-base.svg" alt="" /><img className="application-laptop-shadow" src="/assets/images/application-laptop-shadow.webp" alt="" loading="lazy" decoding="async" /><img className="application-laptop" src="/assets/images/application-laptop.webp" alt="" loading="lazy" decoding="async" /><img className="application-lesson-screen" src="/assets/images/application-lesson-1.webp" alt="" loading="lazy" decoding="async" /></figure>
+                    <div><span>Урок 2</span><p>Кто и за что<br />платит AI-<br />креаторам</p></div>
+                  </article>
                 </div>
-                <div className="application-timer"><div className="application-timer-track"><p>Текущая стоимость действует ещё: <OfferTimer /></p><img src="/assets/images/application-ticker-divider.svg" alt="" /><p>Текущая стоимость действует ещё: <OfferTimer /></p></div></div>
               </div>
+              <div className="application-timer"><div className="application-timer-track"><p>Бесплатная регистрация закроется через: <OfferTimer /></p><img src="/assets/images/application-ticker-divider.svg" alt="" /><p>Бесплатная регистрация закроется через: <OfferTimer /></p></div></div>
               <div className="application-lead">
-                <h3>Оставляй заявку прямо сейчас и бронируй место со скидкой и бонусами</h3>
-                <form onSubmit={submitForm} noValidate className="lead-form">
-                  <div className="lead-form-main">
-                    <div className="lead-inputs">
-                      <label><input name="name" defaultValue={form.name} onInput={(event) => { const value = event.currentTarget.value; setForm((current) => ({ ...current, name: value })); }} autoComplete="name" aria-invalid={Boolean(errors.name)} placeholder="Введи своё имя" />{errors.name && <small>{errors.name}</small>}</label>
-                      <label><input name="phone" defaultValue={form.phone} onInput={(event) => { const value = event.currentTarget.value; setForm((current) => ({ ...current, phone: value })); }} autoComplete="tel" inputMode="tel" aria-invalid={Boolean(errors.phone)} placeholder="Введи номер телефона" />{errors.phone && <small>{errors.phone}</small>}</label>
-                    </div>
-                    <button type="submit" className="form-submit"><span><CourseLabel /></span><b><img src="/assets/images/application-submit-like.svg" alt="" /></b></button>
-                  </div>
-                  <div className="lead-consents">
-                    <div><label className="check-label"><input type="checkbox" checked={form.privacy} onChange={(event) => { const checked = event.currentTarget.checked; setForm((current) => ({ ...current, privacy: checked })); }} /><span>Я соглашаюсь на обработку персональных данных в соответствии с Политикой конфиденциальности.</span></label>{errors.privacy && <small className="check-error">{errors.privacy}</small>}</div>
-                    <div><label className="check-label"><input type="checkbox" checked={form.offer} onChange={(event) => { const checked = event.currentTarget.checked; setForm((current) => ({ ...current, offer: checked })); }} /><span>Я принимаю условия Договора оферты и Политики возврата.</span></label>{errors.offer && <small className="check-error">{errors.offer}</small>}</div>
-                  </div>
-                  {formMessage && <output className="form-success" aria-live="polite">{formMessage}</output>}
-                </form>
+                <h3>Регистрируйся<br />прямо сейчас <span>и получи 2 бесплатных</span><i>урока и бонусы</i></h3>
+                <LeadCaptureForm />
               </div>
             </div>
           </div>
         </div>
         <footer>
           <a className="footer-logo" href="#top"><span><i>AI </i>CREATOR</span><b>by ЖЕНЯ КОВАЛЕНКО</b></a>
-          <div className="legal"><LegalLabel href={legalLinks.offer}>публичная оферта</LegalLabel><span>info@luna13.academy</span><LegalLabel href={legalLinks.refunds}>Copyright © 2026. AI CREATOR.</LegalLabel></div>
+          <div className="legal"><LegalLabel href={legalLinks.privacy}>политика конфиденциальности</LegalLabel><span>info@luna13.academy</span><LegalLabel href={legalLinks.refunds}>Copyright © 2026. AI CREATOR.</LegalLabel></div>
           <div className="application-payment-logos"><img src="/assets/images/application-payment-logos.webp" alt="Visa, Stripe, Mastercard, Revolut и Wise" loading="lazy" decoding="async" /></div>
         </footer>
       </section>
@@ -772,7 +937,9 @@ export default function Home() {
         <span><CourseLabel /></span><i><img src="/assets/images/heart.svg" alt="" /></i>
       </button>
 
-      <LeadDialog open={dialogOpen} onOpenChange={setDialogOpen} />
+      <LeadDialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <LeadCaptureForm />
+      </LeadDialog>
     </main>
   );
 }
