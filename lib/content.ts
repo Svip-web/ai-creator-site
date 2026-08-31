@@ -8,8 +8,9 @@ export type AdvancedProgram = { title: string; items: string[] };
 
 export type StepItem = { number: string; title: string; text: string; emphasis: string[] };
 export type FaqItem = { question: string; answer: string };
-export type ServiceItem = { title: string; price: string; image?: string };
+export type ServiceItem = { title: string; price?: string; image?: string; images?: string[] };
 export type ReviewItem = { name: string; role: string; quote: string; image?: string };
+export type VideoReviewItem = { id: string; title: string };
 
 export const program: ProgramModule[] = [
   {
@@ -108,10 +109,107 @@ export const faq: FaqItem[] = [
 ];
 
 export const services: ServiceItem[] = [
-  { title: 'AI-визуал', price: 'от 50€' },
-  { title: 'AI-фотосессия', price: '125–150€', image: '/assets/images/service-figma.webp' },
-  { title: 'SMM', price: '400–800€', image: '/assets/images/service-figma.webp' },
-  { title: 'Мультфільми для брендів', price: '400–800€' },
+  {
+    title: 'AI-аватары для видео',
+    price: 'от 50€',
+    images: [
+      '/assets/images/service-ai-avatar-1.webp',
+      '/assets/images/service-ai-avatar-2.webp',
+      '/assets/images/service-ai-avatar-3.webp',
+    ],
+  },
+  {
+    title: 'AI-логотипы и визуальная айдентика',
+    price: '125–150€',
+    images: [
+      '/assets/images/service-ai-identity-1.webp',
+      '/assets/images/service-ai-identity-2.webp',
+      '/assets/images/service-ai-identity-3.webp',
+      '/assets/images/service-ai-identity-4.webp',
+      '/assets/images/service-ai-identity-5.webp',
+    ],
+  },
+  {
+    title: 'AI-видео для YouTube и реклама для брендов',
+    price: '400–800€',
+    images: [
+      '/assets/images/service-ai-youtube-1.webp',
+      '/assets/images/service-ai-youtube-2.webp',
+      '/assets/images/service-ai-youtube-3.webp',
+      '/assets/images/service-ai-youtube-4.webp',
+    ],
+  },
+  {
+    title: 'AI-видео на заказ',
+    price: '400–800€',
+    images: [
+      '/assets/images/service-ai-video-order-1.webp',
+      '/assets/images/service-ai-video-order-2.webp',
+      '/assets/images/service-ai-video-order-3.webp',
+      '/assets/images/service-ai-video-order-4.webp',
+    ],
+  },
+  {
+    title: 'AI-фотосессии',
+    price: '80–200€',
+    images: [
+      '/assets/images/service-ai-photoshoot-1.webp',
+      '/assets/images/service-ai-photoshoot-2.webp',
+      '/assets/images/service-ai-photoshoot-3.webp',
+      '/assets/images/service-ai-photoshoot-4.webp',
+      '/assets/images/service-ai-photoshoot-5.webp',
+      '/assets/images/service-ai-photoshoot-6.webp',
+    ],
+  },
+  {
+    title: 'AI-стикеры для личного бренда',
+    price: '50–100€',
+    images: [
+      '/assets/images/service-ai-stickers-1.webp',
+      '/assets/images/service-ai-stickers-2.webp',
+      '/assets/images/service-ai-stickers-3.webp',
+      '/assets/images/service-ai-stickers-4.webp',
+      '/assets/images/service-ai-stickers-5.webp',
+      '/assets/images/service-ai-stickers-6.webp',
+    ],
+  },
+  {
+    title: 'SMM-услуги с поддержкой AI',
+    price: '300–700€/мес',
+    images: [
+      '/assets/images/service-ai-smm-1.webp',
+      '/assets/images/service-ai-smm-2.webp',
+      '/assets/images/service-ai-smm-3.webp',
+      '/assets/images/service-ai-smm-4.webp',
+    ],
+  },
+  {
+    title: 'AI-мультики, сказки и сериалы',
+    price: '300–1000€/мин',
+    images: [
+      '/assets/images/service-ai-cartoons-1-hq.webp',
+      '/assets/images/service-ai-cartoons-2.webp',
+      '/assets/images/service-ai-cartoons-3.webp',
+      '/assets/images/service-ai-cartoons-4.webp',
+      '/assets/images/service-ai-cartoons-5.webp',
+      '/assets/images/service-ai-cartoons-6.webp',
+      '/assets/images/service-ai-cartoons-7.webp',
+    ],
+  },
+  {
+    title: 'AI-блогеры',
+    price: '500–1500€/мес',
+    images: [
+      '/assets/images/service-ai-bloggers-1-hq.webp',
+      '/assets/images/service-ai-bloggers-2.webp',
+      '/assets/images/service-ai-bloggers-3.webp',
+      '/assets/images/service-ai-bloggers-4.webp',
+      '/assets/images/service-ai-bloggers-5.webp',
+      '/assets/images/service-ai-bloggers-6.webp',
+      '/assets/images/service-ai-bloggers-7.webp',
+      '/assets/images/service-ai-bloggers-8.webp',
+    ],
+  },
 ];
 
 export const reviews: ReviewItem[] = [
@@ -128,6 +226,24 @@ export const reviews: ReviewItem[] = [
     image: '/assets/images/review-chat.webp',
   },
 ];
+
+export const videoReviews: VideoReviewItem[] = [
+  { id: 'QNkdHQvzwi8', title: 'Карина (Испания) — отзыв об обучении' },
+  { id: 'mH9OYCNrzuo', title: 'Светлана (Чехия) — отзыв об обучении' },
+  { id: '-lwIwkqzOPQ', title: 'Ольга (Майнц) — отзыв об обучении' },
+  { id: '8Pl7gMs3Io8', title: 'Наталья — отзыв об обучении' },
+];
+
+export const reviewScreenshots = [
+  '/assets/images/review-screenshot-1.webp?v=2',
+  '/assets/images/review-screenshot-2.webp?v=2',
+  '/assets/images/review-screenshot-3.webp?v=2',
+  '/assets/images/review-screenshot-4.webp?v=2',
+  '/assets/images/review-screenshot-5.webp?v=2',
+  '/assets/images/review-screenshot-6.webp?v=2',
+  '/assets/images/review-screenshot-7.webp?v=2',
+  '/assets/images/review-screenshot-8.webp?v=2',
+] as const;
 
 export const legalLinks = {
   offer: '',

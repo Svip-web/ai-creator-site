@@ -1,14 +1,15 @@
 'use client';
 /* oxlint-disable next/no-img-element */
 
-import { ReactNode, useEffect, useState } from 'react';
+import { type Dispatch, type ReactNode, type SetStateAction, useEffect, useRef, useState } from 'react';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
-import { advancedProgram, faq, legalLinks, program, services, steps } from '@/lib/content';
+import { advancedProgram, faq, legalLinks, program, reviewScreenshots, services, steps, videoReviews, type VideoReviewItem } from '@/lib/content';
 
 const DEADLINE_KEY = 'ai-creator-offer-deadline';
 const OFFER_DURATION_MS = 4 * 60 * 60 * 1000;
 const professionTags = ['AI-фото', 'AI-видео', 'Reels', 'Реклама', 'Соцсети'] as const;
 const professionMarqueeTags = [...professionTags, ...professionTags];
+const CAROUSEL_INTERVAL_MS = 3000;
 const REVEAL_SELECTOR = [
   '.hero-copy', '.hero-level', '.hero-description', '.hero-art-window', '.hero-button',
   '.bonus-badge', '.bonus > h2', '.bonus-lessons article', '.bonus > p', '.bonus .primary-button',
@@ -94,62 +95,195 @@ function LeadDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (open
   );
 }
 
+function useAutoplayCarousel<T extends HTMLElement>(slideCount: number, staggerIndex: number, isPaused: boolean, setActiveSlide: Dispatch<SetStateAction<number>>) {
+  const carouselRef = useRef<T>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsVisible(entry.isIntersecting && entry.intersectionRatio >= 0.35),
+      { threshold: [0, 0.35, 1] },
+    );
+    observer.observe(carousel);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!isVisible || isPaused || slideCount < 2) return;
+
+    let intervalId: number | undefined;
+    const staggerDelay = (staggerIndex * 137) % 1200;
+    const advance = () => setActiveSlide((current) => (current + 1) % slideCount);
+    const timeoutId = window.setTimeout(() => {
+      advance();
+      intervalId = window.setInterval(advance, CAROUSEL_INTERVAL_MS);
+    }, CAROUSEL_INTERVAL_MS + staggerDelay);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+      if (intervalId !== undefined) window.clearInterval(intervalId);
+    };
+  }, [isPaused, isVisible, setActiveSlide, slideCount, staggerIndex]);
+
+  return carouselRef;
+}
+
 function ServiceCard({ item, index }: { item: (typeof services)[number]; index: number }) {
-  const [cycle, setCycle] = useState(0);
+  const slides = item.images?.length ? item.images : item.image ? [item.image] : [];
+  const displaySlides = slides.map((image) => `${image}?v=2`);
+  const [activeSlide, setActiveSlide] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
-  const changeSlide = () => setCycle((current) => current + 1);
+  const [autoplayPaused, setAutoplayPaused] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const carouselRef = useAutoplayCarousel<HTMLElement>(slides.length, index, autoplayPaused, setActiveSlide);
+  const changeSlide = (direction: -1 | 1) => {
+    if (slides.length < 2) return;
+    setAutoplayPaused(true);
+    setActiveSlide((current) => (current + direction + slides.length) % slides.length);
+  };
 
   return (
-    <article
-      className={`service-card service-card--${index + 1}`}
-      aria-roledescription="carousel"
-      aria-label={item.title}
-      data-cycle={cycle}
-      onTouchStart={(event) => setTouchStart(event.changedTouches[0].clientX)}
-      onTouchEnd={(event) => {
-        if (touchStart !== null && Math.abs(event.changedTouches[0].clientX - touchStart) > 35) changeSlide();
-        setTouchStart(null);
-      }}
-    >
-      <div className="service-card-media">{item.image && <img src={item.image} alt="" loading="lazy" decoding="async" />}</div>
-      <span className="service-card-title">{item.title}</span>
-      <b className="service-card-price">{item.price}</b>
-      <div className="service-card-arrows">
-        <button type="button" className="service-arrow service-arrow--prev" onClick={changeSlide} aria-label="Предыдущий слайд" />
-        <button type="button" className="service-arrow service-arrow--next" onClick={changeSlide} aria-label="Следующий слайд" />
-      </div>
-    </article>
+    <>
+      <article
+        ref={carouselRef}
+        className={`service-card service-card--${index + 1}`}
+        aria-roledescription="carousel"
+        aria-label={item.title}
+        data-cycle={activeSlide}
+        onTouchStart={(event) => setTouchStart(event.changedTouches[0].clientX)}
+        onTouchEnd={(event) => {
+          if (touchStart !== null) {
+            const distance = event.changedTouches[0].clientX - touchStart;
+            if (Math.abs(distance) > 35) changeSlide(distance > 0 ? -1 : 1);
+          }
+          setTouchStart(null);
+        }}
+      >
+        <button type="button" className="service-card-media" onClick={() => { setAutoplayPaused(true); setPreviewOpen(true); }} aria-label={`Увеличить изображение: ${item.title}`}>
+          {displaySlides.map((image, slideIndex) => <img className={slideIndex === activeSlide ? 'service-slide--active' : undefined} src={image} alt="" loading="lazy" decoding="async" key={image} />)}
+        </button>
+        <span className="service-card-title">{item.title}</span>
+        {item.price && <b className="service-card-price">{item.price}</b>}
+        <div className="service-card-arrows">
+          <button type="button" className="service-arrow service-arrow--prev" onClick={() => changeSlide(-1)} aria-label="Предыдущий слайд" disabled={slides.length < 2} />
+          <button type="button" className="service-arrow service-arrow--next" onClick={() => changeSlide(1)} aria-label="Следующий слайд" disabled={slides.length < 2} />
+        </div>
+      </article>
+      <ImageCarouselDialog open={previewOpen} onOpenChange={(open) => { setPreviewOpen(open); setAutoplayPaused(open); }} images={displaySlides} activeSlide={activeSlide} setActiveSlide={setActiveSlide} label={item.title} />
+    </>
   );
 }
 
-function ReviewMediaCarousel({ image, label }: { image?: string; label: string }) {
-  const [cycle, setCycle] = useState(0);
+function ReviewMediaCarousel({ images = [], videos = [], label, autoplayIndex }: { images?: readonly string[]; videos?: VideoReviewItem[]; label: string; autoplayIndex: number }) {
+  const [activeSlide, setActiveSlide] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
-  const changeSlide = () => setCycle((current) => current + 1);
+  const [autoplayPaused, setAutoplayPaused] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const slideCount = videos.length || images.length;
+  const activeVideo = videos[activeSlide];
+  const activeImage = images[activeSlide];
+  const carouselRef = useAutoplayCarousel<HTMLDivElement>(slideCount, autoplayIndex, autoplayPaused, setActiveSlide);
+  const changeSlide = (direction: number) => {
+    if (slideCount < 2) return;
+    setAutoplayPaused(true);
+    setActiveSlide((current) => (current + direction + slideCount) % slideCount);
+  };
+
+  useEffect(() => {
+    if (!videos.length) return;
+    const pauseWhenPlayerReceivesFocus = () => {
+      window.setTimeout(() => {
+        if (document.activeElement === iframeRef.current) setAutoplayPaused(true);
+      }, 0);
+    };
+    window.addEventListener('blur', pauseWhenPlayerReceivesFocus);
+    return () => window.removeEventListener('blur', pauseWhenPlayerReceivesFocus);
+  }, [videos.length]);
 
   return (
-    <div
-      className={image ? 'review-carousel review-carousel--image' : 'review-carousel'}
-      aria-roledescription="carousel"
-      aria-label={label}
-      data-cycle={cycle}
-      onTouchStart={(event) => setTouchStart(event.changedTouches[0].clientX)}
-      onTouchEnd={(event) => {
-        if (touchStart !== null && Math.abs(event.changedTouches[0].clientX - touchStart) > 35) changeSlide();
-        setTouchStart(null);
-      }}
-    >
-      <div className="review-media">{image && <img src={image} alt="" loading="lazy" decoding="async" />}</div>
-      <div className="review-navigation">
-        <button type="button" className="service-arrow service-arrow--prev service-arrow--outline" onClick={changeSlide} aria-label="Предыдущий слайд" />
-        <button type="button" className="service-arrow service-arrow--next" onClick={changeSlide} aria-label="Следующий слайд" />
+    <>
+      <div
+        ref={carouselRef}
+        className={images.length ? 'review-carousel review-carousel--image' : 'review-carousel review-carousel--video'}
+        aria-roledescription="carousel"
+        aria-label={label}
+        data-cycle={activeSlide}
+        onTouchStart={(event) => setTouchStart(event.changedTouches[0].clientX)}
+        onTouchEnd={(event) => {
+          if (touchStart !== null) {
+            const distance = event.changedTouches[0].clientX - touchStart;
+            if (Math.abs(distance) > 35) changeSlide(distance > 0 ? -1 : 1);
+          }
+          setTouchStart(null);
+        }}
+      >
+        <div className="review-media">
+          {activeVideo && (
+            <iframe
+              ref={iframeRef}
+              key={activeVideo.id}
+              src={`https://www.youtube-nocookie.com/embed/${activeVideo.id}?rel=0&playsinline=1`}
+              title={activeVideo.title}
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+            />
+          )}
+          {activeImage && (
+            <button type="button" onClick={() => { setAutoplayPaused(true); setPreviewOpen(true); }} aria-label={`Увеличить скриншот отзыва ${activeSlide + 1}`}>
+              <img key={activeImage} src={activeImage} alt={`Скриншот отзыва ${activeSlide + 1}`} loading="lazy" decoding="async" />
+            </button>
+          )}
+        </div>
+        <div className="review-navigation">
+          <button type="button" className="service-arrow service-arrow--prev service-arrow--outline" onClick={() => changeSlide(-1)} aria-label="Предыдущий отзыв" disabled={slideCount < 2} />
+          <button type="button" className="service-arrow service-arrow--next" onClick={() => changeSlide(1)} aria-label="Следующий отзыв" disabled={slideCount < 2} />
+        </div>
       </div>
-    </div>
+      {images.length > 0 && <ImageCarouselDialog open={previewOpen} onOpenChange={(open) => { setPreviewOpen(open); setAutoplayPaused(open); }} images={images} activeSlide={activeSlide} setActiveSlide={setActiveSlide} label={label} />}
+    </>
   );
 }
 
 function PrimaryButton({ children, onClick, className = '' }: { children: ReactNode; onClick: () => void; className?: string }) {
   return <button type="button" className={`primary-button ${className}`} onClick={onClick}><span>{children}</span><b aria-hidden="true">↗</b></button>;
+}
+
+function ImageCarouselDialog({ open, onOpenChange, images, activeSlide, setActiveSlide, label }: { open: boolean; onOpenChange: (open: boolean) => void; images: readonly string[]; activeSlide: number; setActiveSlide: Dispatch<SetStateAction<number>>; label: string }) {
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const changeSlide = (direction: -1 | 1) => {
+    if (images.length < 2) return;
+    setActiveSlide((current) => (current + direction + images.length) % images.length);
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent
+        className="image-preview-dialog"
+        onTouchStart={(event) => setTouchStart(event.changedTouches[0].clientX)}
+        onTouchEnd={(event) => {
+          if (touchStart !== null) {
+            const distance = event.changedTouches[0].clientX - touchStart;
+            if (Math.abs(distance) > 35) changeSlide(distance > 0 ? -1 : 1);
+          }
+          setTouchStart(null);
+        }}
+      >
+        <DialogTitle className="image-preview-title">{label}</DialogTitle>
+        <img src={images[activeSlide]} alt={`${label}, изображение ${activeSlide + 1}`} />
+        <div className="image-preview-navigation">
+          <button type="button" className="service-arrow service-arrow--prev service-arrow--outline" onClick={() => changeSlide(-1)} aria-label="Предыдущее изображение" disabled={images.length < 2} />
+          <span>{activeSlide + 1} / {images.length}</span>
+          <button type="button" className="service-arrow service-arrow--next" onClick={() => changeSlide(1)} aria-label="Следующее изображение" disabled={images.length < 2} />
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
 }
 
 function CourseLabel() {
@@ -207,7 +341,7 @@ export default function Home() {
       setCtaBlockerVisible([...visible.values()].some(Boolean));
     }, { threshold: [0, .15, 1] });
 
-    document.querySelectorAll('.hero-button, .primary-button, .earnings-cta, .show-more, .skills-cta, .faq-more, .payment-button, .form-submit').forEach((button) => {
+    document.querySelectorAll('.hero-button, .primary-button, .earnings-cta, .skills-cta, .payment-button, .form-submit').forEach((button) => {
       visible.set(button, false);
       observer.observe(button);
     });
@@ -297,7 +431,13 @@ export default function Home() {
           <p>Создавай фото и видео для брендов с помощью нейросетей и <b>собери портфолио из 10+ проектов за 6–8 недель.</b></p>
         </div>
         <div className="hero-art-window" aria-hidden="true">
-          <img className="hero-art" src="/assets/images/hero-composite.webp" alt="" fetchPriority="high" />
+          <div className="hero-collage">
+            <img className="hero-person" src="/assets/images/hero-person.webp" alt="" fetchPriority="high" />
+            <span className="hero-tile hero-tile--sunglasses"><img src="/assets/images/hero-tile-sunglasses.webp" alt="" /></span>
+            <span className="hero-tile hero-tile--paris"><img src="/assets/images/hero-tile-paris.webp" alt="" /></span>
+            <span className="hero-tile hero-tile--car"><img src="/assets/images/hero-tile-car.webp" alt="" /></span>
+            <span className="hero-tile hero-tile--statue"><img src="/assets/images/hero-tile-statue.webp" alt="" /></span>
+          </div>
         </div>
         <button type="button" className="hero-button" onClick={() => setDialogOpen(true)}>
           <span><CourseLabel /></span>
@@ -349,10 +489,10 @@ export default function Home() {
         </article>
         <article className="profession-card profession-card--course">
           <div className="profession-course-visual" aria-hidden="true">
-            <img className="profession-course-image" src="/assets/images/creator-collage.webp" alt="" loading="lazy" decoding="async" />
-            <span className="profession-course-layer profession-course-layer--fairy"><img src="/assets/images/creator-collage.webp" alt="" loading="lazy" decoding="async" /></span>
-            <span className="profession-course-layer profession-course-layer--scheme"><img src="/assets/images/creator-collage.webp" alt="" loading="lazy" decoding="async" /></span>
-            <span className="profession-course-layer profession-course-layer--bag"><img src="/assets/images/creator-collage.webp" alt="" loading="lazy" decoding="async" /></span>
+            <img className="profession-course-image" src="/assets/images/creator-layer-woman.png" alt="" loading="lazy" decoding="async" />
+            <span className="profession-course-layer profession-course-layer--fairy"><img src="/assets/images/creator-layer-fairy.png" alt="" loading="lazy" decoding="async" /></span>
+            <span className="profession-course-layer profession-course-layer--scheme"><img src="/assets/images/creator-layer-scheme.png" alt="" loading="lazy" decoding="async" /></span>
+            <span className="profession-course-layer profession-course-layer--bag"><img src="/assets/images/creator-layer-bag.png" alt="" loading="lazy" decoding="async" /></span>
           </div>
           <div className="profession-course-copy">
             <p className="profession-course-highlight"><b>На нашем курсе ты <span>научишься создавать контент,</span> который бренды готовы покупать.</b></p>
@@ -524,8 +664,8 @@ export default function Home() {
         <div className="reviews-inner">
           <div className="reviews-heading"><h2>Что говорят</h2><strong><i className="plaque-text">выпускницы,</i></strong><p>которые уже зарабатывают<br />на AI-контенте?</p></div>
           <div className="reviews-content">
-            <ReviewMediaCarousel label="Видеоотзыв" />
-            <ReviewMediaCarousel image="/assets/images/review-figma.webp" label="Отзыв выпускницы" />
+            <ReviewMediaCarousel videos={videoReviews} label="Видеоотзывы выпускниц" autoplayIndex={services.length} />
+            <ReviewMediaCarousel images={reviewScreenshots} label="Скриншоты отзывов выпускниц" autoplayIndex={services.length + 1} />
           </div>
         </div>
       </section>

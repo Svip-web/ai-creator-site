@@ -19,5 +19,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="ru"><head><link rel="preload" as="image" href="/assets/images/hero-composite.webp" type="image/webp" /></head><body>{children}</body></html>;
+  return <html lang="ru"><head><link rel="preload" as="image" href="/assets/images/hero-person.webp" type="image/webp" /></head><body>{children}</body></html>;
 }
