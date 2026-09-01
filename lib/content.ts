@@ -10,7 +10,7 @@ export type StepItem = { number: string; title: string; text: string; emphasis: 
 export type FaqItem = { question: string; answer: string };
 export type ServiceItem = { title: string; price?: string; image?: string; images?: string[] };
 export type ReviewItem = { name: string; role: string; quote: string; image?: string };
-export type VideoReviewItem = { id: string; title: string };
+export type VideoReviewItem = { id: string; src: string; poster: string; title: string };
 
 export const program: ProgramModule[] = [
   {
@@ -161,7 +161,6 @@ export const services: ServiceItem[] = [
     title: 'SMM-услуги с поддержкой AI',
     price: '300–700€/мес',
     images: [
-      '/assets/images/service-ai-smm-cover-v2.webp',
       '/assets/images/service-ai-smm-2.webp',
       '/assets/images/service-ai-smm-3.webp',
       '/assets/images/service-ai-smm-4.webp',
@@ -227,10 +226,10 @@ export const reviews: ReviewItem[] = [
 ];
 
 export const videoReviews: VideoReviewItem[] = [
-  { id: 'QNkdHQvzwi8', title: 'Карина (Испания) — отзыв об обучении' },
-  { id: 'mH9OYCNrzuo', title: 'Светлана (Чехия) — отзыв об обучении' },
-  { id: '-lwIwkqzOPQ', title: 'Ольга (Майнц) — отзыв об обучении' },
-  { id: '8Pl7gMs3Io8', title: 'Наталья — отзыв об обучении' },
+  { id: 'QNkdHQvzwi8', src: '/assets/videos/QNkdHQvzwi8.mp4', poster: '/assets/videos/posters/QNkdHQvzwi8.webp', title: 'Карина (Испания) — отзыв об обучении' },
+  { id: 'mH9OYCNrzuo', src: '/assets/videos/mH9OYCNrzuo.mp4', poster: '/assets/videos/posters/mH9OYCNrzuo.webp', title: 'Светлана (Чехия) — отзыв об обучении' },
+  { id: '-lwIwkqzOPQ', src: '/assets/videos/-lwIwkqzOPQ.mp4', poster: '/assets/videos/posters/-lwIwkqzOPQ.webp', title: 'Ольга (Майнц) — отзыв об обучении' },
+  { id: '8Pl7gMs3Io8', src: '/assets/videos/8Pl7gMs3Io8.mp4', poster: '/assets/videos/posters/8Pl7gMs3Io8.webp', title: 'Наталья — отзыв об обучении' },
 ];
 
 export const reviewScreenshots = [

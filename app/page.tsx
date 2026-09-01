@@ -328,7 +328,7 @@ function ServiceCard({ item, index }: { item: (typeof services)[number]; index: 
         <button type="button" className="service-card-media" onClick={() => { setAutoplayPaused(true); setPreviewOpen(true); }} aria-label={`Увеличить изображение: ${item.title}`}>
           {displaySlides.map((image, slideIndex) => <img className={slideIndex === activeSlide ? `service-slide--active service-slide--${slideDirection === 1 ? 'next' : 'prev'}` : undefined} src={image} alt="" loading="lazy" decoding="async" key={image} />)}
         </button>
-        <span className="service-card-title"><BrandText text={item.title} /></span>
+        <span className="service-card-title">{item.title}</span>
         {item.price && <b className="service-card-price">{item.price}</b>}
         <div className="service-card-arrows">
           <button type="button" className="service-arrow service-arrow--prev" onClick={() => changeSlide(-1)} aria-label="Предыдущий слайд" disabled={slides.length < 2} />
@@ -346,7 +346,8 @@ function ReviewMediaCarousel({ images = [], videos = [], label, autoplayIndex }:
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [autoplayPaused, setAutoplayPaused] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
-  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [videoStarted, setVideoStarted] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const slideCount = videos.length || images.length;
   const activeVideo = videos[activeSlide];
   const activeImage = images[activeSlide];
@@ -354,20 +355,10 @@ function ReviewMediaCarousel({ images = [], videos = [], label, autoplayIndex }:
   const changeSlide = (direction: -1 | 1) => {
     if (slideCount < 2) return;
     setAutoplayPaused(true);
+    setVideoStarted(false);
     setSlideDirection(direction);
     setActiveSlide((current) => (current + direction + slideCount) % slideCount);
   };
-
-  useEffect(() => {
-    if (!videos.length) return;
-    const pauseWhenPlayerReceivesFocus = () => {
-      window.setTimeout(() => {
-        if (document.activeElement === iframeRef.current) setAutoplayPaused(true);
-      }, 0);
-    };
-    window.addEventListener('blur', pauseWhenPlayerReceivesFocus);
-    return () => window.removeEventListener('blur', pauseWhenPlayerReceivesFocus);
-  }, [videos.length]);
 
   return (
     <>
@@ -388,17 +379,26 @@ function ReviewMediaCarousel({ images = [], videos = [], label, autoplayIndex }:
       >
         <div className="review-media">
           {activeVideo && (
-            <iframe
-              ref={iframeRef}
+            // oxlint-disable-next-line jsx-a11y/media-has-caption -- The supplied testimonial videos do not include caption tracks.
+            <video
+              ref={videoRef}
               key={activeVideo.id}
               className={`review-slide review-slide--${slideDirection === 1 ? 'next' : 'prev'}`}
-              src={`https://www.youtube-nocookie.com/embed/${activeVideo.id}?rel=0&playsinline=1`}
+              src={activeVideo.src}
+              poster={activeVideo.poster}
               title={activeVideo.title}
-              loading="lazy"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
+              aria-label={activeVideo.title}
+              controls={videoStarted}
+              playsInline
+              preload="metadata"
+              onPlay={() => { setVideoStarted(true); setAutoplayPaused(true); }}
+              onEnded={(event) => { event.currentTarget.load(); setVideoStarted(false); }}
             />
+          )}
+          {activeVideo && !videoStarted && (
+            <button type="button" className="review-video-play" onClick={() => { setAutoplayPaused(true); void videoRef.current?.play(); }} aria-label={`Воспроизвести: ${activeVideo.title}`}>
+              <span aria-hidden="true" />
+            </button>
           )}
           {activeImage && (
             <button key={activeImage} type="button" className={`review-slide review-slide--${slideDirection === 1 ? 'next' : 'prev'}`} onClick={() => { setAutoplayPaused(true); setPreviewOpen(true); }} aria-label={`Увеличить скриншот отзыва ${activeSlide + 1}`}>
@@ -451,7 +451,7 @@ function MarketExamplesCarousel() {
         <button type="button" className="service-arrow service-arrow--prev service-arrow--outline" onClick={() => changeSlide(-1)} aria-label="Предыдущий пример" />
         <button type="button" className="service-arrow service-arrow--next" onClick={() => changeSlide(1)} aria-label="Следующий пример" />
       </div>
-      <p>При регулярной работе доход AI-<b>креатора может достигать 1 000–2 000 € в месяц и выше.</b> Итог зависит от навыков, стоимости услуг и количества проектов.</p>
+      <p>При регулярной работе доход AI-<b>креатора может достигать 1 000–2 000€ в месяц и выше.</b> Итог зависит от навыков, стоимости услуг и количества проектов.</p>
     </div>
   );
 }
@@ -637,7 +637,7 @@ export default function Home() {
 
       <section className="bonus section-pad">
         <div className="bonus-badge">Твой бонус <img className="bonus-badge-icon" src="/assets/images/bonus-badge.svg" alt="" /></div>
-        <h2>2 вводных урока<br />об AI-креаторстве</h2>
+        <h2>Два бесплатных видео<br />Как начать зарабатывать<br /><span>на AI-креаторстве</span></h2>
         <div className="bonus-lessons">
           <article><img src="/assets/images/lesson-1.webp" alt="Вводный урок" loading="lazy" decoding="async" /><div><span>Урок 1</span><h3>Кто такие<br />AI-креаторы</h3></div></article>
           <article><img src="/assets/images/lesson-2.webp" alt="Вводный урок" loading="lazy" decoding="async" /><div><span>Урок 2</span><h3>Кто и за что<br />платит<br />AI-креаторам</h3></div></article>
@@ -698,7 +698,7 @@ export default function Home() {
         </article>
       </section>
 
-      <div className="spacer spacer--60" aria-hidden="true" />
+      <div className="spacer section-gap" aria-hidden="true" />
 
       <section className="audience section-pad">
         <div className="audience-heading"><h2>Для кого курс<br /><span><i className="plaque-text">MUST-HAVE</i></span></h2><b>В 2026 ГОДУ</b></div>
@@ -710,7 +710,7 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="spacer spacer--59" aria-hidden="true" />
+      <div className="spacer section-gap" aria-hidden="true" />
 
       <section className="earnings">
         <div className="earnings-content">
@@ -754,7 +754,7 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="spacer spacer--60" aria-hidden="true" />
+      <div className="spacer section-gap" aria-hidden="true" />
 
       <section className="expert">
         <h2>Эксперт курса</h2>
@@ -772,7 +772,7 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="spacer spacer--60" aria-hidden="true" />
+      <div className="spacer section-gap" aria-hidden="true" />
 
       <section className={programExpanded ? 'program program--expanded' : 'program'}>
         <h2>Программа<br />обучения</h2>
@@ -783,7 +783,7 @@ export default function Home() {
               <article key={`${module.number}-${index}`} className={expanded ? 'module module--open' : 'module'}>
                 <button type="button" className="module-toggle" aria-label={`${expanded ? 'Скрыть' : 'Показать'} ${module.title}`} aria-expanded={expanded} aria-controls={`module-details-${index}`} onClick={() => setOpenModule(expanded ? null : index)}>
                   <span className="module-meta"><b>модуль {index + 1}</b><img src="/assets/images/module-line.svg" alt="" /></span>
-                  <span className="module-title-row"><h3 className={module.title.length > 32 ? 'module-title--long' : undefined}><BrandText text={module.title} /></h3><b className="module-plus" aria-hidden="true"><i /><i /></b></span>
+                  <span className="module-title-row"><h3><BrandText text={module.title} /></h3><b className="module-plus" aria-hidden="true"><i /><i /></b></span>
                 </button>
                 {expanded && <div className="module-details" id={`module-details-${index}`}><p>{module.description}</p></div>}
               </article>
@@ -794,7 +794,7 @@ export default function Home() {
         <button className={programExpanded ? 'show-more show-more--expanded' : 'show-more'} type="button" aria-expanded={programExpanded} onClick={() => setProgramExpanded((current) => !current)}><span>{programExpanded ? 'Скрыть' : 'Показать больше'}</span><img src="/assets/images/show-more-icon.svg" alt="" /></button>
       </section>
 
-      <div className="spacer spacer--60" aria-hidden="true" />
+      <div className="spacer section-gap" aria-hidden="true" />
 
       <section className="skills">
         <div className="skills-heading"><h2>Какие навыки ты<br />получишь после</h2><strong><i className="plaque-text">обучения</i></strong></div>
@@ -828,7 +828,7 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="spacer spacer--59" aria-hidden="true" />
+      <div className="spacer section-gap" aria-hidden="true" />
 
       <section className="process">
         <div className="process-heading"><h2>Как проходит</h2><strong><i className="plaque-text">обучение</i></strong></div>
@@ -845,7 +845,7 @@ export default function Home() {
         </aside>
       </section>
 
-      <div className="spacer spacer--60" aria-hidden="true" />
+      <div className="spacer section-gap" aria-hidden="true" />
 
       <section className="reviews">
         <div className="reviews-inner">
@@ -857,7 +857,7 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="spacer spacer--60" aria-hidden="true" />
+      <div className="spacer section-gap" aria-hidden="true" />
 
       <section className="certificate">
         <div className="certificate-heading">
@@ -878,7 +878,7 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="spacer spacer--82" aria-hidden="true" />
+      <div className="spacer section-gap" aria-hidden="true" />
 
       <section className={visibleFaq === faq.length || openFaq !== null ? 'faq faq--expanded' : 'faq'}>
         <div className="faq-heading"><h2>Популярные</h2><strong><i className="plaque-text">вопросы</i></strong></div>
@@ -886,7 +886,7 @@ export default function Home() {
         <button type="button" className={visibleFaq === faq.length ? 'faq-more faq-more--expanded' : 'faq-more'} aria-expanded={visibleFaq === faq.length} onClick={() => setVisibleFaq((current) => current === faq.length ? 3 : faq.length)}><span>{visibleFaq === faq.length ? 'Скрыть' : 'Показать больше'}</span><img src="/assets/images/faq-show-more.svg" alt="" /></button>
       </section>
 
-      <div className="spacer spacer--60" aria-hidden="true" />
+      <div className="spacer section-gap" aria-hidden="true" />
 
       <section className="payment">
         <div className="payment-content">
@@ -905,8 +905,6 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="spacer spacer--60" aria-hidden="true" />
-
       <section className="application">
         <div className="application-main">
           <div className="application-hero">
@@ -923,7 +921,7 @@ export default function Home() {
             <div className="application-panel-inner">
               <div className="application-bonus">
                 <div className="application-bonus-badge"><span>Твой бонус</span><img src="/assets/images/application-gift.svg" alt="" /><i>х2</i></div>
-                <h3>2 вводных урока<br />об AI-креаторстве</h3>
+                <h3>Два бесплатных видео<br />Как начать зарабатывать<br /><span>на AI-креаторстве</span></h3>
                 <div className="application-lessons">
                   <article>
                     <figure><img className="application-laptop-base" src="/assets/images/application-laptop-base.svg" alt="" /><img className="application-laptop-shadow" src="/assets/images/application-laptop-shadow.webp" alt="" loading="lazy" decoding="async" /><img className="application-laptop" src="/assets/images/application-laptop.webp" alt="" loading="lazy" decoding="async" /><img className="application-lesson-screen" src="/assets/images/application-lesson-2.webp" alt="" loading="lazy" decoding="async" /></figure>
@@ -937,7 +935,7 @@ export default function Home() {
               </div>
               <div className="application-timer"><div className="application-timer-track"><p>Бесплатная регистрация закроется через: <OfferTimer /></p><img src="/assets/images/application-ticker-divider.svg" alt="" /><p>Бесплатная регистрация закроется через: <OfferTimer /></p></div></div>
               <div className="application-lead">
-                <h3>Регистрируйся<br />прямо сейчас <span>и получи 2 бесплатных</span><i>урока и бонусы</i></h3>
+                <h3>Регистрируйся<br />прямо сейчас <span>и получи 2 бесплатных</span><i>урока</i></h3>
                 <LeadCaptureForm />
               </div>
             </div>
@@ -945,12 +943,10 @@ export default function Home() {
         </div>
         <footer>
           <a className="footer-logo" href="#top"><span><i>AI </i>CREATOR</span><b>by ЖЕНЯ КОВАЛЕНКО</b></a>
-          <div className="legal"><LegalLabel href={legalLinks.privacy}>политика конфиденциальности</LegalLabel><span>info@luna13.academy</span><LegalLabel href={legalLinks.refunds}>Copyright © 2026. AI CREATOR.</LegalLabel></div>
+          <div className="legal"><LegalLabel href={legalLinks.privacy}>политика конфиденциальности</LegalLabel><span>info@kovalenko-ai.com</span><LegalLabel href={legalLinks.refunds}>Copyright © 2026. AI CREATOR.</LegalLabel></div>
           <div className="application-payment-logos"><img src="/assets/images/application-payment-logos.webp" alt="Visa, Stripe, Mastercard, Revolut и Wise" loading="lazy" decoding="async" /></div>
         </footer>
       </section>
-      <div className="end-strip"><span>AI CREATOR</span><span>AI CREATOR</span><span>AI CREATOR</span></div>
-
       <button type="button" className={pastBonus && !ctaBlockerVisible && !dialogOpen ? 'sticky-course-button sticky-course-button--visible' : 'sticky-course-button'} onClick={() => setDialogOpen(true)} aria-hidden={pastBonus && !ctaBlockerVisible && !dialogOpen ? undefined : true} tabIndex={pastBonus && !ctaBlockerVisible && !dialogOpen ? 0 : -1}>
         <span><CourseLabel /></span><i><img src="/assets/images/heart.svg" alt="" /></i>
       </button>
