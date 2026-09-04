@@ -4,6 +4,9 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'AI Creator — профессия будущего',
   description: 'Онлайн-курс по созданию контента с помощью нейросетей.',
+  icons: {
+    icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }],
+  },
   openGraph: {
     title: 'AI Creator — профессия будущего',
     description: 'Научись создавать контент с помощью нейросетей и зарабатывать на этом.',

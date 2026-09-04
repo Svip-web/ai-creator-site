@@ -11,10 +11,21 @@ export default defineConfig({
   publicDir: path.join(projectRoot, 'public'),
   base: '/',
   css: { postcss: { plugins: [tailwindcss()] } },
-  resolve: { alias: { '@': projectRoot } },
+  resolve: {
+    alias: {
+      'next/link': path.join(projectRoot, 'github-pages', 'next-link.tsx'),
+      '@': projectRoot,
+    },
+  },
   plugins: [react()],
   build: {
     outDir: path.join(projectRoot, 'github-pages-dist'),
     emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        main: path.join(projectRoot, 'github-pages', 'index.html'),
+        policy: path.join(projectRoot, 'github-pages', 'policy-aicreator', 'index.html'),
+      },
+    },
   },
 });

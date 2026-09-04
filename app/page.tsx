@@ -4,7 +4,7 @@
 import { type Dispatch, type ReactNode, type SetStateAction, type SubmitEvent, useEffect, useId, useRef, useState } from 'react';
 import intlTelInput, { type Iso2, type Iti } from 'intl-tel-input';
 import 'intl-tel-input/styles';
-import { ArrowDownRight, GraduationCap, Handshake, Laptop, Settings, UserPlus } from 'lucide-react';
+import { ArrowDownRight, CircleUserRound, GraduationCap, Handshake, Laptop, Settings, UserPlus } from 'lucide-react';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { advancedProgram, faq, legalLinks, program, reviewScreenshots, services, steps, videoReviews, type VideoReviewItem } from '@/lib/content';
 
@@ -451,7 +451,7 @@ function MarketExamplesCarousel() {
         <button type="button" className="service-arrow service-arrow--prev service-arrow--outline" onClick={() => changeSlide(-1)} aria-label="Предыдущий пример" />
         <button type="button" className="service-arrow service-arrow--next" onClick={() => changeSlide(1)} aria-label="Следующий пример" />
       </div>
-      <p>При регулярной работе доход AI-<b>креатора может достигать 1 000–2 000€ в месяц и выше.</b> Итог зависит от навыков, стоимости услуг и количества проектов.</p>
+      <p>При регулярной работе доход AI-<b>креатора может достигать 1000–2000€ в месяц и выше.</b></p>
     </div>
   );
 }
@@ -522,11 +522,14 @@ export default function Home() {
   useIntegraLeap();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [servicesExpanded, setServicesExpanded] = useState(false);
+  const servicesToggleRef = useRef<HTMLButtonElement>(null);
   const [programExpanded, setProgramExpanded] = useState(false);
+  const programToggleRef = useRef<HTMLButtonElement>(null);
   const [openModule, setOpenModule] = useState<number | null>(null);
   const [activeStep, setActiveStep] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [visibleFaq, setVisibleFaq] = useState(3);
+  const faqToggleRef = useRef<HTMLButtonElement>(null);
   const [pastBonus, setPastBonus] = useState(false);
   const [applicationReached, setApplicationReached] = useState(false);
   const [ctaBlockerVisible, setCtaBlockerVisible] = useState(false);
@@ -583,6 +586,10 @@ export default function Home() {
     };
   }, []);
 
+  const restoreCollapsedButton = (button: HTMLButtonElement | null) => {
+    window.requestAnimationFrame(() => window.requestAnimationFrame(() => button?.scrollIntoView({ behavior: 'smooth', block: 'center' })));
+  };
+
   return (
     <main className="site-shell">
       <div className={applicationReached ? 'offer-strip offer-strip--hidden' : 'offer-strip'} aria-label="Бесплатная регистрация закроется через" aria-hidden={applicationReached || undefined}>
@@ -609,7 +616,28 @@ export default function Home() {
             <small>by ЖЕНЯ КОВАЛЕНКО</small>
           </a>
           <span className="online-status"><i aria-hidden="true" />Онлайн-формат</span>
+          <nav className="desktop-nav" aria-label="Навигация по странице">
+            <a href="#audience">Для кого</a>
+            <a href="#reviews">Отзывы</a>
+            <a href="#program">О курсе</a>
+            <a href="#expert">Об эксперте</a>
+            <a href="#application">Записаться</a>
+          </nav>
         </header>
+        <div className="desktop-hero-copy desktop-only">
+          <p>Освойте профессию AI-креатора</p>
+          <h1>Создавайте AI-фото и видео для брендов и зарабатывайте</h1>
+          <strong>1000–2000€ онлайн</strong>
+          <div className="desktop-social-proof">
+            <span className="desktop-proof-avatars" aria-hidden="true">
+              <img src="/assets/images/review-screenshot-1.webp?v=2" alt="" />
+              <img src="/assets/images/review-screenshot-2.webp?v=2" alt="" />
+              <img src="/assets/images/review-screenshot-3.webp?v=2" alt="" />
+              <img src="/assets/images/review-screenshot-4.webp?v=2" alt="" />
+            </span>
+            <small>Более 2 000 девушек уже прошли обучение и начали создавать AI-контент по системе Жени Коваленко.</small>
+          </div>
+        </div>
         <div className="hero-copy">
           <p className="eyebrow">ПРОФЕССИЯ</p>
           <h1><i className="plaque-text">AI-креатор</i></h1>
@@ -623,6 +651,8 @@ export default function Home() {
         <div className="hero-art-window" aria-hidden="true">
           <div className="hero-collage">
             <img className="hero-person" src="/assets/images/hero-person.webp" alt="" fetchPriority="high" />
+            <span className="hero-person-name-cover" aria-hidden="true" />
+            <span className="hero-person-name">Женя<br />Коваленко</span>
             <span className="hero-tile hero-tile--sunglasses"><img src="/assets/images/hero-tile-sunglasses.webp" alt="" /></span>
             <span className="hero-tile hero-tile--paris"><img src="/assets/images/hero-tile-paris.webp" alt="" /></span>
             <span className="hero-tile hero-tile--car"><img src="/assets/images/hero-tile-car.webp" alt="" /></span>
@@ -700,7 +730,7 @@ export default function Home() {
 
       <div className="spacer section-gap" aria-hidden="true" />
 
-      <section className="audience section-pad">
+      <section className="audience section-pad" id="audience">
         <div className="audience-heading"><h2>Для кого курс<br /><span><i className="plaque-text">MUST-HAVE</i></span></h2><b>В 2026 ГОДУ</b></div>
         <div className="audience-cards">
           <article><div className="audience-card-media"><span /><img src="/assets/images/audience-beginner-struggle.png" alt="Девушка осваивает сложный интерфейс нейросети" loading="lazy" decoding="async" /></div><div className="audience-card-copy"><h3>Новичкам в нейросетях</h3><p>Освой востребованную онлайн-профессию с нуля — <b>без опыта в дизайне и технических знаний.</b></p></div></article>
@@ -723,7 +753,14 @@ export default function Home() {
             <div className="services-stack">
               {services.slice(0, servicesExpanded ? services.length : 5).map((item, index) => <ServiceCard item={item} index={index} key={item.title} />)}
             </div>
-            <button className={servicesExpanded ? 'show-more show-more--expanded earnings-services-toggle' : 'show-more earnings-services-toggle'} type="button" aria-expanded={servicesExpanded} onClick={() => setServicesExpanded((current) => !current)}><span>{servicesExpanded ? 'Скрыть' : 'Показать больше'}</span><img src="/assets/images/show-more-icon.svg" alt="" /></button>
+            <button ref={servicesToggleRef} className={servicesExpanded ? 'show-more show-more--expanded earnings-services-toggle' : 'show-more earnings-services-toggle'} type="button" aria-expanded={servicesExpanded} onClick={() => {
+              if (!servicesExpanded) {
+                setServicesExpanded(true);
+                return;
+              }
+              setServicesExpanded(false);
+              restoreCollapsedButton(servicesToggleRef.current);
+            }}><span>{servicesExpanded ? 'Скрыть' : 'Показать больше'}</span><img src="/assets/images/show-more-icon.svg" alt="" /></button>
             <div className="earnings-information">
               <div className="client-card">
                 <span><Handshake size={29} strokeWidth={2.4} aria-hidden="true" /></span>
@@ -756,7 +793,7 @@ export default function Home() {
 
       <div className="spacer section-gap" aria-hidden="true" />
 
-      <section className="expert">
+      <section className="expert" id="expert">
         <h2>Эксперт курса</h2>
         <div className="expert-content">
           <div className="expert-photo">
@@ -774,7 +811,7 @@ export default function Home() {
 
       <div className="spacer section-gap" aria-hidden="true" />
 
-      <section className={programExpanded ? 'program program--expanded' : 'program'}>
+      <section className={programExpanded ? 'program program--expanded' : 'program'} id="program">
         <h2>Программа<br />обучения</h2>
         <div className="program-list">
           {program.slice(0, programExpanded ? program.length : 4).map((module, index) => {
@@ -791,7 +828,15 @@ export default function Home() {
           })}
           {programExpanded && <article className="advanced-program"><h3>{advancedProgram.title}</h3><ul>{advancedProgram.items.map((item) => <li key={item}><i><img src="/assets/images/skills-check.svg" alt="" /></i><span>{item}</span></li>)}</ul></article>}
         </div>
-        <button className={programExpanded ? 'show-more show-more--expanded' : 'show-more'} type="button" aria-expanded={programExpanded} onClick={() => setProgramExpanded((current) => !current)}><span>{programExpanded ? 'Скрыть' : 'Показать больше'}</span><img src="/assets/images/show-more-icon.svg" alt="" /></button>
+        <button ref={programToggleRef} className={programExpanded ? 'show-more show-more--expanded' : 'show-more'} type="button" aria-expanded={programExpanded} onClick={() => {
+          if (!programExpanded) {
+            setProgramExpanded(true);
+            return;
+          }
+          setProgramExpanded(false);
+          setOpenModule(null);
+          restoreCollapsedButton(programToggleRef.current);
+        }}><span>{programExpanded ? 'Скрыть' : 'Показать больше'}</span><img src="/assets/images/show-more-icon.svg" alt="" /></button>
       </section>
 
       <div className="spacer section-gap" aria-hidden="true" />
@@ -847,7 +892,7 @@ export default function Home() {
 
       <div className="spacer section-gap" aria-hidden="true" />
 
-      <section className="reviews">
+      <section className="reviews" id="reviews">
         <div className="reviews-inner">
           <div className="reviews-heading"><h2>Что говорят</h2><strong><i className="plaque-text">выпускницы,</i></strong><p><span>которые уже зарабатывают</span><span>на AI-контенте?</span></p></div>
           <div className="reviews-content">
@@ -883,7 +928,15 @@ export default function Home() {
       <section className={visibleFaq === faq.length || openFaq !== null ? 'faq faq--expanded' : 'faq'}>
         <div className="faq-heading"><h2>Популярные</h2><strong><i className="plaque-text">вопросы</i></strong></div>
         <div className="faq-list">{faq.slice(0, visibleFaq).map((item, index) => { const expanded = openFaq === index; return <article key={item.question}><button type="button" aria-expanded={expanded} aria-controls={`faq-answer-${index}`} onClick={() => setOpenFaq(expanded ? null : index)}><span>{item.question}</span><b>{expanded ? '−' : '+'}</b></button>{expanded && <p id={`faq-answer-${index}`}>{item.answer}</p>}</article>; })}</div>
-        <button type="button" className={visibleFaq === faq.length ? 'faq-more faq-more--expanded' : 'faq-more'} aria-expanded={visibleFaq === faq.length} onClick={() => setVisibleFaq((current) => current === faq.length ? 3 : faq.length)}><span>{visibleFaq === faq.length ? 'Скрыть' : 'Показать больше'}</span><img src="/assets/images/faq-show-more.svg" alt="" /></button>
+        <button ref={faqToggleRef} type="button" className={visibleFaq === faq.length ? 'faq-more faq-more--expanded' : 'faq-more'} aria-expanded={visibleFaq === faq.length} onClick={() => {
+          if (visibleFaq !== faq.length) {
+            setVisibleFaq(faq.length);
+            return;
+          }
+          setVisibleFaq(3);
+          setOpenFaq(null);
+          restoreCollapsedButton(faqToggleRef.current);
+        }}><span>{visibleFaq === faq.length ? 'Скрыть' : 'Показать больше'}</span><img src="/assets/images/faq-show-more.svg" alt="" /></button>
       </section>
 
       <div className="spacer section-gap" aria-hidden="true" />
@@ -905,7 +958,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="application">
+      <section className="application" id="application">
         <div className="application-main">
           <div className="application-hero">
             <h2>Как новичку<br />зарабатывать на<br /><mark>AI-контенте для брендов</mark></h2>
@@ -913,6 +966,7 @@ export default function Home() {
               <span><GraduationCap aria-hidden="true" />С полного нуля</span>
               <span><Settings aria-hidden="true" />Без технических знаний</span>
               <span><Laptop aria-hidden="true" />Из любой точки мира</span>
+              <span><CircleUserRound aria-hidden="true" />В любом возрасте</span>
             </div>
             <div className="application-copy"><ArrowDownRight aria-hidden="true" /><p><b>Освой востребованную профессию AI-креатора</b>, создавай фото и видео для брендов и работай онлайн из любой точки мира.</p></div>
             <div className="application-woman"><img src="/assets/images/application-woman.webp" alt="Женя Коваленко" loading="lazy" decoding="async" /></div>

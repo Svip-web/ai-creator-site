@@ -13,7 +13,6 @@ export default function PrivacyPolicyPage() {
         <Link className="policy-back" href="/">← Вернуться на сайт</Link>
         <p>AI CREATOR <span>by ЖЕНЯ КОВАЛЕНКО</span></p>
         <h1>Политика<br /><mark>конфиденциальности</mark></h1>
-        <time dateTime="2026-09-01">Обновлено 1 сентября 2026 года</time>
       </header>
 
       <article className="policy-card">
@@ -90,7 +89,7 @@ export default function PrivacyPolicyPage() {
 
         <section>
           <h2>11. Изменения Политики</h2>
-          <p>Политика может обновляться при изменении сайта, процессов или законодательства. Актуальная версия всегда размещается на этой странице, а дата обновления указывается вверху.</p>
+          <p>Политика может обновляться при изменении сайта, процессов или законодательства. Актуальная версия всегда размещается на этой странице.</p>
         </section>
       </article>
 
