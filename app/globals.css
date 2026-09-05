@@ -578,6 +578,12 @@
 /* Keep the same 32px rhythm between review navigation and student work. */
 @media(max-width:900px){.student-works{margin-top:32px}}
 
+/* Start the guarantee content directly below its heading and enlarge the right visual. */
+@media(min-width:901px){
+  .guarantee-layout{align-items:start}
+  .guarantee-person--composite>img{right:-34px;width:112%}
+}
+
 /* Review screenshots open in an accessible full-screen preview. */
 .review-card-open{width:100%;padding:0;border:0;border-radius:18px;display:block;overflow:hidden;background:transparent;cursor:zoom-in}
 .review-card-open img{width:100%;height:auto;aspect-ratio:3/4;object-fit:cover}
