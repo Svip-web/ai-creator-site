@@ -19,8 +19,8 @@ function Highlight({ text, emphasis }: { text: string; emphasis: string }) {
 }
 
 export default function CourseResults() {
-  const [active, setActive] = useState<number | null>(0);
-  const current = results[active ?? 0];
+  const [active, setActive] = useState(0);
+  const current = results[active];
 
   return (
     <div className="results-panel">
@@ -30,7 +30,7 @@ export default function CourseResults() {
             type="button"
             className={`result-card${active === index ? ' is-open' : ''}`}
             key={item.title}
-            onClick={() => setActive((currentIndex) => currentIndex === index ? null : index)}
+            onClick={() => setActive(index)}
             aria-expanded={active === index}
           >
               <span className="result-summary-row"><span>{item.title}</span><i /></span>
