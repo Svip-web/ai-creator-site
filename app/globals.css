@@ -571,9 +571,9 @@
 }
 
 /* Separate reviews clearly and keep equal spacing around the copy. */
-.reviews-panel{margin-top:24px;padding-top:24px;border-top:2px solid var(--red)}
-.review-cards{margin-top:24px;padding-top:0}
-@media(max-width:900px){.reviews-panel{margin-top:24px;padding-top:24px}.review-cards{margin-top:24px;padding-top:0}}
+.reviews-panel{margin-top:32px;padding-top:32px;border-top:1px solid #e8003659}
+.review-cards{margin-top:32px;padding-top:0}
+@media(max-width:900px){.reviews-panel{margin-top:32px;padding-top:32px}.review-cards{margin-top:32px;padding-top:0}}
 
 /* Review screenshots open in an accessible full-screen preview. */
 .review-card-open{width:100%;padding:0;border:0;border-radius:18px;display:block;overflow:hidden;background:transparent;cursor:zoom-in}
