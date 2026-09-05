@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import BackButton from './BackButton';
 export const dynamic = 'force-static';
 
 export const metadata: Metadata = {
@@ -10,7 +11,7 @@ export default function PrivacyPolicyPage() {
   return (
     <main className="policy-page">
       <header className="policy-header">
-        <a className="policy-back" href="../">← Вернуться на сайт</a>
+        <BackButton />
         <p>AI CREATOR <span>by ЖЕНЯ КОВАЛЕНКО</span></p>
         <h1>Политика<br /><mark>конфиденциальности</mark></h1>
       </header>

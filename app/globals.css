@@ -410,7 +410,7 @@
 /* Standalone policy page, matching the previous AI Creator site. */
 .policy-page{width:min(960px,100%);min-height:100vh;margin:0 auto;padding:36px 20px 54px;background:var(--cream);color:var(--ink)}
 .policy-header{width:100%;padding:18px 0 30px;text-align:center}
-.policy-back{width:max-content;margin:0 auto 28px;display:block;color:#315782;font-size:15px;font-weight:700;text-decoration:none}
+.policy-back{width:max-content;margin:0 auto 28px;padding:0;display:block;border:0;background:none;color:#315782;font:700 15px/normal Gilroy,Arial,sans-serif;text-decoration:none;cursor:pointer}
 .policy-header>p{margin:0;font:700 22px/1 HelveticaNeue}
 .policy-header>p span{display:block;margin-top:4px;font:400 12px/1 Gilroy}
 .policy-header h1{margin:25px 0 18px;font:700 42px/1.03 HelveticaNeue;letter-spacing:-.02em}
