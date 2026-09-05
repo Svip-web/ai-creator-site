@@ -19,9 +19,9 @@ async function patchDirectory(directory) {
 
     const source = await readFile(path, 'utf8');
     const patched = source
-      .replaceAll('/assets/', `${repositoryBasePath}/assets/`)
-      .replaceAll('/_next/', `${repositoryBasePath}/_next/`)
-      .replaceAll('/favicon.svg', `${repositoryBasePath}/favicon.svg`);
+      .replaceAll(/(?<!\/ai-creator-site)\/assets\//g, `${repositoryBasePath}/assets/`)
+      .replaceAll(/(?<!\/ai-creator-site)\/_next\//g, `${repositoryBasePath}/_next/`)
+      .replaceAll(/(?<!\/ai-creator-site)\/favicon\.svg/g, `${repositoryBasePath}/favicon.svg`);
     if (patched !== source) await writeFile(path, patched);
   }
 }
