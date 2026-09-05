@@ -546,3 +546,6 @@
 .hero-signature{position:absolute;z-index:7;left:719px;bottom:55px;color:#fff;font:400 31px/1 GreatVibes;white-space:nowrap;text-shadow:0 2px 12px #0008;pointer-events:none}
 @media(max-width:900px){.hero-signature{left:50%;bottom:26px;transform:translateX(-50%);font-size:30px}}
 @media(max-width:520px){.hero-gallery{height:490px}.hero-person{width:110%;max-width:none;height:480px}.hero-signature{bottom:24px;font-size:30px}}
+
+/* Keep the full guarantee card inside the mobile viewport. */
+@media(max-width:520px){.guarantee-person--composite>img{left:48%;width:92%;height:100%;object-fit:contain}}
