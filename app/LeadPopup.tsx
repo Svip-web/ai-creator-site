@@ -54,6 +54,7 @@ export default function LeadPopup() {
   const phoneInputRef = useRef<HTMLInputElement>(null);
   const hiddenPhoneRef = useRef<HTMLInputElement>(null);
   const phoneInstanceRef = useRef<Iti | null>(null);
+  const isConsultation = /консультац/i.test(source);
 
   useEffect(() => {
     const input = phoneInputRef.current;
@@ -171,8 +172,10 @@ export default function LeadPopup() {
         <button className="lead-popup__close" type="button" onClick={() => setOpen(false)} aria-label="Закрыть окно">×</button>
         <div className="lead-popup__body">
           <span className="lead-popup__eyebrow">AI CREATOR</span>
-          <h2 id="lead-popup-title">Оставьте заявку</h2>
-          <p>Введите email и номер телефона — после отправки вы перейдёте в Telegram и получите дальнейшие инструкции.</p>
+          <h2 id="lead-popup-title">{isConsultation ? 'Получите консультацию' : 'Оставьте заявку'}</h2>
+          <p>{isConsultation
+            ? 'Введите email и номер телефона — мы ответим на вопросы и поможем выбрать подходящий формат обучения.'
+            : 'Введите email и номер телефона — после отправки вы перейдёте в Telegram и получите дальнейшие инструкции.'}</p>
           <form data-name="smartsender" className="lead-popup__form" onSubmitCapture={validate} noValidate>
             <label htmlFor="lead-email">Email</label>
             <input ref={emailRef} id="lead-email" type="email" name="email" autoComplete="email" inputMode="email" placeholder="name@example.com" aria-invalid={Boolean(emailError)} aria-describedby={emailError ? 'lead-email-error' : undefined} onInput={() => setEmailError('')} required />
@@ -184,7 +187,7 @@ export default function LeadPopup() {
             <input ref={hiddenPhoneRef} type="hidden" name="phone" />
             <input type="hidden" name="source" value={source} readOnly />
             {phoneError && <small id="lead-phone-error">{phoneError}</small>}
-            <button type="submit"><span>Отправить заявку</span><i><img src="/assets/images/like.svg" alt="" /></i></button>
+            <button type="submit"><span>{isConsultation ? 'Получить консультацию' : 'Отправить заявку'}</span><i><img src="/assets/images/like.svg" alt="" /></i></button>
           </form>
         </div>
       </dialog>
