@@ -560,3 +560,11 @@
 
 /* Show one complete learning card on mobile without a clipped preview at the right edge. */
 @media(max-width:520px){.benefit-grid article{flex-basis:100%}}
+
+/* Use one consistent 48px vertical rhythm for every main mobile section. */
+@media(max-width:520px){
+  .section,.stories,.course-results,.prices{padding-top:48px;padding-bottom:48px}
+  .program-section,.faq{padding-top:48px;padding-bottom:48px}
+  .mentor{padding-top:48px}
+  .guarantees{padding-top:48px;padding-bottom:0}
+}
