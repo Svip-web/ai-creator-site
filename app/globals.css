@@ -467,12 +467,12 @@
 @keyframes mentor-check-pop{0%,30%,100%{transform:translateY(0) scale(1);filter:drop-shadow(0 3px 5px #69b84b55)}45%{transform:translateY(-4px) scale(1.18);filter:drop-shadow(0 7px 8px #69b84b88)}60%{transform:translateY(0) scale(.96)}72%{transform:translateY(-1px) scale(1.05)}}
 @media(prefers-reduced-motion:reduce){.mentor-facts>p>img{animation:none}}
 
-/* Let the following section mask the flat lower edge of the guarantee artwork. */
+/* Keep the guarantee CTA and the following section in their own layout flow. */
 @media(min-width:901px){
   .guarantees>.cta{position:relative;z-index:3}
-  .guarantee-person--composite{height:660px;margin-bottom:-120px}
+  .guarantee-person--composite{height:660px;margin-bottom:0}
   .guarantee-person--composite>img{width:124%;height:100%}
-  .course-results{position:relative;z-index:2;margin-top:-90px;padding-top:154px}
+  .course-results{position:relative;z-index:2;margin-top:0;padding-top:64px}
 }
 
 /* Keep the lower edge of review mockups clean. */
