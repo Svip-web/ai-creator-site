@@ -523,3 +523,6 @@
 @media(max-width:900px){.mentor-action-row{display:block}.mentor-action-note{display:none}}
 
 .audience-card p strong{color:#1b1b1b;font-weight:700}
+
+/* Leave room for the wide CTA shadow and scale animation on narrow screens. */
+@media(max-width:520px){.guarantees>.cta--wide{width:calc(100% - 16px);margin-inline:auto}}
