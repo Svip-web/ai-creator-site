@@ -350,8 +350,8 @@
   .mentor-facts p{border:1px solid #31578218;background:#f7faff}
 }
 @media(max-width:520px){
-  .mentor-mobile-visual{height:480px;margin-top:16px}
-  .mentor-mobile-visual>img{bottom:-152px;height:690px}
+  .mentor-mobile-visual{height:480px;margin-top:4px}
+  .mentor-mobile-visual>img{bottom:-108px;height:690px}
   .mentor-mobile-visual>span{bottom:92px;font-size:31px}
 }
 
