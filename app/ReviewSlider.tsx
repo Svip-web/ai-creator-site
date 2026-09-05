@@ -11,7 +11,6 @@ const reviews = Array.from(
 
 export default function ReviewSlider() {
   const trackRef = useRef<HTMLDivElement>(null);
-  const [activeReview, setActiveReview] = useState(0);
   const [expandedReview, setExpandedReview] = useState<number | null>(null);
   useDragScroll(trackRef);
 
@@ -29,41 +28,43 @@ export default function ReviewSlider() {
     };
   }, [expandedReview]);
 
-  const scrollToReview = (index: number) => {
+  const getTrackMetrics = () => {
     const track = trackRef.current;
     const card = track?.querySelector<HTMLElement>('.review-card');
-    if (!track || !card) return;
+    if (!track || !card) return null;
 
     const gap = Number.parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 16;
-    const centeredLeft = index * (card.offsetWidth + gap) - (track.clientWidth - card.offsetWidth) / 2;
-    track.scrollTo({ left: centeredLeft, behavior: 'smooth' });
-    setActiveReview(index);
+    const step = card.offsetWidth + gap;
+    const maxIndex = Math.max(0, Math.round((track.scrollWidth - track.clientWidth) / step));
+    return { track, step, maxIndex };
+  };
+
+  const scrollToReview = (index: number) => {
+    const metrics = getTrackMetrics();
+    if (!metrics) return;
+
+    const nextIndex = Math.min(metrics.maxIndex, Math.max(0, index));
+    metrics.track.scrollTo({ left: nextIndex * metrics.step, behavior: 'smooth' });
   };
 
   const scroll = (direction: number) => {
-    const track = trackRef.current;
-    const card = track?.querySelector<HTMLElement>('.review-card');
-    if (!track || !card) return;
+    const metrics = getTrackMetrics();
+    if (!metrics) return;
 
-    const next = (activeReview + direction + reviews.length) % reviews.length;
-
+    const currentIndex = Math.min(metrics.maxIndex, Math.max(0, Math.round(metrics.track.scrollLeft / metrics.step)));
+    const next = currentIndex + direction > metrics.maxIndex
+      ? 0
+      : currentIndex + direction < 0
+        ? metrics.maxIndex
+        : currentIndex + direction;
     scrollToReview(next);
-  };
-
-  const syncActiveReview = () => {
-    const track = trackRef.current;
-    const card = track?.querySelector<HTMLElement>('.review-card');
-    if (!track || !card) return;
-    const gap = Number.parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 16;
-    const centeredPosition = track.scrollLeft + track.clientWidth / 2 - card.offsetWidth / 2;
-    setActiveReview(Math.min(reviews.length - 1, Math.max(0, Math.round(centeredPosition / (card.offsetWidth + gap)))));
   };
 
   return <div className="reviews-panel">
     <div className="reviews-head">
       <p>Честные отзывы девушек, которые <b>прошли обучение, освоили нейросети</b> и начали применять новые навыки в работе и собственных проектах.</p>
     </div>
-    <div className="review-cards drag-scroll" ref={trackRef} onScroll={syncActiveReview}>
+    <div className="review-cards drag-scroll" ref={trackRef}>
       {reviews.map((src, index) => <figure className="review-card" key={src}>
         <figcaption className="review-card-bar"><span aria-hidden="true"><i /><i /><i /></span><b>Отзыв ученицы</b></figcaption>
         <button className="review-card-open" type="button" onClick={() => setExpandedReview(index)} aria-label={`Увеличить отзыв ученицы ${index + 1}`}>
