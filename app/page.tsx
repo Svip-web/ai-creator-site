@@ -120,8 +120,8 @@ export default function Home() {
       <img className="hero-person" src="/assets/images/hero-person.png" alt="Женя Коваленко" />
       <div className="hero-gallery" aria-label="Примеры AI-контента">
         {marqueeColumns.map((images, columnIndex) => <div className={`marquee-column marquee-column--${columnIndex + 1}`} key={columnIndex}><div className="marquee-track">{[...images, ...images].map((src, index) => <img src={src} alt={index < images.length ? `Пример AI-контента ${columnIndex * images.length + index + 1}` : ''} aria-hidden={index >= images.length} key={`${src}-${index}`} />)}</div></div>)}
-        <span>Женя Коваленко</span>
       </div>
+      <span className="hero-signature">Женя Коваленко</span>
     </section>
 
     <section className="section system wrap" id="system">
