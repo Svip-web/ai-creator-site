@@ -271,7 +271,7 @@
 @media(max-width:900px){.faq-list{gap:8px}}
 
 /* Countdown between pricing and FAQ. */
-.countdown{position:relative;min-height:440px;margin-top:28px;padding:48px 46px;border-radius:32px;background:var(--blue);overflow:hidden}
+.countdown{position:relative;width:min(1270px,100%);min-height:440px;margin-top:28px;padding:48px 46px;border-radius:32px;background:var(--blue);overflow:hidden}
 .countdown-copy{position:relative;z-index:2;width:60%;max-width:650px}
 .countdown-copy h2{margin:0;font:700 42px/1.04 HelveticaNeue}
 .countdown-copy h2 mark{display:inline-block;margin-top:7px;padding:5px 13px 7px;border-radius:999px;background:var(--yellow);color:inherit}
