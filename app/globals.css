@@ -584,3 +584,6 @@
 .review-lightbox__content>button{position:absolute;z-index:2;top:12px;right:12px;width:46px;height:46px;padding:0;border:0;border-radius:50%;display:grid;place-items:center;background:#fff;color:#1b1b1b;cursor:pointer;font:400 32px/1 Arial}
 .review-lightbox__content>img{width:auto;max-width:100%;max-height:calc(100vh - 48px);border-radius:20px;object-fit:contain;box-shadow:0 24px 70px #0008}
 @media(max-width:520px){.review-lightbox{padding:12px}.review-lightbox__content{max-height:calc(100vh - 24px)}.review-lightbox__content>button{top:8px;right:8px;width:40px;height:40px;font-size:28px}.review-lightbox__content>img{max-height:calc(100vh - 24px);border-radius:14px}}
+
+/* Avoid stacking the FAQ bottom spacing with another large gap before the final CTA. */
+@media(max-width:520px){.closing{padding-top:0}}
