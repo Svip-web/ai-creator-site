@@ -601,6 +601,9 @@
 /* Keep the student-count badge on the portrait, away from the heading. */
 @media(min-width:901px){.mentor-desktop-stats p:nth-child(2){top:350px}}
 
+/* Keep the mobile signature fully over the dark jacket. */
+@media(max-width:900px){.mentor-mobile-visual>span{left:44%}}
+
 /* Review screenshots open in an accessible full-screen preview. */
 .review-card-open{width:100%;padding:0;border:0;border-radius:18px;display:block;overflow:hidden;background:transparent;cursor:zoom-in}
 .review-card-open img{width:100%;height:auto;aspect-ratio:3/4;object-fit:cover}
