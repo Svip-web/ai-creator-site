@@ -557,3 +557,6 @@
 
 /* Oversize the mobile guarantee portrait and let the next section cover its lower edge. */
 @media(max-width:520px){.guarantees{overflow:visible;padding-bottom:0}.guarantee-person--composite{height:560px;margin-bottom:-110px}.guarantee-person--composite>img{left:45%;bottom:-110px;width:124%;height:112%;object-fit:contain}.guarantees>.cta--wide{position:relative;z-index:4;margin-top:20px}.course-results{position:relative;z-index:3;border-radius:28px 28px 0 0}}
+
+/* Show one complete learning card on mobile without a clipped preview at the right edge. */
+@media(max-width:520px){.benefit-grid article{flex-basis:100%}}
