@@ -169,9 +169,9 @@ export default function Home() {
     <section className="mentor" id="expert">
       <img className="mentor-person" src="/assets/images/expert-person.png" alt="Женя Коваленко" />
       <div className="mentor-desktop-stats" aria-label="Факты о Жене Коваленко">
-        <p><b>03+</b><span>года в AI</span></p>
-        <p><b>2K+</b><span>учениц</span></p>
-        <p><b>3K+</b><span>коммерческих работ</span></p>
+        <p><b>3+ года</b><span>в AI</span></p>
+        <p><b>2 000+</b><span>учениц</span></p>
+        <p><b>3 000+</b><span>коммерческих работ</span></p>
       </div>
       <span className="mentor-signature">Женя Коваленко</span>
       <div className="mentor-content">
