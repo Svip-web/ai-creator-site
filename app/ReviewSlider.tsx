@@ -1,7 +1,7 @@
 'use client';
 
 /* oxlint-disable next/no-img-element */
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 const reviews = Array.from(
   { length: 5 },
@@ -10,38 +10,61 @@ const reviews = Array.from(
 
 export default function ReviewSlider() {
   const trackRef = useRef<HTMLDivElement>(null);
+  const [activeReview, setActiveReview] = useState(0);
+
+  const scrollToReview = (index: number) => {
+    const track = trackRef.current;
+    const card = track?.querySelector<HTMLElement>('.review-card');
+    if (!track || !card) return;
+
+    const gap = Number.parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 16;
+    const centeredLeft = index * (card.offsetWidth + gap) - (track.clientWidth - card.offsetWidth) / 2;
+    track.scrollTo({ left: centeredLeft, behavior: 'smooth' });
+    setActiveReview(index);
+  };
 
   const scroll = (direction: number) => {
     const track = trackRef.current;
     const card = track?.querySelector<HTMLElement>('.review-card');
     if (!track || !card) return;
 
-    const gap = Number.parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 16;
-    const step = card.offsetWidth + gap;
-    const end = track.scrollWidth - track.clientWidth;
+    const next = (activeReview + direction + reviews.length) % reviews.length;
 
-    if (direction > 0 && track.scrollLeft >= end - step / 2) {
-      track.scrollTo({ left: 0, behavior: 'smooth' });
-    } else if (direction < 0 && track.scrollLeft <= step / 2) {
-      track.scrollTo({ left: end, behavior: 'smooth' });
-    } else {
-      track.scrollBy({ left: direction * step, behavior: 'smooth' });
-    }
+    scrollToReview(next);
+  };
+
+  const syncActiveReview = () => {
+    const track = trackRef.current;
+    const card = track?.querySelector<HTMLElement>('.review-card');
+    if (!track || !card) return;
+    const gap = Number.parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 16;
+    const centeredPosition = track.scrollLeft + track.clientWidth / 2 - card.offsetWidth / 2;
+    setActiveReview(Math.min(reviews.length - 1, Math.max(0, Math.round(centeredPosition / (card.offsetWidth + gap)))));
   };
 
   return <div className="reviews-panel">
     <div className="reviews-head">
       <p>Честные отзывы девушек, которые <b>прошли обучение, освоили нейросети</b> и начали применять новые навыки в работе и собственных проектах.</p>
-      <div className="slider-arrows review-arrows">
-        <button type="button" onClick={() => scroll(-1)} aria-label="Предыдущий отзыв"><img src="/assets/images/arrow-left.svg" alt="" /></button>
-        <button type="button" onClick={() => scroll(1)} aria-label="Следующий отзыв"><img src="/assets/images/arrow-right.svg" alt="" /></button>
-      </div>
     </div>
-    <div className="review-cards" ref={trackRef}>
+    <div className="review-cards" ref={trackRef} onScroll={syncActiveReview}>
       {reviews.map((src, index) => <figure className="review-card" key={src}>
         <figcaption className="review-card-bar"><span aria-hidden="true"><i /><i /><i /></span><b>Отзыв ученицы</b></figcaption>
         <img src={src} alt={`Отзыв ученицы ${index + 1}`} />
       </figure>)}
+    </div>
+    <div className="review-slider-controls" aria-label="Навигация по отзывам">
+      <button className="review-arrow" type="button" onClick={() => scroll(-1)} aria-label="Предыдущий отзыв"><img src="/assets/images/arrow-left.svg" alt="" /></button>
+      <div className="review-dots">
+        {reviews.map((_, index) => <button
+          key={index}
+          type="button"
+          className={index === activeReview ? 'is-active' : ''}
+          onClick={() => scrollToReview(index)}
+          aria-label={`Показать отзыв ${index + 1}`}
+          aria-current={index === activeReview ? 'true' : undefined}
+        />)}
+      </div>
+      <button className="review-arrow" type="button" onClick={() => scroll(1)} aria-label="Следующий отзыв"><img src="/assets/images/arrow-right.svg" alt="" /></button>
     </div>
   </div>;
 }
