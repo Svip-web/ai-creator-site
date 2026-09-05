@@ -457,12 +457,12 @@
 }
 @keyframes mentor-badge-float{0%,100%{translate:0 0}50%{translate:0 -6px}}
 @media(max-width:520px){
-  .mentor-portrait-badges p{min-width:96px;padding:9px 11px 8px;border-radius:14px}
-  .mentor-portrait-badges b{font-size:17px}
-  .mentor-portrait-badges span{font-size:10px}
-  .mentor-portrait-badges p:nth-child(1){left:10px;top:34px}
-  .mentor-portrait-badges p:nth-child(2){right:10px;top:112px}
-  .mentor-portrait-badges p:nth-child(3){left:10px;bottom:108px;max-width:126px}
+  .mentor-portrait-badges p{min-width:118px;padding:12px 14px 11px;border-radius:16px}
+  .mentor-portrait-badges b{font-size:21px}
+  .mentor-portrait-badges span{font-size:12px}
+  .mentor-portrait-badges p:nth-child(1){left:8px;top:28px}
+  .mentor-portrait-badges p:nth-child(2){right:8px;top:102px}
+  .mentor-portrait-badges p:nth-child(3){left:8px;bottom:96px;max-width:150px}
 }
 @media(prefers-reduced-motion:reduce){.mentor-portrait-badges p{animation:none}}
 
