@@ -43,7 +43,7 @@ export default function StudySlider() {
 
   return <>
     <div className="study-layout">
-      <div className="study-media"><img className="study-cover" src="/assets/images/study-bonuses-mockup-v2.png" alt="Материалы, модули и бонусы обучения AI-креаторов" loading="lazy" decoding="async" /></div>
+      <div className="study-media"><img className="study-cover" src="/assets/images/study-bonuses-mockup-v2.png" alt="Материалы, модули и бонусы обучения AI‑креаторов" loading="lazy" decoding="async" /></div>
       <div className={`study-slider study-slider--${pageSize}`} aria-live="polite">
         <div className={`study-pages drag-pages${swipe.dragging ? ' is-dragging' : ''}`} {...swipe.handlers} style={{ transform: `translateX(calc(-${page * 100}% + ${swipe.offset}px))` }}>
           {pages.map((items, pageIndex) => <div className="study-grid" aria-hidden={pageIndex !== page} key={pageIndex}>

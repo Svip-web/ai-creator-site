@@ -592,6 +592,7 @@
 
 /* Show one complete learning card on mobile without a clipped preview at the right edge. */
 @media(max-width:520px){.benefit-grid article{flex-basis:100%}}
+@media(max-width:520px){.benefit-grid article{min-height:0;padding-bottom:22px}}
 
 /* Use one consistent 48px vertical rhythm for every main mobile section. */
 @media(max-width:520px){
@@ -714,6 +715,7 @@
 
 /* Keep audience cards fully inside the viewport with an exact 12px gap. */
 .audience-slider{overflow:hidden;overflow-clip-margin:0}
+.audience-slider-track{align-items:flex-start;transition:transform .5s cubic-bezier(.2,.75,.25,1),height .3s ease}
 .audience-slide{gap:12px}
 
 /* Global mobile slider rule: one complete card, never clipped at either edge. */

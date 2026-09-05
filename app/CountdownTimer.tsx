@@ -53,7 +53,7 @@ export default function CountdownTimer() {
           ))}
         </div>
         <a className="cta countdown-cta" href="#start">
-          <span>Стать AI-креатором</span>
+          <span>Стать AI‑креатором</span>
           <i><img src="/assets/images/like.svg" alt="" /></i>
         </a>
       </div>

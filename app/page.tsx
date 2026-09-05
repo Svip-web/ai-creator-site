@@ -109,7 +109,7 @@ const plans = [
 ];
 
 function Cta({ compact = false }: { compact?: boolean }) {
-  return <a className={compact ? 'cta cta--compact' : 'cta'} href="#start"><span>Начать путь AI-креатора<br className="desktop-break" /> по нашей системе</span><i><img src="/assets/images/like.svg" alt="" /></i></a>;
+  return <a className={compact ? 'cta cta--compact' : 'cta'} href="#start"><span>Начать путь AI‑креатора<br className="desktop-break" /> по нашей системе</span><i><img src="/assets/images/like.svg" alt="" /></i></a>;
 }
 
 function LayeredSystemGraphic({ src }: { src: string }) {
@@ -133,7 +133,7 @@ export default function Home() {
 
     <section className="hero wrap" id="top">
       <div className="hero-copy">
-        <p className="eyebrow"><img src="/assets/images/work.svg" alt="" />Освойте профессию AI-креатора</p>
+        <p className="eyebrow"><img src="/assets/images/work.svg" alt="" />Освойте профессию AI‑креатора</p>
         <h1>Создавайте AI-фото<br />и видео для брендов<br />и зарабатывайте</h1>
         <strong className="income">1000–2000<span className="euro">€</span>&nbsp;онлайн</strong>
         <p className="hero-subline">Пошаговая система <strong>от первого AI-визуала до портфолио и первых заказов</strong> — без опыта, знания языка и навыков дизайна.</p>
@@ -148,18 +148,18 @@ export default function Home() {
     </section>
 
     <section className="section system wrap" id="system">
-      <div className="section-title"><h2>Как работает профессия</h2><strong>AI-креатора?</strong></div>
+      <div className="section-title"><h2>Как работает профессия</h2><strong>AI‑креатора?</strong></div>
       <div className="steps">{steps.map((step) => <article className={step.featured ? 'step step--featured' : 'step'} key={step.number}><b>{`{${step.number}}`}</b><h3><EmphasizedText text={step.title} emphasis={step.emphasis} /></h3>{step.image && <LayeredSystemGraphic src={step.image} />}</article>)}</div>
       <p className="system-note">Следуя нашей системе, <b>вы шаг за шагом освоите нейросети,</b> соберёте портфолио и сможете превратить новый навык в удалённый доход.</p><Cta />
     </section>
 
     <div className="barriers-stage" id="barriers"><section className="section barriers"><div className="wrap">
-      <div className="section-title"><h2>Что вам точно не понадобится, чтобы стать</h2><strong>AI-креатором?</strong></div>
+      <div className="section-title"><h2>Что вам точно не понадобится, чтобы стать</h2><strong>AI‑креатором?</strong></div>
       <BarrierSlider items={barriers} />
     </div></section></div>
 
     <section className="section audience wrap" id="audience">
-      <div className="section-title"><h2>Кому подходит профессия</h2><strong>AI-креатора?</strong></div>
+      <div className="section-title"><h2>Кому подходит профессия</h2><strong>AI‑креатора?</strong></div>
       <AudienceSlider items={audience} />
       <Cta />
     </section>
@@ -212,7 +212,7 @@ export default function Home() {
           <div className="mentor-facts">{mentorFacts.map((fact) => <p key={fact.text}><img src="/assets/images/check.svg" alt="" /><span><EmphasizedText text={fact.text} emphasis={fact.emphasis} /></span></p>)}</div>
           <div className="mentor-action-row">
             <a className="cta cta--mentor" href="#prices"><span>Записаться на курс с<br /> индивидуальным подходом</span><i><img src="/assets/images/like.svg" alt="" /></i></a>
-            <p className="mentor-action-note"><b>Готовы учиться у Жени?</b><span>Выберите тариф и начните путь в AI-креаторстве</span></p>
+            <p className="mentor-action-note"><b>Готовы учиться у Жени?</b><span>Выберите тариф и начните путь в AI‑креаторстве</span></p>
           </div>
         </div>
       </div>
@@ -230,8 +230,8 @@ export default function Home() {
 
     <section className="prices" id="prices"><div className="wrap" id="start"><div className="section-title"><h2>Тарифы</h2><strong>участия</strong></div><div className="price-grid">{plans.map((plan) => <article key={plan.name}><header className={`price-head price-head--${plan.tone}`}><h3>{plan.name}</h3><span>{plan.label}</span></header><ul>{plan.items.map((item) => <li key={item}><i className="price-check"><img src="/assets/images/price-check.svg" alt="" /></i><span>{item}</span></li>)}</ul><a className="cta price-cta" href="#start"><span>Выбрать этот тариф</span><i><img src="/assets/images/like.svg" alt="" /></i></a></article>)}</div><div className="price-consultation"><p>Не знаете какой выбрать?</p><a className="cta price-consultation__button" href="#start"><span>Оставить заявку на<br />консультацию с экспертом</span></a></div></div></section>
 
-    <section className="career-showcase wrap" aria-label="Профессия AI-креатора">
-      <h2>Освойте профессию AI-креатора<br /><mark>и начните зарабатывать</mark></h2>
+    <section className="career-showcase wrap" aria-label="Профессия AI‑креатора">
+      <h2>Освойте профессию AI‑креатора<br /><mark>и начните зарабатывать</mark></h2>
       <p>Создавая фото и видео для брендов<br /><strong>С нуля до готового портфолио за 6–8 недель</strong></p>
       <div className="career-showcase__gallery">
         <div className="career-showcase__track">

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { usePageSwipe } from './useDragSlider';
 
 /* oxlint-disable next/no-img-element */
@@ -17,6 +17,8 @@ function HighlightedCopy({ text, emphasis }: { text: string; emphasis: string })
 export default function AudienceSlider({ items }: AudienceSliderProps) {
   const [pageSize, setPageSize] = useState(2);
   const [page, setPage] = useState(0);
+  const [trackHeight, setTrackHeight] = useState<number>();
+  const slideRefs = useRef<Array<HTMLDivElement | null>>([]);
   const indexedItems = useMemo(() => items.map((item, index) => ({ item, index })), [items]);
   const pages = useMemo(() => Array.from({ length: Math.ceil(indexedItems.length / pageSize) }, (_, index) => indexedItems.slice(index * pageSize, index * pageSize + pageSize)), [indexedItems, pageSize]);
 
@@ -30,12 +32,23 @@ export default function AudienceSlider({ items }: AudienceSliderProps) {
     return () => window.removeEventListener('resize', updatePageSize);
   }, []);
 
+  useLayoutEffect(() => {
+    const slide = slideRefs.current[page];
+    if (!slide) return;
+
+    const updateHeight = () => setTrackHeight(slide.offsetHeight);
+    updateHeight();
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(slide);
+    return () => observer.disconnect();
+  }, [page, pageSize]);
+
   const move = (direction: number) => setPage((current) => (current + direction + pages.length) % pages.length);
   const swipe = usePageSwipe((direction) => move(direction));
 
   return <div className="audience-slider">
-    <div className={`audience-slider-track drag-pages${swipe.dragging ? ' is-dragging' : ''}`} {...swipe.handlers} style={{ transform: `translateX(calc(-${page * 100}% + ${swipe.offset}px))` }}>
-      {pages.map((slide, slideIndex) => <div className="audience-slide" aria-hidden={slideIndex !== page} key={slideIndex}>
+    <div className={`audience-slider-track drag-pages${swipe.dragging ? ' is-dragging' : ''}`} {...swipe.handlers} style={{ transform: `translateX(calc(-${page * 100}% + ${swipe.offset}px))`, height: trackHeight }}>
+      {pages.map((slide, slideIndex) => <div className="audience-slide" ref={(element) => { slideRefs.current[slideIndex] = element; }} aria-hidden={slideIndex !== page} key={slideIndex}>
         {slide.map(({ item: [title, text, emphasis], index }) => {
           return <article className="audience-card" key={title}>
             <img src={`/assets/images/audience-sad-${String(index + 1).padStart(2, '0')}.png`} alt="" loading="lazy" decoding="async" />
