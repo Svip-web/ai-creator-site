@@ -13,6 +13,8 @@ import ProgramCloseButton from './ProgramCloseButton';
 import ReviewSlider from './ReviewSlider';
 import CountdownTimer from './CountdownTimer';
 
+export const dynamic = 'force-static';
+
 /* oxlint-disable next/no-img-element */
 const heroImages = Array.from({ length: 11 }, (_, index) => `/assets/images/hero-${String(index + 1).padStart(2, '0')}.png`);
 const avatars = Array.from({ length: 4 }, (_, index) => `/assets/images/avatar-0${index + 1}.png`);
@@ -264,7 +266,7 @@ export default function Home() {
 
     <footer className="site-footer">
       <div className="site-footer__inner wrap">
-        <a className="site-footer__offer" href="/policy-aicreator">Публичная оферта</a>
+        <a className="site-footer__offer" href="./policy-aicreator.html">Публичная оферта</a>
         <div className="payment-marks" aria-label="Поддерживаемые платёжные системы">
           <span className="payment-mark payment-mark--visa">VISA</span>
           <span className="payment-mark payment-mark--stripe">stripe</span>

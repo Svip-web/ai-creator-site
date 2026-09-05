@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
+export const dynamic = 'force-static';
 
 export const metadata: Metadata = {
   title: 'Политика конфиденциальности — AI CREATOR',
@@ -10,7 +10,7 @@ export default function PrivacyPolicyPage() {
   return (
     <main className="policy-page">
       <header className="policy-header">
-        <Link className="policy-back" href="/">← Вернуться на сайт</Link>
+        <a className="policy-back" href="../">← Вернуться на сайт</a>
         <p>AI CREATOR <span>by ЖЕНЯ КОВАЛЕНКО</span></p>
         <h1>Политика<br /><mark>конфиденциальности</mark></h1>
       </header>
@@ -83,7 +83,7 @@ export default function PrivacyPolicyPage() {
       </article>
 
       <footer className="policy-footer">
-        <Link href="/">AI CREATOR</Link>
+        <a href="../">AI CREATOR</a>
         <span>by ЖЕНЯ КОВАЛЕНКО</span>
         <a href="mailto:info@kovalenko-ai.com">info@kovalenko-ai.com</a>
       </footer>

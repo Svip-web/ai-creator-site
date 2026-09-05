@@ -317,7 +317,7 @@
 /* Closing application block and footer. */
 .closing{position:relative;margin-top:0;padding:58px 0 72px;border-radius:0;overflow:hidden;background:var(--cream)}
 .closing-inner{position:relative;z-index:1;text-align:center}
-.closing-cta{width:min(430px,100%);height:86px;margin:0 auto;text-transform:uppercase;font-size:24px}
+.closing-cta{width:min(430px,100%);height:86px;margin:0 auto;text-transform:none;font-size:24px}
 .closing-inner>p{position:relative;z-index:2;max-width:720px;margin:34px auto 0;color:#343434;font-size:21px;line-height:1.25}
 .closing-watermark{position:absolute;z-index:-1;left:50%;bottom:-54px;color:#96b2d322;white-space:nowrap;transform:translateX(-50%);font:700 clamp(110px,17vw,230px)/1 HelveticaNeue;letter-spacing:-.06em}
 .site-footer{padding:56px 0 36px;background:#dcecff}
@@ -561,6 +561,14 @@
 
 /* Oversize the mobile guarantee portrait and let the next section cover its lower edge. */
 @media(max-width:520px){.guarantees{overflow:visible;padding-bottom:0}.guarantee-person--composite{height:560px;margin-bottom:-110px}.guarantee-person--composite>img{left:45%;bottom:-110px;width:124%;height:112%;object-fit:contain}.guarantees>.cta--wide{position:relative;z-index:4;margin-top:20px}.course-results{position:relative;z-index:3;border-radius:28px 28px 0 0}}
+
+/* Keep the mobile audience CTA, its outline and glow fully inside the viewport. */
+@media(max-width:520px){
+  .audience{width:100%;max-width:520px;padding-inline:20px;overflow:visible}
+  .audience-slider{width:100%;min-width:0}
+  .audience>.cta{width:100%;max-width:340px;margin:24px auto 12px;animation:cta-breathe-mobile 1.7s ease-in-out infinite}
+}
+@keyframes cta-breathe-mobile{0%,100%{filter:brightness(1) saturate(1);scale:1}38%{filter:brightness(1.12) saturate(1.12);scale:1}62%{filter:brightness(1.06) saturate(1.06);scale:1}}
 
 /* Show one complete learning card on mobile without a clipped preview at the right edge. */
 @media(max-width:520px){.benefit-grid article{flex-basis:100%}}
