@@ -189,7 +189,7 @@ export default function Home() {
           <div className="mentor-facts">{mentorFacts.map((fact) => <p key={fact.text}><img src="/assets/images/check.svg" alt="" /><span><EmphasizedText text={fact.text} emphasis={fact.emphasis} /></span></p>)}</div>
           <div className="mentor-action-row">
             <a className="cta cta--mentor" href="#prices"><span>Записаться на курс с<br /> индивидуальным подходом</span><i><img src="/assets/images/like.svg" alt="" /></i></a>
-            <p className="mentor-action-note"><b>Остались вопросы?</b><span>Подберём формат обучения под ваши цели</span></p>
+            <p className="mentor-action-note"><b>Готовы учиться у Жени?</b><span>Выберите тариф и начните путь в AI-креаторстве</span></p>
           </div>
         </div>
       </div>
