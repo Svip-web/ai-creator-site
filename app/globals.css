@@ -555,5 +555,5 @@
 @media(max-width:900px){.hero-signature{left:50%;bottom:26px;transform:translateX(-50%);font-size:30px}}
 @media(max-width:520px){.hero-gallery{height:490px}.hero-person{width:110%;max-width:none;height:480px}.hero-signature{bottom:24px;font-size:30px}}
 
-/* Keep the full guarantee card inside the mobile viewport. */
-@media(max-width:520px){.guarantee-person--composite>img{left:48%;width:92%;height:100%;object-fit:contain}}
+/* Oversize the mobile guarantee portrait and let the next section cover its lower edge. */
+@media(max-width:520px){.guarantees{overflow:visible;padding-bottom:0}.guarantee-person--composite{height:560px;margin-bottom:-110px}.guarantee-person--composite>img{left:45%;bottom:-110px;width:124%;height:112%;object-fit:contain}.guarantees>.cta--wide{position:relative;z-index:4;margin-top:20px}.course-results{position:relative;z-index:3;border-radius:28px 28px 0 0}}
