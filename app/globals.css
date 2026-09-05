@@ -214,6 +214,7 @@
 .program details[open] summary em::before{content:"Скрыть"}
 .program details[open] summary em::after{transform:rotate(180deg)}
 @media(max-width:520px){.program summary em,.program details[open] summary em{height:66px}.program summary em::before{font-size:16px}.program summary em::after,.program details[open] summary em::after{flex-basis:36px;width:36px;height:36px}}
+@media(max-width:520px){.program summary em,.program details[open] summary em{width:220px;height:54px;padding:0 9px 0 17px;justify-self:center}.program summary em::before{font-size:14px}.program summary em::after,.program details[open] summary em::after{flex-basis:32px;width:32px;height:32px}}
 .student-works-marquee{margin-left:-34px;margin-right:-34px}
 @media(max-width:900px){.student-works-slider{margin-left:-18px;margin-right:-18px;padding-inline:18px}}
 @media(max-width:900px){.course-results{padding-left:14px;padding-right:14px}.course-results>.wrap{width:100%;max-width:none}}
