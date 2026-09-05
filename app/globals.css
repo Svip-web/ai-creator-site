@@ -285,13 +285,13 @@
 @media(max-width:520px){.countdown{border-radius:28px}.countdown-copy h2{font-size:27px}.countdown-copy p{font-size:15px}.countdown-clock{gap:7px}.countdown-unit{border-radius:18px}.countdown-unit strong{font-size:38px}.countdown-unit small{font-size:12px}.countdown-cta{min-width:0;width:100%;height:66px;font-size:17px}.countdown-chair{margin-bottom:-96px}}
 
 /* Consultation CTA below the tariff cards. */
-.price-consultation{margin-top:66px;text-align:center}
+.price-consultation{margin-top:32px;text-align:center}
 .price-consultation p{margin:0 0 18px;color:var(--ink);font-size:23px;line-height:1.15}
 .price-consultation__button{width:min(470px,100%);height:86px;margin:0 auto;text-align:center;font-size:22px;line-height:1.12}
 .price-consultation__button{animation:none;transition:none}
 .price-consultation__button::before{display:none;animation:none}
 .price-consultation__button:hover,.price-consultation__button:focus-visible,.price-consultation__button:active{transform:none;box-shadow:0 4px 0 #980019;filter:none}
-@media(max-width:900px){.price-consultation{margin-top:38px}.price-consultation p{margin-bottom:14px;font-size:19px}.price-consultation__button{height:72px;font-size:17px}}
+@media(max-width:900px){.price-consultation{margin-top:24px}.price-consultation p{margin-bottom:14px;font-size:19px}.price-consultation__button{height:72px;font-size:17px}}
 @media(max-width:520px){.price-consultation__button{width:100%;font-size:18px}}
 
 /* Let the mobile study slider include its controls in the section height. */
