@@ -486,7 +486,7 @@
   .audience-card{transform-origin:center;transition:transform .34s cubic-bezier(.2,.8,.2,1),box-shadow .34s ease,border-color .34s ease,background .34s ease}
   .audience-card>img{transition:transform .5s cubic-bezier(.2,.8,.2,1),filter .35s ease}
   .audience-card b{display:inline-block;transition:transform .34s ease,color .34s ease}
-  .audience-card:hover{z-index:2;border-color:#ffd76a;background:#e6f1ff;box-shadow:0 12px 0 #ffd76a,0 24px 38px #31578224;transform:translateY(-7px) rotate(-.25deg)}
+  .audience-card:hover{z-index:2;border-color:#ffd76a;background:#e6f1ff;box-shadow:0 12px 0 #ffd76a;transform:translateY(-7px) rotate(-.25deg)}
   .audience-card:nth-child(even):hover{transform:translateY(-7px) rotate(.25deg)}
   .audience-card:hover>img{filter:saturate(1.08) contrast(1.03);transform:scale(1.035)}
   .audience-card:hover b{color:#315782;transform:translateX(7px)}
