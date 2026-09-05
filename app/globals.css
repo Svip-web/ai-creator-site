@@ -433,8 +433,8 @@
 @media(max-width:900px){.review-cards{padding-top:12px;padding-bottom:28px}.review-card{padding:9px;border-radius:22px;transform:rotate(.5deg) translateY(4px)}.review-card:nth-child(even),.review-card:nth-child(3n){transform:rotate(-.5deg) translateY(4px)}.review-card-bar{height:31px;padding-bottom:8px;font-size:10px}.review-card>img{border-radius:14px}}
 @media(prefers-reduced-motion:reduce){.review-card{transition:none}.review-card,.review-card:nth-child(even),.review-card:nth-child(3n),.review-card:hover{transform:none}}
 
-/* Stronger lesson labels in every course module. */
-.program-content li{font-weight:700}
+/* Use regular lesson copy and reserve bold weight for selected key phrases. */
+.program-content li{font-weight:400}.program-content li strong{font-weight:700}
 
 /* The approved guarantee composition is supplied as one finished image. */
 .guarantee-person--composite{background:transparent;overflow:visible}
