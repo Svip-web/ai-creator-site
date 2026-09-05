@@ -54,16 +54,6 @@ export default function ReviewSlider() {
     </div>
     <div className="review-slider-controls" aria-label="Навигация по отзывам">
       <button className="review-arrow" type="button" onClick={() => scroll(-1)} aria-label="Предыдущий отзыв"><img src="/assets/images/arrow-left.svg" alt="" /></button>
-      <div className="review-dots">
-        {reviews.map((_, index) => <button
-          key={index}
-          type="button"
-          className={index === activeReview ? 'is-active' : ''}
-          onClick={() => scrollToReview(index)}
-          aria-label={`Показать отзыв ${index + 1}`}
-          aria-current={index === activeReview ? 'true' : undefined}
-        />)}
-      </div>
       <button className="review-arrow" type="button" onClick={() => scroll(1)} aria-label="Следующий отзыв"><img src="/assets/images/arrow-right.svg" alt="" /></button>
     </div>
   </div>;
