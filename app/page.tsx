@@ -12,6 +12,7 @@ import AudienceSlider from './AudienceSlider';
 import ProgramCloseButton from './ProgramCloseButton';
 import ReviewSlider from './ReviewSlider';
 import CountdownTimer from './CountdownTimer';
+import SiteHeader from './SiteHeader';
 
 export const dynamic = 'force-static';
 
@@ -128,11 +129,7 @@ export default function Home() {
     <ScrollEffects />
     <LeadPopup />
     <RegistrationToast />
-    <header className="header wrap">
-      <a className="brand" href="#top" aria-label="AI Growth Studio — начало страницы"><span className="brand-symbol" /><span className="brand-wordmark" /></a>
-      <nav aria-label="Навигация по странице"><a href="#audience">Для кого</a><a href="#stories">Отзывы</a><a href="#course">О курсе</a><a href="#expert">Об эксперте</a><a href="#prices">Тарифы</a><a href="#guarantees">Гарантии</a></nav>
-      <div className="header-actions"><a href="#start">Получить консультацию</a><a href="#start">Оставить заявку</a></div>
-    </header>
+    <SiteHeader />
 
     <section className="hero wrap" id="top">
       <div className="hero-copy">
