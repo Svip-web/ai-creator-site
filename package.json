@@ -1,5 +1,5 @@
 {
-  "name": "ai-creator-site",
+  "name": "sites-project",
   "version": "0.1.0",
   "private": true,
   "engines": {
@@ -8,9 +8,8 @@
   "scripts": {
     "dev": "vinext dev",
     "build": "vinext build",
-    "build:pages": "vite build --config vite.pages.config.ts",
     "start": "wrangler dev --config dist/server/wrangler.json",
-    "lint": "oxlint app lib components/ui/dialog.tsx",
+    "lint": "oxlint",
     "format": "oxfmt"
   },
   "dependencies": {
@@ -22,7 +21,7 @@
     "date-fns": "4.1.0",
     "embla-carousel-react": "8.5.2",
     "input-otp": "1.4.2",
-    "intl-tel-input": "^27.0.10",
+    "intl-tel-input": "^27.3.1",
     "lucide-react": "1.31.0",
     "react": "19.2.6",
     "react-day-picker": "9.8.1",
