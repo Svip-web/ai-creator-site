@@ -476,9 +476,10 @@
 
 /* Keep the guarantee CTA and the following section in their own layout flow. */
 @media(min-width:901px){
+  .guarantees{padding-bottom:0}
   .guarantees>.cta{position:relative;z-index:3}
   .guarantee-person--composite{height:660px;margin-bottom:0}
-  .guarantee-person--composite>img{width:124%;height:100%}
+  .guarantee-person--composite>img{left:auto;right:0;bottom:-110px;width:100%;height:auto;object-position:right bottom;transform:none}
   .course-results{position:relative;z-index:2;margin-top:0;padding-top:64px}
 }
 
