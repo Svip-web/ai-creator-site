@@ -31,6 +31,7 @@ jobs:
         run: npm run build
         env:
           GITHUB_PAGES: 'true'
+          NEXT_PUBLIC_TELEGRAM_ENDPOINT: 'https://ai-creator-kovalenko.svip201517.chatgpt.site/api/telegram-lead'
       - name: Prepare repository paths
         run: node scripts/prepare-github-pages.mjs
       - uses: actions/configure-pages@v5

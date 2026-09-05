@@ -20,6 +20,8 @@ const formConfig = {
   },
 };
 
+const telegramEndpoint = process.env.NEXT_PUBLIC_TELEGRAM_ENDPOINT || '/api/telegram-lead';
+
 async function detectCountryByIp(): Promise<Iso2> {
   try {
     const response = await fetch('https://get.geojs.io/v1/ip/geo.json');
@@ -112,7 +114,7 @@ export default function LeadPopup() {
       }
 
       try {
-        const telegramResponse = await fetch('/api/telegram-lead', {
+        const telegramResponse = await fetch(telegramEndpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
