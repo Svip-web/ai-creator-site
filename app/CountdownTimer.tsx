@@ -42,18 +42,22 @@ export default function CountdownTimer() {
   return (
     <section className="countdown wrap" aria-label="До завершения набора">
       <div className="countdown-copy">
-        <span>Набор открыт</span>
-        <h2>Успейте сохранить<br />текущую стоимость</h2>
+        <h2>Успейте занять место в потоке и сохранить текущую <mark>стоимость обучения</mark></h2>
         <p>До завершения набора осталось:</p>
+        <div className="countdown-clock" aria-live="polite">
+          {items.map(([label, value]) => (
+            <div className="countdown-unit" key={label}>
+              <strong>{value}</strong>
+              <small>{label}</small>
+            </div>
+          ))}
+        </div>
+        <a className="cta countdown-cta" href="#start">
+          <span>Стать AI-креатором</span>
+          <i><img src="/assets/images/like.svg" alt="" /></i>
+        </a>
       </div>
-      <div className="countdown-clock" aria-live="polite">
-        {items.map(([label, value]) => (
-          <div className="countdown-unit" key={label}>
-            <strong>{value}</strong>
-            <small>{label}</small>
-          </div>
-        ))}
-      </div>
+      <img className="countdown-chair" src="/assets/images/ai-creator-chair.png" alt="Кресло с ноутбуком AI Creator" />
     </section>
   );
 }

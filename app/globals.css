@@ -270,16 +270,19 @@
 @media(max-width:900px){.faq-list{gap:8px}}
 
 /* Countdown between pricing and FAQ. */
-.countdown{margin-top:28px;padding:38px 46px;border-radius:32px;display:flex;align-items:center;justify-content:space-between;gap:36px;background:var(--blue);overflow:hidden}
-.countdown-copy>span{width:max-content;padding:8px 14px;border-radius:999px;display:block;background:var(--yellow);font:700 14px/1 HelveticaNeue}
-.countdown-copy h2{margin:16px 0 10px;font:700 36px/1 HelveticaNeue}
-.countdown-copy p{margin:0;color:#4f535a;font-size:17px}
-.countdown-clock{display:flex;align-items:center;gap:10px}
-.countdown-unit{width:118px;height:118px;border-radius:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;box-shadow:0 1px 0 #3157821c}
-.countdown-unit strong{color:var(--red);font:700 48px/1 HelveticaNeue;font-variant-numeric:tabular-nums}
-.countdown-unit small{margin-top:8px;color:#4f535a;font:400 14px/1 Gilroy}
-@media(max-width:900px){.countdown{width:min(calc(100% - 28px),620px);margin-top:18px;padding:30px 18px;flex-direction:column;text-align:center;gap:24px}.countdown-copy>span{margin-inline:auto}.countdown-copy h2{font-size:30px}.countdown-clock{width:100%;justify-content:center}.countdown-unit{width:min(29vw,112px);height:min(29vw,112px)}}
-@media(max-width:520px){.countdown{border-radius:28px}.countdown-copy h2{font-size:27px}.countdown-copy p{font-size:15px}.countdown-clock{gap:7px}.countdown-unit{border-radius:18px}.countdown-unit strong{font-size:38px}.countdown-unit small{font-size:12px}}
+.countdown{position:relative;min-height:440px;margin-top:28px;padding:48px 46px;border-radius:32px;background:var(--blue);overflow:hidden}
+.countdown-copy{position:relative;z-index:2;width:60%;max-width:650px}
+.countdown-copy h2{margin:0;font:700 42px/1.04 HelveticaNeue}
+.countdown-copy h2 mark{display:inline-block;margin-top:7px;padding:5px 13px 7px;border-radius:999px;background:var(--yellow);color:inherit}
+.countdown-copy p{margin:20px 0 0;color:#4f535a;font-size:17px}
+.countdown-clock{display:flex;align-items:center;gap:10px;margin-top:20px}
+.countdown-unit{width:104px;height:96px;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;box-shadow:0 1px 0 #3157821c}
+.countdown-unit strong{color:var(--red);font:700 42px/1 HelveticaNeue;font-variant-numeric:tabular-nums}
+.countdown-unit small{margin-top:7px;color:#4f535a;font:400 13px/1 Gilroy}
+.countdown-cta{min-width:330px;height:72px;margin-top:24px;font-size:18px}
+.countdown-chair{position:absolute;z-index:1;right:-18px;bottom:-168px;width:455px;height:auto;display:block}
+@media(max-width:900px){.countdown{width:min(calc(100% - 28px),620px);min-height:0;margin-top:18px;padding:34px 18px 0;text-align:center}.countdown-copy{width:100%;max-width:none}.countdown-copy h2{font-size:30px}.countdown-copy h2 mark{padding-inline:10px}.countdown-clock{width:100%;justify-content:center}.countdown-unit{width:min(29vw,104px);height:min(27vw,96px)}.countdown-cta{margin:24px auto 0}.countdown-chair{position:relative;right:auto;bottom:auto;width:min(100%,390px);margin:16px auto -118px}}
+@media(max-width:520px){.countdown{border-radius:28px}.countdown-copy h2{font-size:27px}.countdown-copy p{font-size:15px}.countdown-clock{gap:7px}.countdown-unit{border-radius:18px}.countdown-unit strong{font-size:38px}.countdown-unit small{font-size:12px}.countdown-cta{min-width:0;width:100%;height:66px;font-size:17px}.countdown-chair{margin-bottom:-96px}}
 
 /* Consultation CTA below the tariff cards. */
 .price-consultation{margin-top:66px;text-align:center}
