@@ -568,3 +568,18 @@
   .mentor{padding-top:48px}
   .guarantees{padding-top:48px;padding-bottom:0}
 }
+
+/* Separate reviews clearly and keep equal spacing around the copy. */
+.reviews-panel{margin-top:24px;padding-top:24px;border-top:2px solid var(--red)}
+.review-cards{margin-top:24px;padding-top:0}
+@media(max-width:900px){.reviews-panel{margin-top:24px;padding-top:24px}.review-cards{margin-top:24px;padding-top:0}}
+
+/* Review screenshots open in an accessible full-screen preview. */
+.review-card-open{width:100%;padding:0;border:0;border-radius:18px;display:block;overflow:hidden;background:transparent;cursor:zoom-in}
+.review-card-open img{width:100%;height:auto;aspect-ratio:3/4;object-fit:cover}
+.review-card-open:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+.review-lightbox{position:fixed;z-index:1200;inset:0;padding:24px;display:grid;place-items:center;background:#101010d9;backdrop-filter:blur(8px)}
+.review-lightbox__content{position:relative;width:min(720px,100%);max-height:calc(100vh - 48px);display:grid;place-items:center}
+.review-lightbox__content>button{position:absolute;z-index:2;top:12px;right:12px;width:46px;height:46px;padding:0;border:0;border-radius:50%;display:grid;place-items:center;background:#fff;color:#1b1b1b;cursor:pointer;font:400 32px/1 Arial}
+.review-lightbox__content>img{width:auto;max-width:100%;max-height:calc(100vh - 48px);border-radius:20px;object-fit:contain;box-shadow:0 24px 70px #0008}
+@media(max-width:520px){.review-lightbox{padding:12px}.review-lightbox__content{max-height:calc(100vh - 24px)}.review-lightbox__content>button{top:8px;right:8px;width:40px;height:40px;font-size:28px}.review-lightbox__content>img{max-height:calc(100vh - 24px);border-radius:14px}}
