@@ -575,6 +575,9 @@
 .review-cards{margin-top:32px;padding-top:0}
 @media(max-width:900px){.reviews-panel{margin-top:32px;padding-top:32px}.review-cards{margin-top:32px;padding-top:0}}
 
+/* Keep the same 32px rhythm between review navigation and student work. */
+@media(max-width:900px){.student-works{margin-top:32px}}
+
 /* Review screenshots open in an accessible full-screen preview. */
 .review-card-open{width:100%;padding:0;border:0;border-radius:18px;display:block;overflow:hidden;background:transparent;cursor:zoom-in}
 .review-card-open img{width:100%;height:auto;aspect-ratio:3/4;object-fit:cover}
