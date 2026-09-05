@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { usePageSwipe } from './useDragSlider';
 
 /* oxlint-disable next/no-img-element */
 
@@ -30,13 +31,14 @@ export default function AudienceSlider({ items }: AudienceSliderProps) {
   }, []);
 
   const move = (direction: number) => setPage((current) => (current + direction + pages.length) % pages.length);
+  const swipe = usePageSwipe((direction) => move(direction));
 
   return <div className="audience-slider">
-    <div className="audience-slider-track" style={{ transform: `translateX(-${page * 100}%)` }}>
+    <div className={`audience-slider-track drag-pages${swipe.dragging ? ' is-dragging' : ''}`} {...swipe.handlers} style={{ transform: `translateX(calc(-${page * 100}% + ${swipe.offset}px))` }}>
       {pages.map((slide, slideIndex) => <div className="audience-slide" aria-hidden={slideIndex !== page} key={slideIndex}>
         {slide.map(({ item: [title, text, emphasis], index }) => {
           return <article className="audience-card" key={title}>
-            <img src={`/assets/images/audience-sad-${String(index + 1).padStart(2, '0')}.png`} alt="" />
+            <img src={`/assets/images/audience-sad-${String(index + 1).padStart(2, '0')}.png`} alt="" loading="lazy" decoding="async" />
             <div><b>/{String(index + 1).padStart(2, '0')}</b><h3>{title}</h3><p><HighlightedCopy text={text} emphasis={emphasis} /></p></div>
           </article>;
         })}

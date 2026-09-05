@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import { useDragScroll } from './useDragSlider';
 
 /* oxlint-disable jsx-a11y/media-has-caption, next/no-img-element */
 
@@ -10,6 +11,7 @@ export default function VideoStories() {
   const trackRef = useRef<HTMLDivElement>(null);
   const videoRefs = useRef<Array<HTMLVideoElement | null>>([]);
   const [playing, setPlaying] = useState<number | null>(null);
+  useDragScroll(trackRef);
 
   const move = (direction: -1 | 1) => {
     const track = trackRef.current;
@@ -30,11 +32,13 @@ export default function VideoStories() {
 
   return (
     <div className="story-slider">
-      <div className="story-videos" ref={trackRef}>
+      <div className="story-videos drag-scroll" ref={trackRef}>
         {videos.map((name, index) => (
           <article key={name}>
-            <video ref={(element) => { videoRefs.current[index] = element; }} controls playsInline preload="metadata" poster={`/assets/videos/posters/${name}.webp`} aria-label={`Видеоистория ученицы ${index + 1}`} onPlay={() => { videoRefs.current.forEach((video, videoIndex) => { if (videoIndex !== index) video?.pause(); }); setPlaying(index); }} onPause={() => setPlaying((current) => current === index ? null : current)} onEnded={() => setPlaying(null)}>
+            <video ref={(element) => { videoRefs.current[index] = element; }} controls playsInline preload="none" poster={`/assets/videos/posters/${name}.webp`} aria-label={`Видеоистория ученицы ${index + 1}`} onPlay={() => { videoRefs.current.forEach((video, videoIndex) => { if (videoIndex !== index) video?.pause(); }); setPlaying(index); }} onPause={() => setPlaying((current) => current === index ? null : current)} onEnded={() => setPlaying(null)}>
+              <source src={`/assets/videos/${name}.webm`} type="video/webm" />
               <source src={`/assets/videos/${name}.mp4`} type="video/mp4" />
+              Ваш браузер не поддерживает воспроизведение видео.
             </video>
             {playing !== index && <button className="story-play" type="button" onClick={() => videoRefs.current[index]?.play()} aria-label={`Воспроизвести видеоисторию ${index + 1}`}><img src="/assets/images/play.svg" alt="" /></button>}
           </article>

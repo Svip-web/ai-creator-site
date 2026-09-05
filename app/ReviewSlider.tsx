@@ -2,6 +2,7 @@
 
 /* oxlint-disable next/no-img-element */
 import { useEffect, useRef, useState } from 'react';
+import { useDragScroll } from './useDragSlider';
 
 const reviews = Array.from(
   { length: 5 },
@@ -12,6 +13,7 @@ export default function ReviewSlider() {
   const trackRef = useRef<HTMLDivElement>(null);
   const [activeReview, setActiveReview] = useState(0);
   const [expandedReview, setExpandedReview] = useState<number | null>(null);
+  useDragScroll(trackRef);
 
   useEffect(() => {
     if (expandedReview === null) return;
@@ -61,11 +63,11 @@ export default function ReviewSlider() {
     <div className="reviews-head">
       <p>Честные отзывы девушек, которые <b>прошли обучение, освоили нейросети</b> и начали применять новые навыки в работе и собственных проектах.</p>
     </div>
-    <div className="review-cards" ref={trackRef} onScroll={syncActiveReview}>
+    <div className="review-cards drag-scroll" ref={trackRef} onScroll={syncActiveReview}>
       {reviews.map((src, index) => <figure className="review-card" key={src}>
         <figcaption className="review-card-bar"><span aria-hidden="true"><i /><i /><i /></span><b>Отзыв ученицы</b></figcaption>
         <button className="review-card-open" type="button" onClick={() => setExpandedReview(index)} aria-label={`Увеличить отзыв ученицы ${index + 1}`}>
-          <img src={src} alt={`Отзыв ученицы ${index + 1}`} />
+          <img src={src} alt={`Отзыв ученицы ${index + 1}`} loading="lazy" decoding="async" />
         </button>
       </figure>)}
     </div>
@@ -76,7 +78,7 @@ export default function ReviewSlider() {
     {expandedReview !== null && <div className="review-lightbox" role="dialog" aria-modal="true" aria-label={`Увеличенный отзыв ученицы ${expandedReview + 1}`} onMouseDown={(event) => { if (event.currentTarget === event.target) setExpandedReview(null); }}>
       <div className="review-lightbox__content">
         <button type="button" autoFocus onClick={() => setExpandedReview(null)} aria-label="Закрыть увеличенный отзыв">×</button>
-        <img src={reviews[expandedReview]} alt={`Увеличенный отзыв ученицы ${expandedReview + 1}`} />
+        <img src={reviews[expandedReview]} alt={`Увеличенный отзыв ученицы ${expandedReview + 1}`} decoding="async" />
       </div>
     </div>}
   </div>;

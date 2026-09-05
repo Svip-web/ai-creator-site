@@ -3,6 +3,7 @@
 /* oxlint-disable next/no-img-element */
 
 import { useRef } from 'react';
+import { useDragScroll } from './useDragSlider';
 
 const benefits = [
   { title: 'Полную систему освоения профессии с нуля', text: 'Пошаговую программу от знакомства с нейросетями до портфолио, поиска клиентов и выполнения коммерческих заказов.', emphasis: 'Пошаговую программу', image: 'benefit-01.png' },
@@ -24,12 +25,14 @@ function Highlight({ text, emphasis }: { text: string; emphasis: string }) {
 
 export default function LearningBenefits() {
   const track = useRef<HTMLDivElement>(null);
+  useDragScroll(track);
 
   const move = (direction: -1 | 1) => {
     const slider = track.current;
     const card = slider?.querySelector<HTMLElement>('article');
     if (!slider || !card) return;
-    const step = card.offsetWidth + 8;
+    const gap = Number.parseFloat(getComputedStyle(slider).gap) || 0;
+    const step = card.offsetWidth + gap;
     const end = slider.scrollWidth - slider.clientWidth;
     if (direction === 1 && slider.scrollLeft >= end - step / 2) {
       slider.scrollTo({ left: 0, behavior: 'smooth' });
@@ -41,9 +44,9 @@ export default function LearningBenefits() {
   };
 
   return <>
-    <div className="benefit-grid" ref={track}>
+    <div className="benefit-grid drag-scroll" ref={track}>
       {benefits.map((item, index) => <article key={item.title}>
-        <div className="benefit-image"><img src={`/assets/images/${item.image}`} alt={item.title} /><span><img src="/assets/images/gift.svg" alt="" />{String(index + 1).padStart(2, '0')}</span></div>
+        <div className="benefit-image"><img src={`/assets/images/${item.image}`} alt={item.title} loading="lazy" decoding="async" /><span><img src="/assets/images/gift.svg" alt="" />{String(index + 1).padStart(2, '0')}</span></div>
         <h3>{item.title}</h3>
         <p><Highlight text={item.text} emphasis={item.emphasis} /></p>
       </article>)}

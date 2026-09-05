@@ -36,13 +36,13 @@ export default function CourseResults() {
               <span className="result-summary-row"><span>{item.title}</span><i /></span>
               {active === index && <>
                 <span className="result-copy"><Highlight text={item.text} emphasis={item.emphasis} /></span>
-                <span className="result-mobile-image"><img src={`/assets/images/course-results/${item.image}`} alt={item.title} /></span>
+                <span className="result-mobile-image"><img src={`/assets/images/course-results/${item.image}`} alt={item.title} loading="lazy" decoding="async" /></span>
               </>}
           </button>
         ))}
       </div>
       <div className="result-visual">
-        <img key={current.image} src={`/assets/images/course-results/${current.image}`} alt={current.title} />
+        <img key={current.image} src={`/assets/images/course-results/${current.image}`} alt={current.title} loading="lazy" decoding="async" />
       </div>
     </div>
   );

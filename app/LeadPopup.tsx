@@ -8,8 +8,6 @@ import 'intl-tel-input/styles';
 
 const formConfig = {
   url: 'https://mufiksoft.com/shopifyband/amo-panel/forms.php',
-  ssLink: 'https://telegram.me/aicreatorjenny_bot?start=ZGw6MzM4NzU2',
-  ssDomain: 'aipashamik',
   presets: {
     smartsender: {
       title: 'Реєстрація на веб {{tomorrowDate}} — сайт №2',
@@ -50,6 +48,9 @@ export default function LeadPopup() {
   const [source, setSource] = useState('');
   const [emailError, setEmailError] = useState('');
   const [phoneError, setPhoneError] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
   const emailRef = useRef<HTMLInputElement>(null);
   const phoneInputRef = useRef<HTMLInputElement>(null);
   const hiddenPhoneRef = useRef<HTMLInputElement>(null);
@@ -91,8 +92,39 @@ export default function LeadPopup() {
   }, []);
 
   useEffect(() => {
-    const appWindow = window as Window & { ilfConfig?: typeof formConfig };
+    const appWindow = window as Window & {
+      ilfConfig?: typeof formConfig;
+      IlPrepareForm?: (data: Record<string, unknown>) => Promise<Record<string, unknown>>;
+      IlAfterForm?: (data: Record<string, unknown>) => Promise<Record<string, unknown> | false>;
+    };
     appWindow.ilfConfig = formConfig;
+    appWindow.IlPrepareForm = async (data) => {
+      setSubmitting(true);
+      setSubmitError('');
+      return data;
+    };
+    appWindow.IlAfterForm = async (data) => {
+      setSubmitting(false);
+
+      if (typeof data.error === 'string' && data.error) {
+        setSubmitError('Не удалось отправить заявку. Пожалуйста, попробуйте ещё раз.');
+        return false;
+      }
+
+      try {
+        const telegramResponse = await fetch('/api/telegram-lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (!telegramResponse.ok) console.error('Telegram notification failed');
+      } catch {
+        console.error('Telegram notification failed');
+      }
+
+      setSubmitted(true);
+      return data;
+    };
 
     if (!document.getElementById('integraleap-sf')) {
       const script = document.createElement('script');
@@ -110,6 +142,9 @@ export default function LeadPopup() {
       setSource(trigger.innerText.replace(/\s+/g, ' ').trim());
       setEmailError('');
       setPhoneError('');
+      setSubmitError('');
+      setSubmitted(false);
+      setSubmitting(false);
       setOpen(true);
       window.setTimeout(() => emailRef.current?.focus(), 100);
     };
@@ -123,6 +158,8 @@ export default function LeadPopup() {
     return () => {
       document.removeEventListener('click', openFromButton);
       document.removeEventListener('keydown', closeOnEscape);
+      delete appWindow.IlPrepareForm;
+      delete appWindow.IlAfterForm;
     };
   }, []);
 
@@ -172,11 +209,16 @@ export default function LeadPopup() {
         <button className="lead-popup__close" type="button" onClick={() => setOpen(false)} aria-label="Закрыть окно">×</button>
         <div className="lead-popup__body">
           <span className="lead-popup__eyebrow">AI CREATOR</span>
-          <h2 id="lead-popup-title">{isConsultation ? 'Получите консультацию' : 'Оставьте заявку'}</h2>
-          <p>{isConsultation
-            ? 'Введите email и номер телефона — мы ответим на вопросы и поможем выбрать подходящий формат обучения.'
-            : 'Введите email и номер телефона — после отправки вы перейдёте в Telegram и получите дальнейшие инструкции.'}</p>
-          <form data-name="smartsender" className="lead-popup__form" onSubmitCapture={validate} noValidate>
+          {submitted ? <>
+            <h2 id="lead-popup-title">Спасибо за заявку!</h2>
+            <p>Мы получили ваши данные и скоро свяжемся с вами.</p>
+            <button className="lead-popup__success-close" type="button" onClick={() => setOpen(false)}>Закрыть</button>
+          </> : <>
+            <h2 id="lead-popup-title">{isConsultation ? 'Получите консультацию' : 'Оставьте заявку'}</h2>
+            <p>{isConsultation
+              ? 'Введите email и номер телефона — мы ответим на вопросы и поможем выбрать подходящий формат обучения.'
+              : 'Введите email и номер телефона — мы свяжемся с вами и расскажем о дальнейших шагах.'}</p>
+            <form data-name="smartsender" className="lead-popup__form" onSubmitCapture={validate} noValidate>
             <label htmlFor="lead-email">Email</label>
             <input ref={emailRef} id="lead-email" type="email" name="email" autoComplete="email" inputMode="email" placeholder="name@example.com" aria-invalid={Boolean(emailError)} aria-describedby={emailError ? 'lead-email-error' : undefined} onInput={() => setEmailError('')} required />
             {emailError && <small id="lead-email-error">{emailError}</small>}
@@ -187,8 +229,10 @@ export default function LeadPopup() {
             <input ref={hiddenPhoneRef} type="hidden" name="phone" />
             <input type="hidden" name="source" value={source} readOnly />
             {phoneError && <small id="lead-phone-error">{phoneError}</small>}
-            <button type="submit"><span>{isConsultation ? 'Получить консультацию' : 'Отправить заявку'}</span><i><img src="/assets/images/like.svg" alt="" /></i></button>
-          </form>
+              {submitError && <small role="alert">{submitError}</small>}
+              <button type="submit" disabled={submitting}><span>{submitting ? 'Отправляем…' : isConsultation ? 'Получить консультацию' : 'Отправить заявку'}</span><i><img src="/assets/images/like.svg" alt="" /></i></button>
+            </form>
+          </>}
         </div>
       </dialog>
     </div>

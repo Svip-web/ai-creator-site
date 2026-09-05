@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef } from 'react';
+import { useDragScroll } from './useDragSlider';
 
 /* oxlint-disable next/no-img-element */
 
@@ -12,6 +13,7 @@ const works = Array.from(
 export default function StudentWorks() {
   const sliderRef = useRef<HTMLDivElement>(null);
   const pauseUntilRef = useRef(0);
+  useDragScroll(sliderRef, () => { pauseUntilRef.current = Date.now() + 7000; });
 
   const move = useCallback((direction: -1 | 1, manual = false) => {
     const slider = sliderRef.current;
@@ -49,7 +51,7 @@ export default function StudentWorks() {
 
   const cards = works.map((src, index) => (
     <figure className="student-work-card" key={src}>
-      <img src={src} alt={`Работа ученицы ${index + 1}`} />
+      <img src={src} alt={`Работа ученицы ${index + 1}`} loading="lazy" decoding="async" />
     </figure>
   ));
 
@@ -66,13 +68,13 @@ export default function StudentWorks() {
       <div className="student-works-marquee" aria-label="Работы учениц">
         <div className="student-works-track">
           <div className="student-works-group">{cards}</div>
-          <div className="student-works-group" aria-hidden="true">{works.map((src) => <figure className="student-work-card" key={`${src}-copy`}><img src={src} alt="" /></figure>)}</div>
+          <div className="student-works-group" aria-hidden="true">{works.map((src) => <figure className="student-work-card" key={`${src}-copy`}><img src={src} alt="" loading="lazy" decoding="async" /></figure>)}</div>
         </div>
       </div>
 
-      <div className="student-works-slider" ref={sliderRef} aria-label="Слайдер работ учениц" onPointerDown={() => { pauseUntilRef.current = Date.now() + 7000; }}>
+      <div className="student-works-slider drag-scroll" ref={sliderRef} aria-label="Слайдер работ учениц">
         {cards}
-        {works.map((src, index) => <figure className="student-work-card" aria-hidden="true" key={`${src}-mobile-copy`}><img src={src} alt="" /></figure>)}
+        {works.map((src, index) => <figure className="student-work-card" aria-hidden="true" key={`${src}-mobile-copy`}><img src={src} alt="" loading="lazy" decoding="async" /></figure>)}
       </div>
     </div>
   );

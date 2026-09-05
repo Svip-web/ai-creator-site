@@ -109,6 +109,18 @@ function Cta({ compact = false }: { compact?: boolean }) {
   return <a className={compact ? 'cta cta--compact' : 'cta'} href="#start"><span>Начать путь AI-креатора<br className="desktop-break" /> по нашей системе</span><i><img src="/assets/images/like.svg" alt="" /></i></a>;
 }
 
+function LayeredSystemGraphic({ src }: { src: string }) {
+  const variant = src.includes('02') ? '02' : '01';
+  const layers = variant === '01'
+    ? ['tile-one', 'tile-two', 'tile-three', 'tile-four', 'cursor', 'icons']
+    : ['screen-photo', 'screen-list', 'screen-check', 'profile-left', 'profile-top', 'profile-bottom', 'folder'];
+
+  return <div className={`system-graphic system-graphic--${variant}`} role="img" aria-label={variant === '01' ? 'Примеры направлений AI-контента' : 'Работа над коммерческими AI-проектами'}>
+    <img className="system-graphic__base" src={`/assets/images/system-${variant}-base-v2.png`} alt="" loading="lazy" decoding="async" />
+    {layers.map((layer) => <span className={`system-graphic__layer system-graphic__layer--${layer}`} aria-hidden="true" key={layer}><img src={src} alt="" loading="lazy" decoding="async" /></span>)}
+  </div>;
+}
+
 export default function Home() {
   return <main>
     <ScrollEffects />
@@ -138,7 +150,7 @@ export default function Home() {
 
     <section className="section system wrap" id="system">
       <div className="section-title"><h2>Как работает профессия</h2><strong>AI-креатора?</strong></div>
-      <div className="steps">{steps.map((step) => <article className={step.featured ? 'step step--featured' : 'step'} key={step.number}><b>{`{${step.number}}`}</b><h3><EmphasizedText text={step.title} emphasis={step.emphasis} /></h3>{step.image && <img src={step.image} alt="" />}</article>)}</div>
+      <div className="steps">{steps.map((step) => <article className={step.featured ? 'step step--featured' : 'step'} key={step.number}><b>{`{${step.number}}`}</b><h3><EmphasizedText text={step.title} emphasis={step.emphasis} /></h3>{step.image && <LayeredSystemGraphic src={step.image} />}</article>)}</div>
       <p className="system-note">Следуя нашей системе, <b>вы шаг за шагом освоите нейросети,</b> соберёте портфолио и сможете превратить новый навык в удалённый доход.</p><Cta />
     </section>
 
@@ -164,7 +176,7 @@ export default function Home() {
 
     <section className="section guarantees wrap" id="guarantees">
       <div className="section-title guarantee-title"><h2>А какие у нас <span>гарантии?</span></h2><p>4 причины чувствовать себя уверенно во время обучения</p></div>
-      <div className="guarantee-layout"><div className="guarantee-grid">{guarantees.map((item) => <article key={item.title}><span><img src={`/assets/images/${item.icon}`} alt="" /></span><h3>{item.title}</h3><p><EmphasizedText text={item.text} emphasis={item.emphasis} /></p></article>)}</div><div className="guarantee-person guarantee-person--composite"><img src="/assets/images/guarantee-composite.png" alt="Женя Коваленко и условия обучения" /></div></div>
+      <div className="guarantee-layout"><div className="guarantee-grid">{guarantees.map((item) => <article key={item.title}><span><img src={`/assets/images/${item.icon}`} alt="" /></span><h3>{item.title}</h3><p><EmphasizedText text={item.text} emphasis={item.emphasis} /></p></article>)}</div><div className="guarantee-person guarantee-person--composite"><img src="/assets/images/guarantee-composite.png" alt="Женя Коваленко и условия обучения" loading="lazy" decoding="async" /></div></div>
       <a className="cta cta--wide" href="#prices"><span>Выбрать обучение и начать создавать AI-контент</span><i><img src="/assets/images/like.svg" alt="" /></i></a>
     </section>
 
@@ -179,7 +191,7 @@ export default function Home() {
     </section>
 
     <section className="mentor" id="expert">
-      <img className="mentor-person" src="/assets/images/expert-person.png" alt="Женя Коваленко" />
+      <img className="mentor-person" src="/assets/images/expert-person.png" alt="Женя Коваленко" loading="lazy" decoding="async" />
       <div className="mentor-desktop-stats" aria-label="Факты о Жене Коваленко">
         <p><b>3+ года</b><span>в AI</span></p>
         <p><b>2 000+</b><span>учениц</span></p>
@@ -189,7 +201,7 @@ export default function Home() {
       <div className="mentor-content">
         <div className="mentor-title"><h2>Ваш наставник</h2><strong>Женя Коваленко</strong></div>
         <div className="mentor-mobile-visual">
-          <img src="/assets/images/expert-person.png" alt="Женя Коваленко" />
+          <img src="/assets/images/expert-person.png" alt="Женя Коваленко" loading="lazy" decoding="async" />
           <div className="mentor-portrait-badges" aria-label="Факты о Жене Коваленко">
             <p><b>3+ года</b><span>в AI</span></p>
             <p><b>2 000+</b><span>учениц</span></p>
@@ -218,6 +230,23 @@ export default function Home() {
     </section>
 
     <section className="prices" id="prices"><div className="wrap" id="start"><div className="section-title"><h2>Тарифы</h2><strong>участия</strong></div><div className="price-grid">{plans.map((plan) => <article key={plan.name}><header className={`price-head price-head--${plan.tone}`}><h3>{plan.name}</h3><span>{plan.label}</span></header><ul>{plan.items.map((item) => <li key={item}><i className="price-check"><img src="/assets/images/price-check.svg" alt="" /></i><span>{item}</span></li>)}</ul><a className="cta price-cta" href="#start"><span>Выбрать этот тариф</span><i><img src="/assets/images/like.svg" alt="" /></i></a></article>)}</div><div className="price-consultation"><p>Не знаете какой выбрать?</p><a className="cta price-consultation__button" href="#start"><span>Оставить заявку на<br />консультацию с экспертом</span></a></div></div></section>
+
+    <section className="career-showcase wrap" aria-label="Профессия AI-креатора">
+      <h2>Освойте профессию AI-креатора<br /><mark>и начните зарабатывать</mark></h2>
+      <p>Создавая фото и видео для брендов<br /><strong>С нуля до готового портфолио за 6–8 недель</strong></p>
+      <div className="career-showcase__gallery">
+        <div className="career-showcase__track">
+          {[0, 1].map((copy) => heroImages.slice(0, 5).map((src, index) => (
+            <img
+              src={src}
+              alt={copy === 0 ? `Пример AI-контента ${index + 1}` : ''}
+              aria-hidden={copy === 1}
+              key={`${copy}-${src}`}
+            />
+          )))}
+        </div>
+      </div>
+    </section>
 
     <CountdownTimer />
 
