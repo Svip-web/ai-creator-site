@@ -255,11 +255,11 @@
 @media(max-width:900px){.mentor-content{order:1}.mentor-person{order:2}}
 @media(max-width:520px){.mentor-person{left:-42%;width:184%;height:720px;margin:8px 0 -105px;object-fit:contain;object-position:center bottom}.mentor-signature{bottom:205px}}
 
-/* Expanded program control sits after the lesson list. */
-.program details.has-lessons[open] summary em{display:none}
-.program-close{width:276px;height:72px;margin:24px auto 0;padding:0 16px 0 24px;border:0;border-radius:999px;display:flex;align-items:center;justify-content:space-between;gap:14px;background:linear-gradient(90deg,#ff3540,#ce002b);box-shadow:0 4px 0 #980019;color:#fff;cursor:pointer;font:700 18px/1 HelveticaNeue}
+/* Keep the desktop program control in its original summary position. */
+.program-close{width:276px;height:72px;margin:24px auto 0;padding:0 16px 0 24px;border:0;border-radius:999px;display:none;align-items:center;justify-content:space-between;gap:14px;background:linear-gradient(90deg,#ff3540,#ce002b);box-shadow:0 4px 0 #980019;color:#fff;cursor:pointer;font:700 18px/1 HelveticaNeue}
 .program-close i{flex:0 0 38px;width:38px;height:38px;border:2px solid transparent;border-radius:50%;background:url('/assets/images/program-toggle-icon.png') center/contain no-repeat;transform:rotate(180deg);transition:border-color .2s ease}
 .program-close:hover i,.program-close:focus-visible i{border-color:#fff}
+@media(max-width:900px){.program details.has-lessons[open] summary em{display:none}.program-close{display:flex}}
 @media(max-width:520px){.program-close{width:100%;height:66px;font-size:16px}.program-close i{flex-basis:36px;width:36px;height:36px}}
 
 /* Compact transition from pricing to FAQ on mobile. */
