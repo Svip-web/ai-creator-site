@@ -17,19 +17,19 @@ import SiteHeader from './SiteHeader';
 export const dynamic = 'force-static';
 
 /* oxlint-disable next/no-img-element */
-const heroImages = Array.from({ length: 11 }, (_, index) => `/assets/images/hero-${String(index + 1).padStart(2, '0')}.png`);
-const avatars = Array.from({ length: 4 }, (_, index) => `/assets/images/avatar-0${index + 1}.png`);
+const heroImages = Array.from({ length: 11 }, (_, index) => `/assets/images/hero-${String(index + 1).padStart(2, '0')}.webp`);
+const avatars = Array.from({ length: 4 }, (_, index) => `/assets/images/avatar-0${index + 1}.webp`);
 const marqueeColumns = [
   [...heroImages],
   [...heroImages.slice(4), ...heroImages.slice(0, 4)],
 ];
 
 const steps = [
-  { number: '01', title: 'Выбираем востребованную нишу и формат контента', emphasis: 'востребованную нишу', image: '/assets/images/system-01.png', featured: true },
+  { number: '01', title: 'Выбираем востребованную нишу и формат контента', emphasis: 'востребованную нишу', image: '/assets/images/system-01.webp', featured: true },
   { number: '02', title: 'Выбираем востребованную нишу и формат контента', emphasis: 'формат контента' },
   { number: '03', title: 'Выбираем востребованную нишу и формат контента', emphasis: 'востребованную нишу' },
   { number: '04', title: 'Выполняем заказ и получаем оплату', emphasis: 'получаем оплату' },
-  { number: '05', title: 'Лучших выпускниц приглашаем работать над реальными проектами в нашей AI-агенции AI Growth Studio', emphasis: 'реальными проектами', image: '/assets/images/system-02.png', featured: true },
+  { number: '05', title: 'Лучших выпускниц приглашаем работать над реальными проектами в нашей AI-агенции AI Growth Studio', emphasis: 'реальными проектами', image: '/assets/images/system-02.webp', featured: true },
 ];
 
 function EmphasizedText({ text, emphasis }: { text: string; emphasis: string }) {
@@ -119,7 +119,7 @@ function LayeredSystemGraphic({ src }: { src: string }) {
     : ['screen-photo', 'screen-list', 'screen-check', 'profile-left', 'profile-top', 'profile-bottom', 'folder'];
 
   return <div className={`system-graphic system-graphic--${variant}`} role="img" aria-label={variant === '01' ? 'Примеры направлений AI-контента' : 'Работа над коммерческими AI-проектами'}>
-    <img className="system-graphic__base" src={`/assets/images/system-${variant}-base-v2.png`} alt="" loading="lazy" decoding="async" />
+    <img className="system-graphic__base" src={`/assets/images/system-${variant}-base-v2.webp`} alt="" loading="lazy" decoding="async" />
     {layers.map((layer) => <span className={`system-graphic__layer system-graphic__layer--${layer}`} aria-hidden="true" key={layer}><img src={src} alt="" loading="lazy" decoding="async" /></span>)}
   </div>;
 }
@@ -138,11 +138,11 @@ export default function Home() {
         <strong className="income">1000–2000<span className="euro">€</span>&nbsp;онлайн</strong>
         <p className="hero-subline">Пошаговая система <strong>от первого AI-визуала до портфолио и первых заказов</strong> — без опыта, знания языка и навыков дизайна.</p>
         <Cta />
-        <div className="proof"><span>{avatars.map((src) => <img src={src} alt="" key={src} />)}</span><small>*Более 2 000 девушек уже прошли обучение и начали создавать AI-контент по системе Жени Коваленко.</small></div>
+        <div className="proof"><span>{avatars.map((src) => <img src={src} alt="" loading="lazy" decoding="async" key={src} />)}</span><small>*Более 2 000 девушек уже прошли обучение и начали создавать AI-контент по системе Жени Коваленко.</small></div>
       </div>
-      <img className="hero-person" src="/assets/images/hero-person.png" alt="Женя Коваленко" />
+      <img className="hero-person" src="/assets/images/hero-person.webp" alt="Женя Коваленко" fetchPriority="high" decoding="async" />
       <div className="hero-gallery" aria-label="Примеры AI-контента">
-        {marqueeColumns.map((images, columnIndex) => <div className={`marquee-column marquee-column--${columnIndex + 1}`} key={columnIndex}><div className="marquee-track">{[...images, ...images].map((src, index) => <img src={src} alt={index < images.length ? `Пример AI-контента ${columnIndex * images.length + index + 1}` : ''} aria-hidden={index >= images.length} key={`${src}-${index}`} />)}</div></div>)}
+        {marqueeColumns.map((images, columnIndex) => <div className={`marquee-column marquee-column--${columnIndex + 1}`} key={columnIndex}><div className="marquee-track">{[...images, ...images].map((src, index) => <img src={src} alt={index < images.length ? `Пример AI-контента ${columnIndex * images.length + index + 1}` : ''} aria-hidden={index >= images.length} loading="lazy" decoding="async" fetchPriority="low" key={`${src}-${index}`} />)}</div></div>)}
       </div>
       <span className="hero-signature">Женя Коваленко</span>
     </section>
@@ -175,7 +175,7 @@ export default function Home() {
 
     <section className="section guarantees wrap" id="guarantees">
       <div className="section-title guarantee-title"><h2>А какие у нас <span>гарантии?</span></h2><p>4 причины чувствовать себя уверенно во время обучения</p></div>
-      <div className="guarantee-layout"><div className="guarantee-grid">{guarantees.map((item) => <article key={item.title}><span><img src={`/assets/images/${item.icon}`} alt="" /></span><h3>{item.title}</h3><p><EmphasizedText text={item.text} emphasis={item.emphasis} /></p></article>)}</div><div className="guarantee-person guarantee-person--composite"><img src="/assets/images/guarantee-composite.png" alt="Женя Коваленко и условия обучения" loading="lazy" decoding="async" /></div></div>
+      <div className="guarantee-layout"><div className="guarantee-grid">{guarantees.map((item) => <article key={item.title}><span><img src={`/assets/images/${item.icon}`} alt="" loading="lazy" decoding="async" /></span><h3>{item.title}</h3><p><EmphasizedText text={item.text} emphasis={item.emphasis} /></p></article>)}</div><div className="guarantee-person guarantee-person--composite"><img src="/assets/images/guarantee-composite.webp" alt="Женя Коваленко и условия обучения" loading="lazy" decoding="async" /></div></div>
       <a className="cta cta--wide" href="#prices"><span>Выбрать обучение и начать создавать AI-контент</span><i><img src="/assets/images/like.svg" alt="" /></i></a>
     </section>
 
@@ -190,7 +190,7 @@ export default function Home() {
     </section>
 
     <section className="mentor" id="expert">
-      <img className="mentor-person" src="/assets/images/expert-person.png" alt="Женя Коваленко" loading="lazy" decoding="async" />
+      <img className="mentor-person" src="/assets/images/expert-person.webp" alt="Женя Коваленко" loading="lazy" decoding="async" />
       <div className="mentor-desktop-stats" aria-label="Факты о Жене Коваленко">
         <p><b>3+ года</b><span>в AI</span></p>
         <p><b>2 000+</b><span>учениц</span></p>
@@ -200,7 +200,7 @@ export default function Home() {
       <div className="mentor-content">
         <div className="mentor-title"><h2>Ваш наставник</h2><strong>Женя Коваленко</strong></div>
         <div className="mentor-mobile-visual">
-          <img src="/assets/images/expert-person.png" alt="Женя Коваленко" loading="lazy" decoding="async" />
+          <img src="/assets/images/expert-person.webp" alt="Женя Коваленко" loading="lazy" decoding="async" />
           <div className="mentor-portrait-badges" aria-label="Факты о Жене Коваленко">
             <p><b>3+ года</b><span>в AI</span></p>
             <p><b>2 000+</b><span>учениц</span></p>
@@ -209,7 +209,7 @@ export default function Home() {
           <span>Женя Коваленко</span>
         </div>
         <div className="mentor-mobile-details">
-          <div className="mentor-facts">{mentorFacts.map((fact) => <p key={fact.text}><img src="/assets/images/check.svg" alt="" /><span><EmphasizedText text={fact.text} emphasis={fact.emphasis} /></span></p>)}</div>
+          <div className="mentor-facts">{mentorFacts.map((fact) => <p key={fact.text}><img src="/assets/images/check.svg" alt="" loading="lazy" decoding="async" /><span><EmphasizedText text={fact.text} emphasis={fact.emphasis} /></span></p>)}</div>
           <div className="mentor-action-row">
             <a className="cta cta--mentor" href="#prices"><span>Записаться на курс с<br /> индивидуальным подходом</span><i><img src="/assets/images/like.svg" alt="" /></i></a>
             <p className="mentor-action-note"><b>Готовы учиться у Жени?</b><span>Выберите тариф и начните путь в AI‑креаторстве</span></p>
@@ -228,7 +228,7 @@ export default function Home() {
       <div className="program wrap" aria-label="Программа обучения">{courseModules.map((module) => <details className={[module.vip && 'is-vip', module.lessons.length > 0 && 'has-lessons'].filter(Boolean).join(' ')} key={module.number}><summary><b>{module.number}</b><span><ProgramTitle title={module.title} vip={module.vip} /></span><em>Показать больше</em></summary>{module.lessons.length > 0 && <div className="program-content"><ul>{module.lessons.map((lesson) => <li key={lesson}>{programLessonEmphasis[lesson] ? <EmphasizedText text={lesson} emphasis={programLessonEmphasis[lesson]} /> : lesson}</li>)}</ul><ProgramCloseButton /></div>}</details>)}</div>
     </section>
 
-    <section className="prices" id="prices"><div className="wrap" id="start"><div className="section-title"><h2>Тарифы</h2><strong>участия</strong></div><div className="price-grid">{plans.map((plan) => <article key={plan.name}><header className={`price-head price-head--${plan.tone}`}><h3>{plan.name}</h3><span>{plan.label}</span></header><ul>{plan.items.map((item) => <li key={item}><i className="price-check"><img src="/assets/images/price-check.svg" alt="" /></i><span>{item}</span></li>)}</ul><a className="cta price-cta" href="#start"><span>Выбрать этот тариф</span><i><img src="/assets/images/like.svg" alt="" /></i></a></article>)}</div><div className="price-consultation"><p>Не знаете какой выбрать?</p><a className="cta price-consultation__button" href="#start"><span>Оставить заявку на<br />консультацию с экспертом</span></a></div></div></section>
+    <section className="prices" id="prices"><div className="wrap" id="start"><div className="section-title"><h2>Тарифы</h2><strong>участия</strong></div><div className="price-grid">{plans.map((plan) => <article key={plan.name}><header className={`price-head price-head--${plan.tone}`}><h3>{plan.name}</h3><span>{plan.label}</span></header><ul>{plan.items.map((item) => <li key={item}><i className="price-check"><img src="/assets/images/price-check.svg" alt="" loading="lazy" decoding="async" /></i><span>{item}</span></li>)}</ul><a className="cta price-cta" href="#start"><span>Выбрать этот тариф</span><i><img src="/assets/images/like.svg" alt="" /></i></a></article>)}</div><div className="price-consultation"><p>Не знаете какой выбрать?</p><a className="cta price-consultation__button" href="#start"><span>Оставить заявку на<br />консультацию с экспертом</span></a></div></div></section>
 
     <section className="career-showcase wrap" aria-label="Профессия AI‑креатора">
       <h2>Освойте профессию AI‑креатора<br /><mark>и начните зарабатывать</mark></h2>
@@ -240,6 +240,8 @@ export default function Home() {
               src={src}
               alt={copy === 0 ? `Пример AI-контента ${index + 1}` : ''}
               aria-hidden={copy === 1}
+              loading="lazy"
+              decoding="async"
               key={`${copy}-${src}`}
             />
           )))}

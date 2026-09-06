@@ -6,7 +6,7 @@ import { useDragScroll } from './useDragSlider';
 
 const reviews = Array.from(
   { length: 5 },
-  (_, index) => `/assets/images/reviews/review-${String(index + 1).padStart(2, '0')}.png`,
+  (_, index) => `/assets/images/reviews/review-${String(index + 1).padStart(2, '0')}.webp`,
 );
 
 export default function ReviewSlider() {

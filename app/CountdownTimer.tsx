@@ -57,7 +57,7 @@ export default function CountdownTimer() {
           <i><img src="/assets/images/like.svg" alt="" /></i>
         </a>
       </div>
-      <img className="countdown-chair" src="/assets/images/ai-creator-chair.png" alt="Кресло с ноутбуком AI Creator" loading="lazy" decoding="async" />
+      <img className="countdown-chair" src="/assets/images/ai-creator-chair.webp" alt="Кресло с ноутбуком AI Creator" loading="lazy" decoding="async" />
     </section>
   );
 }

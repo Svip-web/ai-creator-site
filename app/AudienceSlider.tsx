@@ -51,7 +51,7 @@ export default function AudienceSlider({ items }: AudienceSliderProps) {
       {pages.map((slide, slideIndex) => <div className="audience-slide" ref={(element) => { slideRefs.current[slideIndex] = element; }} aria-hidden={slideIndex !== page} key={slideIndex}>
         {slide.map(({ item: [title, text, emphasis], index }) => {
           return <article className="audience-card" key={title}>
-            <img src={`/assets/images/audience-sad-${String(index + 1).padStart(2, '0')}.png`} alt="" loading="lazy" decoding="async" />
+            <img src={`/assets/images/audience-sad-${String(index + 1).padStart(2, '0')}.webp`} alt="" loading="lazy" decoding="async" />
             <div><b>/{String(index + 1).padStart(2, '0')}</b><h3>{title}</h3><p><HighlightedCopy text={text} emphasis={emphasis} /></p></div>
           </article>;
         })}

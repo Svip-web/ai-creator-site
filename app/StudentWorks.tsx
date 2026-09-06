@@ -7,7 +7,7 @@ import { useDragScroll } from './useDragSlider';
 
 const works = Array.from(
   { length: 11 },
-  (_, index) => `/assets/images/hero-${String(index + 1).padStart(2, '0')}.png`,
+  (_, index) => `/assets/images/hero-${String(index + 1).padStart(2, '0')}.webp`,
 );
 
 export default function StudentWorks() {
