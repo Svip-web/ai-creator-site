@@ -3,7 +3,7 @@
 /* oxlint-disable next/no-img-element */
 
 import { type SyntheticEvent, useEffect, useRef, useState } from 'react';
-import intlTelInput, { type Iso2, type Iti } from 'intl-tel-input';
+import type { Iso2, Iti } from 'intl-tel-input';
 import 'intl-tel-input/styles';
 
 const formConfig = {
@@ -60,38 +60,47 @@ export default function LeadPopup() {
   const isConsultation = /консультац/i.test(source);
 
   useEffect(() => {
+    if (!open) return;
     const input = phoneInputRef.current;
     if (!input) return;
 
-    const instance = intlTelInput(input, {
-      initialCountry: 'auto',
-      useFullscreenPopup: false,
-      countryOrder: ['ua'],
-      excludeCountries: ['ru', 'by'],
-      separateDialCode: true,
-      nationalMode: true,
-      autoPlaceholder: 'aggressive',
-      formatAsYouType: true,
-      geoIpLookup: (success) => {
-        void detectCountryByIp().then(success).catch(() => success('ua'));
-      },
-      loadUtils: () => import('intl-tel-input/utils'),
-    });
-    phoneInstanceRef.current = instance;
+    let cancelled = false;
+    let instance: Iti | null = null;
+    let resetPhoneForCountry: (() => void) | null = null;
 
-    const resetPhoneForCountry = () => {
-      input.value = '';
-      if (hiddenPhoneRef.current) hiddenPhoneRef.current.value = '';
-      setPhoneError('');
-    };
-    input.addEventListener('countrychange', resetPhoneForCountry);
+    void import('intl-tel-input').then(({ default: intlTelInput }) => {
+      if (cancelled) return;
+      instance = intlTelInput(input, {
+        initialCountry: 'auto',
+        useFullscreenPopup: false,
+        countryOrder: ['ua'],
+        excludeCountries: ['ru', 'by'],
+        separateDialCode: true,
+        nationalMode: true,
+        autoPlaceholder: 'aggressive',
+        formatAsYouType: true,
+        geoIpLookup: (success) => {
+          void detectCountryByIp().then(success).catch(() => success('ua'));
+        },
+        loadUtils: () => import('intl-tel-input/utils'),
+      });
+      phoneInstanceRef.current = instance;
+
+      resetPhoneForCountry = () => {
+        input.value = '';
+        if (hiddenPhoneRef.current) hiddenPhoneRef.current.value = '';
+        setPhoneError('');
+      };
+      input.addEventListener('countrychange', resetPhoneForCountry);
+    });
 
     return () => {
-      input.removeEventListener('countrychange', resetPhoneForCountry);
-      instance.destroy();
+      cancelled = true;
+      if (resetPhoneForCountry) input.removeEventListener('countrychange', resetPhoneForCountry);
+      instance?.destroy();
       phoneInstanceRef.current = null;
     };
-  }, []);
+  }, [open]);
 
   useEffect(() => {
     const appWindow = window as Window & {
@@ -128,14 +137,6 @@ export default function LeadPopup() {
       return data;
     };
 
-    if (!document.getElementById('integraleap-sf')) {
-      const script = document.createElement('script');
-      script.id = 'integraleap-sf';
-      script.src = 'https://client.integraleap.com/js/sf.js';
-      script.async = true;
-      document.head.appendChild(script);
-    }
-
     const openFromButton = (event: MouseEvent) => {
       const target = event.target as HTMLElement | null;
       const trigger = target?.closest<HTMLElement>('.cta, .header-actions a');
@@ -164,6 +165,15 @@ export default function LeadPopup() {
       delete appWindow.IlAfterForm;
     };
   }, []);
+
+  useEffect(() => {
+    if (!open || document.getElementById('integraleap-sf')) return;
+    const script = document.createElement('script');
+    script.id = 'integraleap-sf';
+    script.src = 'https://client.integraleap.com/js/sf.js';
+    script.async = true;
+    document.head.appendChild(script);
+  }, [open]);
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
