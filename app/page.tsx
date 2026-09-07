@@ -16,7 +16,7 @@ import SiteHeader from './SiteHeader';
 
 export const dynamic = 'force-static';
 
-/* oxlint-disable next/no-img-element */
+/* oxlint-disable jsx-a11y/media-has-caption, next/no-img-element */
 const heroImages = Array.from({ length: 11 }, (_, index) => `/assets/images/hero-${String(index + 1).padStart(2, '0')}.webp`);
 const careerImages = Array.from({ length: 6 }, (_, index) => `/assets/images/career-${String(index + 1).padStart(2, '0')}-v2.webp`);
 const avatars = Array.from({ length: 4 }, (_, index) => `/assets/images/avatar-0${index + 1}.webp`);
@@ -25,8 +25,10 @@ const marqueeColumns = [
   [...heroImages.slice(4), ...heroImages.slice(0, 4)],
 ];
 
-const steps = [
-  { number: '01', title: 'Выбираем востребованную нишу и формат контента', emphasis: 'востребованную нишу', image: '/assets/images/system-01.webp', featured: true },
+type Step = { number: string; title: string; emphasis: string; image?: string; video?: string; featured?: boolean };
+
+const steps: Step[] = [
+  { number: '01', title: 'Выбираем востребованную нишу и формат контента', emphasis: 'востребованную нишу', image: '/assets/images/system-01.webp', video: '/assets/videos/roma-ai-showcase.mp4', featured: true },
   { number: '02', title: 'Создаём AI-фото и видео для портфолио', emphasis: 'AI-фото и видео для портфолио' },
   { number: '03', title: 'Находим первых клиентов и предлагаем им свои услуги', emphasis: 'первых клиентов' },
   { number: '04', title: 'Выполняем заказ и получаем оплату', emphasis: 'получаем оплату' },
@@ -158,7 +160,7 @@ export default function Home() {
 
     <section className="section system wrap" id="system">
       <div className="section-title"><h2>Как работает профессия</h2><strong>AI‑креатора?</strong></div>
-      <div className="steps">{steps.map((step) => <article className={step.featured ? 'step step--featured' : 'step'} key={step.number}><b>{`{${step.number}}`}</b><h3><EmphasizedText text={step.title} emphasis={step.emphasis} /></h3>{step.image && <LayeredSystemGraphic src={step.image} />}</article>)}</div>
+      <div className="steps">{steps.map((step) => <article className={step.featured ? 'step step--featured' : 'step'} key={step.number}><b>{`{${step.number}}`}</b><h3><EmphasizedText text={step.title} emphasis={step.emphasis} /></h3>{step.video ? <video className="system-graphic system-inline-video" src={step.video} poster={step.image} autoPlay muted loop playsInline preload="metadata" aria-label="Пример AI-видео" /> : step.image && <LayeredSystemGraphic src={step.image} />}</article>)}</div>
       <p className="system-note">Следуя нашей системе, <b>вы шаг за шагом освоите нейросети,</b> соберёте портфолио и сможете превратить новый навык в удалённый доход.</p><Cta />
     </section>
 

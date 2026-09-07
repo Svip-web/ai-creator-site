@@ -77,7 +77,10 @@ export default function SiteHeader() {
         <nav aria-label="Мобильная навигация">
           {links.map(([href, label]) => <a href={href} key={href} onClick={closeMenu}>{label}</a>)}
         </nav>
-        <div className="header-actions header-actions--mobile"><a href="#start" onClick={closeMenu}>Оставить заявку</a></div>
+        <div className="header-actions header-actions--mobile">
+          <a href="#start" onClick={closeMenu}>Получить консультацию</a>
+          <a href="#start" onClick={closeMenu}>Оставить заявку</a>
+        </div>
       </div>
     </header>
   );

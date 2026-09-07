@@ -1,6 +1,6 @@
 'use client';
 
-/* oxlint-disable next/no-img-element */
+/* oxlint-disable jsx-a11y/media-has-caption, next/no-img-element */
 
 import { useState } from 'react';
 
@@ -19,6 +19,20 @@ function PortfolioGrid({ mobile = false }: { mobile?: boolean }) {
   return <span className={`result-work-grid${mobile ? ' result-work-grid--mobile' : ''}`} aria-label="Примеры AI-работ">
     {portfolioImages.map((image, index) => <img className="result-work-grid__item" src={image} alt={`AI-работа ${index + 1}`} loading="lazy" decoding="async" key={image} />)}
   </span>;
+}
+
+function AiCourseVideo({ mobile = false }: { mobile?: boolean }) {
+  return <video
+    className={`result-video${mobile ? ' result-video--mobile' : ''}`}
+    src="/assets/videos/roma-ai-showcase.mp4"
+    poster="/assets/images/course-results/02-ai-video.webp"
+    autoPlay
+    muted
+    loop
+    playsInline
+    preload="metadata"
+    aria-label="Пример AI-видео"
+  />;
 }
 
 function ClientChat({ mobile = false }: { mobile?: boolean }) {
@@ -99,13 +113,13 @@ export default function CourseResults() {
               <span className="result-summary-row"><span>{item.title}</span><i /></span>
               {active === index && <>
                 <span className="result-copy"><Highlight text={item.text} emphasis={item.emphasis} /></span>
-                <span className="result-mobile-image">{index === 2 ? <PortfolioGrid mobile /> : index === 3 ? <ClientChat mobile /> : index === 4 ? <FirstClientsChat mobile /> : index === 5 ? <RemoteIncome mobile /> : <img src={`/assets/images/course-results/${item.image}`} alt={item.title} loading="lazy" decoding="async" />}</span>
+                <span className="result-mobile-image">{index === 1 ? <AiCourseVideo mobile /> : index === 2 ? <PortfolioGrid mobile /> : index === 3 ? <ClientChat mobile /> : index === 4 ? <FirstClientsChat mobile /> : index === 5 ? <RemoteIncome mobile /> : <img src={`/assets/images/course-results/${item.image}`} alt={item.title} loading="lazy" decoding="async" />}</span>
               </>}
           </button>
         ))}
       </div>
       <div className="result-visual">
-        {active === 2 ? <PortfolioGrid /> : active === 3 ? <ClientChat /> : active === 4 ? <FirstClientsChat /> : active === 5 ? <RemoteIncome /> : <img key={current.image} src={`/assets/images/course-results/${current.image}`} alt={current.title} loading="lazy" decoding="async" />}
+        {active === 1 ? <AiCourseVideo /> : active === 2 ? <PortfolioGrid /> : active === 3 ? <ClientChat /> : active === 4 ? <FirstClientsChat /> : active === 5 ? <RemoteIncome /> : <img key={current.image} src={`/assets/images/course-results/${current.image}`} alt={current.title} loading="lazy" decoding="async" />}
       </div>
     </div>
   );

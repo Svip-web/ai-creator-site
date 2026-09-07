@@ -5,8 +5,8 @@ export const metadata: Metadata = {
   title: 'AI Creator — Женя Коваленко',
   description: 'Освойте профессию AI‑креатора и создавайте AI-контент для брендов.',
   icons: {
-    icon: [{ url: '/favicon.svg?v=2', type: 'image/svg+xml' }],
-    shortcut: '/favicon.svg?v=2',
+    icon: [{ url: '/assets/images/logo-source.webp?v=3', type: 'image/webp' }],
+    shortcut: '/assets/images/logo-source.webp?v=3',
   },
 };
 
