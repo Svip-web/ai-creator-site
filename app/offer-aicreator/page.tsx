@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import BackButton from '../policy-aicreator/BackButton';
 
 export const dynamic = 'force-static';
@@ -262,7 +263,7 @@ export default function PublicOfferPage() {
       </article>
 
       <footer className="policy-footer">
-        <a href="../">AI CREATOR</a>
+        <Link href="/">AI CREATOR</Link>
         <span>by ЖЕНЯ КОВАЛЕНКО</span>
         <a href="mailto:info@stony.store">info@stony.store</a>
       </footer>

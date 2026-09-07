@@ -166,7 +166,7 @@ export default function LeadPopup() {
 
     const openFromButton = (event: MouseEvent) => {
       const target = event.target as HTMLElement | null;
-      const trigger = target?.closest<HTMLElement>('.cta, .header-actions a');
+      const trigger = target?.closest<HTMLElement>('.cta, .header-actions a, [data-lead-popup]');
       if (!trigger) return;
       event.preventDefault();
       setSource(trigger.innerText.replace(/\s+/g, ' ').trim());

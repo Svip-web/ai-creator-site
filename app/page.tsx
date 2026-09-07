@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import VideoStories from './VideoStories';
 import LeadPopup from './LeadPopup';
 import CourseResults from './CourseResults';
@@ -114,12 +115,12 @@ function Cta({ compact = false }: { compact?: boolean }) {
 
 function LayeredSystemGraphic({ src }: { src: string }) {
   if (src.includes('ai-collage')) {
-    return <div className="system-graphic system-graphic--collage" role="img" aria-label="Коллаж коммерческих AI-проектов AI Growth Studio">
+    return <figure className="system-graphic system-graphic--collage" aria-label="Коллаж коммерческих AI-проектов AI Growth Studio">
       <span className="system-graphic__tiles" aria-hidden="true">
         {careerImages.map((image) => <span className="system-graphic__tile" style={{ backgroundImage: `url(${image})` }} key={image} />)}
       </span>
       <span className="system-graphic__brand" aria-hidden="true"><span className="brand-symbol" /><span className="brand-wordmark" /></span>
-    </div>;
+    </figure>;
   }
 
   const variant = src.includes('02') ? '02' : '01';
@@ -127,10 +128,10 @@ function LayeredSystemGraphic({ src }: { src: string }) {
     ? ['tile-one', 'tile-two', 'tile-three', 'tile-four', 'cursor', 'icons']
     : ['screen-photo', 'screen-list', 'screen-check', 'profile-left', 'profile-top', 'profile-bottom', 'folder'];
 
-  return <div className={`system-graphic system-graphic--${variant}`} role="img" aria-label={variant === '01' ? 'Примеры направлений AI-контента' : 'Работа над коммерческими AI-проектами'}>
+  return <figure className={`system-graphic system-graphic--${variant}`} aria-label={variant === '01' ? 'Примеры направлений AI-контента' : 'Работа над коммерческими AI-проектами'}>
     <img className="system-graphic__base" src={`/assets/images/system-${variant}-base-v2.webp`} alt="" loading="lazy" decoding="async" />
     {layers.map((layer) => <span className={`system-graphic__layer system-graphic__layer--${layer}`} aria-hidden="true" key={layer}><img src={src} alt="" loading="lazy" decoding="async" /></span>)}
-  </div>;
+  </figure>;
 }
 
 export default function Home() {
@@ -264,12 +265,12 @@ export default function Home() {
           <div className="section-title faq-side-title"><h2>Часто задаваемые</h2><strong>вопросы</strong></div>
           <aside className="countdown-consultant faq-consultant" aria-label="Консультация по обучению">
             <div className="countdown-consultant__person">
-              <span className="countdown-consultant__avatar"><img src="/assets/images/faq-consultant-avatar.png" alt="Консультант AI Creator" loading="lazy" decoding="async" /></span>
+              <span className="countdown-consultant__avatar"><img src="/assets/images/faq-consultant-avatar.webp" alt="Консультант AI Creator" loading="lazy" decoding="async" /></span>
               <span><strong>Команда AI Creator</strong><small><i aria-hidden="true" />Сейчас онлайн</small></span>
             </div>
             <h3>Остались<br />вопросы?</h3>
           <p>Заполните форму — мы <strong>ответим на вопросы о программе, обучении и поддержке</strong>, а также <strong>поможем выбрать подходящий формат</strong>.</p>
-            <a href="#start">Получить консультацию</a>
+            <a href="#start" data-lead-popup>Получить консультацию</a>
           </aside>
         </div>
         <div className="faq-content">
@@ -293,8 +294,8 @@ export default function Home() {
           </div>
           <div className="site-footer__column">
             <h3>Документы</h3>
-            <a href="/offer-aicreator">Публичная оферта</a>
-            <a href="/policy-aicreator">Политика конфиденциальности</a>
+            <Link href="/offer-aicreator">Публичная оферта</Link>
+            <Link href="/policy-aicreator">Политика конфиденциальности</Link>
             <address>300 Kings Point Dr, office 1507,<br />Sunny Isles Beach, FL 33160, USA</address>
           </div>
           <div className="site-footer__column site-footer__facts">

@@ -74,7 +74,7 @@ export default function StudentWorks() {
 
       <div className="student-works-slider drag-scroll" ref={sliderRef} aria-label="Слайдер работ учениц">
         {cards}
-        {works.map((src, index) => <figure className="student-work-card" aria-hidden="true" key={`${src}-mobile-copy`}><img src={src} alt="" loading="lazy" decoding="async" /></figure>)}
+        {works.map((src) => <figure className="student-work-card" aria-hidden="true" key={`${src}-mobile-copy`}><img src={src} alt="" loading="lazy" decoding="async" /></figure>)}
       </div>
     </div>
   );

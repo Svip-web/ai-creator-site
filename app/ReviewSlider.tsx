@@ -76,11 +76,12 @@ export default function ReviewSlider() {
       <button className="review-arrow" type="button" onClick={() => scroll(-1)} aria-label="Предыдущий отзыв"><img src="/assets/images/arrow-left.svg?v=solid-blue" alt="" /></button>
       <button className="review-arrow" type="button" onClick={() => scroll(1)} aria-label="Следующий отзыв"><img src="/assets/images/arrow-right.svg?v=solid-blue" alt="" /></button>
     </div>
-    {expandedReview !== null && <div className="review-lightbox" role="dialog" aria-modal="true" aria-label={`Увеличенный отзыв ученицы ${expandedReview + 1}`} onMouseDown={(event) => { if (event.currentTarget === event.target) setExpandedReview(null); }}>
+    {expandedReview !== null && <dialog className="review-lightbox" open aria-label={`Увеличенный отзыв ученицы ${expandedReview + 1}`}>
+      <button className="review-lightbox__backdrop" type="button" onClick={() => setExpandedReview(null)} aria-label="Закрыть увеличенный отзыв" />
       <div className="review-lightbox__content">
         <button type="button" autoFocus onClick={() => setExpandedReview(null)} aria-label="Закрыть увеличенный отзыв">×</button>
         <img src={reviews[expandedReview]} alt={`Увеличенный отзыв ученицы ${expandedReview + 1}`} decoding="async" />
       </div>
-    </div>}
+    </dialog>}
   </div>;
 }

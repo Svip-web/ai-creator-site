@@ -17,7 +17,7 @@ const portfolioImages = Array.from({ length: 6 }, (_, index) => `/assets/images/
 
 function PortfolioGrid({ mobile = false }: { mobile?: boolean }) {
   return <span className={`result-work-grid${mobile ? ' result-work-grid--mobile' : ''}`} aria-label="Примеры AI-работ">
-    {portfolioImages.map((image, index) => <span className="result-work-grid__item" style={{ backgroundImage: `url(${image})` }} aria-label={`AI-работа ${index + 1}`} role="img" key={image} />)}
+    {portfolioImages.map((image, index) => <img className="result-work-grid__item" src={image} alt={`AI-работа ${index + 1}`} loading="lazy" decoding="async" key={image} />)}
   </span>;
 }
 

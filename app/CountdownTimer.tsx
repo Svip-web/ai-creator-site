@@ -1,5 +1,7 @@
 'use client';
 
+/* oxlint-disable next/no-img-element */
+
 import { useEffect, useState } from 'react';
 
 type TimeLeft = {
@@ -62,9 +64,9 @@ export default function CountdownTimer() {
         <p><strong>3 000+</strong><span>единиц коммерческого контента</span></p>
         <p><strong>6–8 недель</strong><span>до готового портфолио</span></p>
       </div>
-      <svg className="countdown-arrow" viewBox="0 0 190 110" aria-hidden="true">
-        <path d="M8 98C44 92 58 69 76 48C97 24 126 17 169 18" />
-        <path d="M149 6L171 18L154 36" />
+      <svg className="countdown-arrow" viewBox="0 0 72 112" aria-hidden="true">
+        <path d="M12 8C16 35 23 69 52 99" />
+        <path d="M31 91L53 101L48 77" />
       </svg>
       <img className="countdown-chair" src="/assets/images/ai-creator-chair.webp" alt="Кресло с ноутбуком AI Creator" loading="lazy" decoding="async" />
     </section>

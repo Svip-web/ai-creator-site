@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import BackButton from './BackButton';
 export const dynamic = 'force-static';
 
@@ -84,7 +85,7 @@ export default function PrivacyPolicyPage() {
       </article>
 
       <footer className="policy-footer">
-        <a href="../">AI CREATOR</a>
+        <Link href="/">AI CREATOR</Link>
         <span>by ЖЕНЯ КОВАЛЕНКО</span>
         <a href="mailto:info@kovalenko-ai.com">info@kovalenko-ai.com</a>
       </footer>
