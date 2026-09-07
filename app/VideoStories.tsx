@@ -45,8 +45,8 @@ export default function VideoStories() {
         ))}
       </div>
       <div className="slider-arrows">
-        <button type="button" onClick={() => move(-1)} aria-label="Предыдущее видео"><img src="/assets/images/arrow-left.svg" alt="" /></button>
-        <button type="button" onClick={() => move(1)} aria-label="Следующее видео"><img src="/assets/images/arrow-right.svg" alt="" /></button>
+        <button type="button" onClick={() => move(-1)} aria-label="Предыдущее видео"><img src="/assets/images/arrow-left.svg?v=solid-blue" alt="" /></button>
+        <button type="button" onClick={() => move(1)} aria-label="Следующее видео"><img src="/assets/images/arrow-right.svg?v=solid-blue" alt="" /></button>
       </div>
     </div>
   );

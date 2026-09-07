@@ -54,8 +54,8 @@ export default function StudySlider() {
           </div>)}
         </div>
         <div className="slider-arrows study-arrows">
-          <button type="button" onClick={previous} aria-label="Предыдущие пункты"><img src="/assets/images/arrow-left.svg" alt="" /></button>
-          <button type="button" onClick={next} aria-label="Следующие пункты"><img src="/assets/images/arrow-right.svg" alt="" /></button>
+          <button type="button" onClick={previous} aria-label="Предыдущие пункты"><img src="/assets/images/arrow-left.svg?v=solid-blue" alt="" /></button>
+          <button type="button" onClick={next} aria-label="Следующие пункты"><img src="/assets/images/arrow-right.svg?v=solid-blue" alt="" /></button>
         </div>
       </div>
     </div>

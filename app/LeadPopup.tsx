@@ -67,6 +67,8 @@ export default function LeadPopup() {
     let cancelled = false;
     let instance: Iti | null = null;
     let resetPhoneForCountry: (() => void) | null = null;
+    let limitPhoneLength: (() => void) | null = null;
+    let updatePhoneLimit: (() => void) | null = null;
 
     void import('intl-tel-input').then(({ default: intlTelInput }) => {
       if (cancelled) return;
@@ -86,16 +88,41 @@ export default function LeadPopup() {
       });
       phoneInstanceRef.current = instance;
 
+      let maxNationalDigits = 15;
+      updatePhoneLimit = () => {
+        window.setTimeout(() => {
+          const placeholderDigits = input.placeholder.match(/\d/g)?.length ?? 0;
+          const dialCodeDigits = instance?.getSelectedCountryData()?.dialCode?.length ?? 0;
+          maxNationalDigits = placeholderDigits || Math.max(7, 15 - dialCodeDigits);
+          input.maxLength = Math.max(input.placeholder.length, maxNationalDigits);
+        });
+      };
+
+      limitPhoneLength = () => {
+        let digitCount = 0;
+        const limitedValue = Array.from(input.value).filter((character) => {
+          if (!/\d/.test(character)) return true;
+          digitCount += 1;
+          return digitCount <= maxNationalDigits;
+        }).join('').trimEnd();
+
+        if (input.value !== limitedValue) input.value = limitedValue;
+      };
+
       resetPhoneForCountry = () => {
         input.value = '';
         if (hiddenPhoneRef.current) hiddenPhoneRef.current.value = '';
         setPhoneError('');
+        updatePhoneLimit?.();
       };
+      input.addEventListener('input', limitPhoneLength);
       input.addEventListener('countrychange', resetPhoneForCountry);
+      updatePhoneLimit();
     });
 
     return () => {
       cancelled = true;
+      if (limitPhoneLength) input.removeEventListener('input', limitPhoneLength);
       if (resetPhoneForCountry) input.removeEventListener('countrychange', resetPhoneForCountry);
       instance?.destroy();
       phoneInstanceRef.current = null;

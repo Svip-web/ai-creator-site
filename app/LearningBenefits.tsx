@@ -52,8 +52,8 @@ export default function LearningBenefits() {
       </article>)}
     </div>
     <div className="slider-arrows learning-benefits-controls">
-      <button type="button" onClick={() => move(-1)} aria-label="Предыдущие преимущества"><img src="/assets/images/arrow-left.svg" alt="" /></button>
-      <button type="button" onClick={() => move(1)} aria-label="Следующие преимущества"><img src="/assets/images/arrow-right.svg" alt="" /></button>
+      <button type="button" onClick={() => move(-1)} aria-label="Предыдущие преимущества"><img src="/assets/images/arrow-left.svg?v=solid-blue" alt="" /></button>
+      <button type="button" onClick={() => move(1)} aria-label="Следующие преимущества"><img src="/assets/images/arrow-right.svg?v=solid-blue" alt="" /></button>
     </div>
   </>;
 }

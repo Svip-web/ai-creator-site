@@ -1,4 +1,3 @@
-import ScrollEffects from './ScrollEffects';
 import VideoStories from './VideoStories';
 import LeadPopup from './LeadPopup';
 import CourseResults from './CourseResults';
@@ -18,6 +17,7 @@ export const dynamic = 'force-static';
 
 /* oxlint-disable next/no-img-element */
 const heroImages = Array.from({ length: 11 }, (_, index) => `/assets/images/hero-${String(index + 1).padStart(2, '0')}.webp`);
+const careerImages = Array.from({ length: 6 }, (_, index) => `/assets/images/career-${String(index + 1).padStart(2, '0')}-v2.webp`);
 const avatars = Array.from({ length: 4 }, (_, index) => `/assets/images/avatar-0${index + 1}.webp`);
 const marqueeColumns = [
   [...heroImages],
@@ -26,10 +26,10 @@ const marqueeColumns = [
 
 const steps = [
   { number: '01', title: 'Выбираем востребованную нишу и формат контента', emphasis: 'востребованную нишу', image: '/assets/images/system-01.webp', featured: true },
-  { number: '02', title: 'Выбираем востребованную нишу и формат контента', emphasis: 'формат контента' },
-  { number: '03', title: 'Выбираем востребованную нишу и формат контента', emphasis: 'востребованную нишу' },
+  { number: '02', title: 'Создаём AI-фото и видео для портфолио', emphasis: 'AI-фото и видео для портфолио' },
+  { number: '03', title: 'Находим первых клиентов и предлагаем им свои услуги', emphasis: 'первых клиентов' },
   { number: '04', title: 'Выполняем заказ и получаем оплату', emphasis: 'получаем оплату' },
-  { number: '05', title: 'Лучших выпускниц приглашаем работать над реальными проектами в нашей AI-агенции AI Growth Studio', emphasis: 'реальными проектами', image: '/assets/images/system-02.webp', featured: true },
+  { number: '05', title: 'Лучших выпускниц приглашаем работать над реальными проектами в нашей AI-агенции AI Growth Studio', emphasis: 'реальными проектами', image: '/assets/images/system-02-ai-collage-v2.webp', featured: true },
 ];
 
 function EmphasizedText({ text, emphasis }: { text: string; emphasis: string }) {
@@ -103,9 +103,9 @@ const mentorFacts = [
 ];
 
 const plans = [
-  { name: 'BASIC', label: 'самостоятельно', tone: 'blue', items: ['Модуль предобучения', 'Практические домашние задания', 'Доступ к платформе на 1 месяц', 'База знаний — все шаблоны, инструкции и чек-листы'] },
-  { name: 'PRO', label: 'поддержка куратора', tone: 'dark', items: ['Всё из тарифа «Basic» +', '8 модулей', 'Модуль по созданию портфолио', 'Обратная связь от куратора', 'Проверка домашних заданий', 'Сертификат', 'Обучение 6 недель', 'Записи мастер-классов', 'Готовое портфолио', 'Доступ к платформе на 3 месяца', 'Доступ к комьюнити выпускниц'] },
-  { name: 'VIP', label: 'поддержка команды', tone: 'yellow', items: ['Всё из тарифа «Pro» +', 'Модули по работе с брендами и зарубежным рынком', 'Стажировка на реальных проектах', 'Обучение 8 недель', 'Доступ к платформе на 6 месяцев', 'Онлайн мастер-классы с привлечёнными экспертами', 'HR-блок для присоединения к компании мечты', 'Личный чат с командой и Женей', 'Доступ к комьюнити выпускниц', 'Возможность попасть к нам в команду', 'Гарантия возврата'] },
+  { name: 'BASIC', label: 'самостоятельно', tone: 'blue', items: ['Модуль предобучения', '6 модулей', 'Практические домашние задания', 'Доступ к платформе на 1 месяц', 'База знаний — все шаблоны, инструкции и чек-листы'] },
+  { name: 'PRO', label: 'поддержка куратора', tone: 'dark', items: ['Всё из тарифа «Basic» +', '8 модулей', 'Модуль по созданию портфолио', 'Обратная связь от куратора', 'Проверка домашних заданий', 'Сертификат', 'Обучение 6 недель', 'Записи мастер-классов', 'Готовое портфолио', 'Доступ к платформе на 3 месяца', 'Доступ к компьюнити выпускниц'] },
+  { name: 'VIP', label: 'поддержка команды', tone: 'yellow', featured: true, items: ['Всё из тарифа «Pro» +', 'Модули по работе с брендами и зарубежным рынком', 'Стажировка на реальных проектах', 'Обучение 8 недель', 'Доступ к платформе на 6 месяцев', 'Онлайн мастер-классы с привлеченными экспертами', 'HR — блок для присоединения к компании мечты', 'Личный чат с командой и Женей', 'Доступ к компьюнити выпускниц', 'Возможность попасть к нам в команду', 'Гарантия возврата'] },
 ];
 
 function Cta({ compact = false }: { compact?: boolean }) {
@@ -113,6 +113,15 @@ function Cta({ compact = false }: { compact?: boolean }) {
 }
 
 function LayeredSystemGraphic({ src }: { src: string }) {
+  if (src.includes('ai-collage')) {
+    return <div className="system-graphic system-graphic--collage" role="img" aria-label="Коллаж коммерческих AI-проектов AI Growth Studio">
+      <span className="system-graphic__tiles" aria-hidden="true">
+        {careerImages.map((image) => <span className="system-graphic__tile" style={{ backgroundImage: `url(${image})` }} key={image} />)}
+      </span>
+      <span className="system-graphic__brand" aria-hidden="true"><span className="brand-symbol" /><span className="brand-wordmark" /></span>
+    </div>;
+  }
+
   const variant = src.includes('02') ? '02' : '01';
   const layers = variant === '01'
     ? ['tile-one', 'tile-two', 'tile-three', 'tile-four', 'cursor', 'icons']
@@ -126,7 +135,6 @@ function LayeredSystemGraphic({ src }: { src: string }) {
 
 export default function Home() {
   return <main>
-    <ScrollEffects />
     <LeadPopup />
     <RegistrationToast />
     <SiteHeader />
@@ -154,14 +162,13 @@ export default function Home() {
     </section>
 
     <div className="barriers-stage" id="barriers"><section className="section barriers"><div className="wrap">
-      <div className="section-title"><h2>Что вам точно не понадобится, чтобы стать</h2><strong>AI‑креатором?</strong></div>
+      <div className="section-title"><h2>Что вам точно <em className="negative-accent">не</em> понадобится, чтобы стать</h2><strong>AI‑креатором?</strong></div>
       <BarrierSlider items={barriers} />
     </div></section></div>
 
     <section className="section audience wrap" id="audience">
       <div className="section-title"><h2>Кому подходит профессия</h2><strong>AI‑креатора?</strong></div>
       <AudienceSlider items={audience} />
-      <Cta />
     </section>
 
     <section className="stories" id="stories">
@@ -175,7 +182,7 @@ export default function Home() {
 
     <section className="section guarantees wrap" id="guarantees">
       <div className="section-title guarantee-title"><h2>А какие у нас <span>гарантии?</span></h2><p>4 причины чувствовать себя уверенно во время обучения</p></div>
-      <div className="guarantee-layout"><div className="guarantee-grid">{guarantees.map((item) => <article key={item.title}><span><img src={`/assets/images/${item.icon}`} alt="" loading="lazy" decoding="async" /></span><h3>{item.title}</h3><p><EmphasizedText text={item.text} emphasis={item.emphasis} /></p></article>)}</div><div className="guarantee-person guarantee-person--composite"><img src="/assets/images/guarantee-composite.webp" alt="Женя Коваленко и условия обучения" loading="lazy" decoding="async" /></div></div>
+      <div className="guarantee-layout"><div className="guarantee-grid">{guarantees.map((item) => <article key={item.title}><span><img src={`/assets/images/${item.icon}`} alt="" loading="lazy" decoding="async" /></span><h3>{item.title}</h3><p><EmphasizedText text={item.text} emphasis={item.emphasis} /></p></article>)}</div><div className="guarantee-person guarantee-person--composite"><img src="/assets/images/guarantee-person.webp" alt="Женя Коваленко" loading="lazy" decoding="async" /></div></div>
       <a className="cta cta--wide" href="#prices"><span>Выбрать обучение и начать создавать AI-контент</span><i><img src="/assets/images/like.svg" alt="" /></i></a>
     </section>
 
@@ -228,14 +235,14 @@ export default function Home() {
       <div className="program wrap" aria-label="Программа обучения">{courseModules.map((module) => <details className={[module.vip && 'is-vip', module.lessons.length > 0 && 'has-lessons'].filter(Boolean).join(' ')} key={module.number}><summary><b>{module.number}</b><span><ProgramTitle title={module.title} vip={module.vip} /></span><em>Показать больше</em></summary>{module.lessons.length > 0 && <div className="program-content"><ul>{module.lessons.map((lesson) => <li key={lesson}>{programLessonEmphasis[lesson] ? <EmphasizedText text={lesson} emphasis={programLessonEmphasis[lesson]} /> : lesson}</li>)}</ul><ProgramCloseButton /></div>}</details>)}</div>
     </section>
 
-    <section className="prices" id="prices"><div className="wrap" id="start"><div className="section-title"><h2>Тарифы</h2><strong>участия</strong></div><div className="price-grid">{plans.map((plan) => <article key={plan.name}><header className={`price-head price-head--${plan.tone}`}><h3>{plan.name}</h3><span>{plan.label}</span></header><ul>{plan.items.map((item) => <li key={item}><i className="price-check"><img src="/assets/images/price-check.svg" alt="" loading="lazy" decoding="async" /></i><span>{item}</span></li>)}</ul><a className="cta price-cta" href="#start"><span>Выбрать этот тариф</span><i><img src="/assets/images/like.svg" alt="" /></i></a></article>)}</div><div className="price-consultation"><p>Не знаете какой выбрать?</p><a className="cta price-consultation__button" href="#start"><span>Оставить заявку на<br />консультацию с экспертом</span></a></div></div></section>
+    <section className="prices" id="prices"><div className="wrap" id="start"><div className="section-title"><h2>Тарифы</h2><strong>участия</strong></div><div className="price-grid">{plans.map((plan) => <article className={plan.featured ? 'is-featured' : undefined} key={plan.name}><header className={`price-head price-head--${plan.tone}`}><h3>{plan.name}</h3><span>{plan.label}</span></header><ul>{plan.items.map((item) => <li key={item}><i className="price-check"><img src="/assets/images/price-check.svg" alt="" loading="lazy" decoding="async" /></i><span>{item}</span></li>)}</ul><a className="cta price-cta" href="#start"><span>Выбрать этот тариф</span><i><img src="/assets/images/like.svg" alt="" /></i></a></article>)}</div></div></section>
 
     <section className="career-showcase wrap" aria-label="Профессия AI‑креатора">
       <h2>Освойте профессию AI‑креатора<br /><mark>и начните зарабатывать</mark></h2>
       <p>Создавая фото и видео для брендов<br /><strong>С нуля до готового портфолио за 6–8 недель</strong></p>
       <div className="career-showcase__gallery">
         <div className="career-showcase__track">
-          {[0, 1].map((copy) => heroImages.slice(0, 5).map((src, index) => (
+          {[0, 1].map((copy) => careerImages.map((src, index) => (
             <img
               src={src}
               alt={copy === 0 ? `Пример AI-контента ${index + 1}` : ''}
@@ -252,28 +259,59 @@ export default function Home() {
     <CountdownTimer />
 
     <section className="section faq wrap" id="faq">
-      <div className="section-title"><h2>Часто задаваемые</h2><strong>вопросы</strong></div>
-      <div className="faq-list">{faqs.map(([question, answer], index) => <details key={question}><summary><b>{String(index + 1).padStart(2, '0')}</b><span>{question}</span><i aria-hidden="true" /></summary><p>{answer}</p></details>)}</div>
-    </section>
-
-    <section className="closing" aria-label="Оставить заявку">
-      <div className="closing-inner wrap">
-        <a className="cta closing-cta" href="#start"><span>Оставить заявку</span></a>
-        <p>Команда свяжется с вами, разберётся в вашей ситуации<br className="desktop-break" /> и предложит конкретные шаги для быстрого результата.</p>
+      <div className="faq-layout">
+        <div className="faq-sidebar">
+          <div className="section-title faq-side-title"><h2>Часто задаваемые</h2><strong>вопросы</strong></div>
+          <aside className="countdown-consultant faq-consultant" aria-label="Консультация по обучению">
+            <div className="countdown-consultant__person">
+              <span className="countdown-consultant__avatar"><img src="/assets/images/faq-consultant-avatar.png" alt="Консультант AI Creator" loading="lazy" decoding="async" /></span>
+              <span><strong>Команда AI Creator</strong><small><i aria-hidden="true" />Сейчас онлайн</small></span>
+            </div>
+            <h3>Остались<br />вопросы?</h3>
+          <p>Заполните форму — мы <strong>ответим на вопросы о программе, обучении и поддержке</strong>, а также <strong>поможем выбрать подходящий формат</strong>.</p>
+            <a href="#start">Получить консультацию</a>
+          </aside>
+        </div>
+        <div className="faq-content">
+          <div className="faq-list">{faqs.map(([question, answer], index) => <details key={question}><summary><b>{String(index + 1).padStart(2, '0')}</b><span>{question}</span><i aria-hidden="true" /></summary><p>{answer}</p></details>)}</div>
+        </div>
       </div>
     </section>
 
     <footer className="site-footer">
       <div className="site-footer__inner wrap">
-        <a className="site-footer__offer" href="./policy-aicreator.html">Публичная оферта</a>
-        <div className="payment-marks" aria-label="Поддерживаемые платёжные системы">
-          <span className="payment-mark payment-mark--visa">VISA</span>
-          <span className="payment-mark payment-mark--stripe">stripe</span>
-          <span className="payment-mark payment-mark--mastercard" aria-label="Mastercard"><i /><i /></span>
-          <span className="payment-mark payment-mark--r">R</span>
-          <span className="payment-mark payment-mark--way">↗</span>
+        <div className="site-footer__top">
+          <div className="site-footer__brand-column">
+            <a className="brand site-footer__brand" href="#top" aria-label="AI Growth Studio — на главную"><span className="brand-symbol" /><span className="brand-wordmark" /></a>
+            <p>Онлайн-обучение профессии AI‑креатора для работы с брендами и бизнесом.</p>
+          </div>
+          <div className="site-footer__column">
+            <h3>Контакты</h3>
+            <a href="mailto:info@stony.store">info@stony.store</a>
+            <a className="cta site-footer__callback" href="#start">Заказать звонок</a>
+            <span>Stony LLC</span>
+          </div>
+          <div className="site-footer__column">
+            <h3>Документы</h3>
+            <a href="/offer-aicreator">Публичная оферта</a>
+            <a href="/policy-aicreator">Политика конфиденциальности</a>
+            <address>300 Kings Point Dr, office 1507,<br />Sunny Isles Beach, FL 33160, USA</address>
+          </div>
+          <div className="site-footer__column site-footer__facts">
+            <h3>AI Creator</h3>
+            <ul><li>Более 2 000 учениц</li><li>Более 3 000 работ</li><li>Обучение за 6–8 недель</li><li>Компания сертифицирована по европейскому стандарту</li></ul>
+          </div>
         </div>
-        <p>Copyright © 2026. AI-CREATOR</p>
+        <div className="site-footer__bottom">
+          <div className="payment-marks" aria-label="Поддерживаемые платёжные системы">
+            <span className="payment-mark payment-mark--visa">VISA</span>
+            <span className="payment-mark payment-mark--stripe">stripe</span>
+            <span className="payment-mark payment-mark--mastercard" aria-label="Mastercard"><i /><i /></span>
+            <span className="payment-mark payment-mark--r">R</span>
+            <span className="payment-mark payment-mark--way">↗</span>
+          </div>
+          <p>Copyright © 2026. AI GROWTH STUDIO</p>
+        </div>
       </div>
     </footer>
 

@@ -51,16 +51,15 @@ export default function AudienceSlider({ items }: AudienceSliderProps) {
       {pages.map((slide, slideIndex) => <div className="audience-slide" ref={(element) => { slideRefs.current[slideIndex] = element; }} aria-hidden={slideIndex !== page} key={slideIndex}>
         {slide.map(({ item: [title, text, emphasis], index }) => {
           return <article className="audience-card" key={title}>
-            <img src={`/assets/images/audience-sad-${String(index + 1).padStart(2, '0')}.webp`} alt="" loading="lazy" decoding="async" />
+            <img src={index === 0 ? '/assets/images/audience-work-life-01.webp' : `/assets/images/audience-sad-${String(index + 1).padStart(2, '0')}.webp`} alt="" loading="lazy" decoding="async" />
             <div><b>/{String(index + 1).padStart(2, '0')}</b><h3>{title}</h3><p><HighlightedCopy text={text} emphasis={emphasis} /></p></div>
           </article>;
         })}
       </div>)}
     </div>
     <div className="audience-controls" aria-label="Навигация по аудиториям">
-      <button type="button" onClick={() => move(-1)} aria-label="Предыдущие карточки"><img src="/assets/images/arrow-left.svg" alt="" /></button>
-      <span>{String(page + 1).padStart(2, '0')} / {String(pages.length).padStart(2, '0')}</span>
-      <button type="button" onClick={() => move(1)} aria-label="Следующие карточки"><img src="/assets/images/arrow-right.svg" alt="" /></button>
+      <button type="button" onClick={() => move(-1)} aria-label="Предыдущие карточки"><img src="/assets/images/arrow-left.svg?v=solid-blue" alt="" /></button>
+      <button type="button" onClick={() => move(1)} aria-label="Следующие карточки"><img src="/assets/images/arrow-right.svg?v=solid-blue" alt="" /></button>
     </div>
   </div>;
 }

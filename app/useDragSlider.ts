@@ -2,9 +2,14 @@
 
 import { PointerEvent as ReactPointerEvent, RefObject, useEffect, useRef, useState } from 'react';
 
-export function useDragScroll<T extends HTMLElement>(ref: RefObject<T | null>, onDragStart?: () => void) {
-  const callbackRef = useRef(onDragStart);
-  callbackRef.current = onDragStart;
+export function useDragScroll<T extends HTMLElement>(ref: RefObject<T | null>, onDragStart?: () => void, onDragEnd?: (scrollLeft: number) => void) {
+  const startCallbackRef = useRef(onDragStart);
+  const endCallbackRef = useRef(onDragEnd);
+
+  useEffect(() => {
+    startCallbackRef.current = onDragStart;
+    endCallbackRef.current = onDragEnd;
+  }, [onDragStart, onDragEnd]);
 
   useEffect(() => {
     const element = ref.current;
@@ -36,7 +41,7 @@ export function useDragScroll<T extends HTMLElement>(ref: RefObject<T | null>, o
         suppressClick = true;
         element.classList.add('is-dragging');
         element.setPointerCapture?.(event.pointerId);
-        callbackRef.current?.();
+        startCallbackRef.current?.();
       }
       event.preventDefault();
       element.scrollLeft = startScroll - deltaX;
@@ -44,9 +49,11 @@ export function useDragScroll<T extends HTMLElement>(ref: RefObject<T | null>, o
 
     const pointerUp = (event: PointerEvent) => {
       if (event.pointerId !== pointerId) return;
+      const didDrag = dragging;
       pointerId = null;
       element.classList.remove('is-dragging');
       if (element.hasPointerCapture?.(event.pointerId)) element.releasePointerCapture(event.pointerId);
+      if (didDrag) endCallbackRef.current?.(element.scrollLeft);
       window.setTimeout(() => { suppressClick = false; }, 180);
     };
 

@@ -60,8 +60,8 @@ export default function StudentWorks() {
       <div className="student-works-head">
         <h3>Работы наших учениц</h3>
         <div className="slider-arrows student-works-controls">
-          <button type="button" onClick={() => move(-1, true)} aria-label="Предыдущая работа"><img src="/assets/images/arrow-left.svg" alt="" /></button>
-          <button type="button" onClick={() => move(1, true)} aria-label="Следующая работа"><img src="/assets/images/arrow-right.svg" alt="" /></button>
+          <button type="button" onClick={() => move(-1, true)} aria-label="Предыдущая работа"><img src="/assets/images/arrow-left.svg?v=solid-blue" alt="" /></button>
+          <button type="button" onClick={() => move(1, true)} aria-label="Следующая работа"><img src="/assets/images/arrow-right.svg?v=solid-blue" alt="" /></button>
         </div>
       </div>
 

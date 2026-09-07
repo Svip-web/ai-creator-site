@@ -33,8 +33,8 @@ export default function BarrierSlider({ items }: { items: Barrier[] }) {
   return <>
     <div className="barrier-grid drag-scroll" ref={trackRef}>{items.map((item, index) => <article key={`${item.title}-${index}`}><span><img src={`/assets/images/${item.icon}`} alt="" /></span><h3>{item.title}</h3><p><HighlightedText text={item.text} emphasis={item.emphasis} /></p></article>)}</div>
     <div className="slider-arrows barrier-arrows">
-      <button type="button" onClick={() => scroll(-1)} aria-label="Предыдущая карточка"><img src="/assets/images/arrow-left.svg" alt="" /></button>
-      <button type="button" onClick={() => scroll(1)} aria-label="Следующая карточка"><img src="/assets/images/arrow-right.svg" alt="" /></button>
+      <button type="button" onClick={() => scroll(-1)} aria-label="Предыдущая карточка"><img src="/assets/images/arrow-left.svg?v=solid-blue" alt="" /></button>
+      <button type="button" onClick={() => scroll(1)} aria-label="Следующая карточка"><img src="/assets/images/arrow-right.svg?v=solid-blue" alt="" /></button>
     </div>
   </>;
 }
