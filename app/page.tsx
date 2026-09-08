@@ -40,7 +40,7 @@ const marqueeColumns = [
 type Step = { number: string; title: string; emphasis: string; image?: string; video?: string; featured?: boolean };
 
 const steps: Step[] = [
-  { number: '01', title: 'Выбираем востребованную нишу и формат контента', emphasis: 'востребованную нишу', image: '/assets/images/system-01.webp', video: '/assets/videos/roma-ai-showcase.mp4', featured: true },
+  { number: '01', title: 'Выбираем востребованную нишу и формат контента', emphasis: 'востребованную нишу', image: '/assets/images/system-01.webp', video: '/assets/videos/roma-ai-showcase-v2.mp4', featured: true },
   { number: '02', title: 'Создаём AI-фото и видео для портфолио', emphasis: 'AI-фото и видео для портфолио' },
   { number: '03', title: 'Находим первых клиентов и предлагаем им свои услуги', emphasis: 'первых клиентов' },
   { number: '04', title: 'Выполняем заказ и получаем оплату', emphasis: 'получаем оплату' },

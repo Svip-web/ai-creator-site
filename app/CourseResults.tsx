@@ -23,7 +23,7 @@ const staticScreenImages: Record<number, string> = {
 function AiCourseVideo({ mobile = false }: { mobile?: boolean }) {
   return <video
     className={`result-video${mobile ? ' result-video--mobile' : ''}`}
-    src="/assets/videos/roma-ai-showcase.mp4"
+    src="/assets/videos/ai-course-video-v2.mp4"
     poster="/assets/images/course-results/02-ai-video.webp"
     autoPlay
     muted
