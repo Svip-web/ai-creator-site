@@ -18,10 +18,8 @@ const works = [
 export default function StudentWorks() {
   const marqueeRef = useRef<HTMLDivElement>(null);
   const sliderRef = useRef<HTMLDivElement>(null);
-  const pauseUntilRef = useRef(0);
-  const pauseTicker = () => { pauseUntilRef.current = Date.now() + 3000; };
   useDragScroll(marqueeRef);
-  useDragScroll(sliderRef, pauseTicker, pauseTicker);
+  useDragScroll(sliderRef);
 
   useEffect(() => {
     const media = window.matchMedia('(max-width: 900px)');
@@ -34,7 +32,7 @@ export default function StudentWorks() {
       const elapsed = Math.min(currentTime - previousTime, 50);
       previousTime = currentTime;
 
-      if (slider && media.matches && !reducedMotion.matches && !document.hidden && Date.now() >= pauseUntilRef.current) {
+      if (slider && media.matches && !reducedMotion.matches && !document.hidden) {
         const card = slider.querySelector<HTMLElement>('.student-work-card');
         const gap = Number.parseFloat(getComputedStyle(slider).gap) || 0;
         const cycle = card ? (card.offsetWidth + gap) * works.length : 0;

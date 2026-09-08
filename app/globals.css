@@ -1100,7 +1100,7 @@
     -webkit-overflow-scrolling:touch;
   }
   .career-showcase__gallery::-webkit-scrollbar{display:none}
-  .career-showcase__track{animation:career-showcase-marquee 34s linear infinite;will-change:transform}
+  .career-showcase__track{animation:none;will-change:auto;transform:none}
   .career-showcase__gallery img{scroll-snap-align:none;scroll-snap-stop:normal}
 }
 @media(max-width:900px) and (prefers-reduced-motion:reduce){
@@ -1201,7 +1201,7 @@
 @media(max-width:520px){
   .hero h1{font-size:clamp(24px,8.4vw,34px);line-height:1;white-space:nowrap}
   .hero h1 br{display:block}
-  .hero-person{bottom:0;width:122%;height:560px}
+  .hero-person{bottom:-20px;width:108%;height:520px}
   .hero-action-card{top:calc(100% + 230px);width:calc(100% + 12px);max-width:none}
   .hero-action-card .proof{
     align-items:center;

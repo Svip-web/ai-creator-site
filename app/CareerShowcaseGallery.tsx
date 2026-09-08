@@ -2,7 +2,7 @@
 
 /* oxlint-disable next/no-img-element */
 
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useDragScroll } from './useDragSlider';
 
 type CareerShowcaseGalleryProps = {
@@ -12,6 +12,30 @@ type CareerShowcaseGalleryProps = {
 export default function CareerShowcaseGallery({ images }: CareerShowcaseGalleryProps) {
   const galleryRef = useRef<HTMLDivElement>(null);
   useDragScroll(galleryRef);
+
+  useEffect(() => {
+    const mobile = window.matchMedia('(max-width: 900px)');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let animationFrame = 0;
+    let previousTime = performance.now();
+
+    const tick = (currentTime: number) => {
+      const gallery = galleryRef.current;
+      const elapsed = Math.min(currentTime - previousTime, 50);
+      previousTime = currentTime;
+
+      if (gallery && mobile.matches && !reducedMotion.matches && !document.hidden) {
+        const cycle = gallery.scrollWidth / 2;
+        gallery.scrollLeft += elapsed * 0.098;
+        if (cycle > 0 && gallery.scrollLeft >= cycle) gallery.scrollLeft -= cycle;
+      }
+
+      animationFrame = requestAnimationFrame(tick);
+    };
+
+    animationFrame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(animationFrame);
+  }, []);
 
   return (
     <div className="career-showcase__gallery drag-scroll" ref={galleryRef} aria-label="Примеры AI-контента">
