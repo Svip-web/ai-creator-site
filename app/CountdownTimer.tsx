@@ -64,7 +64,7 @@ export default function CountdownTimer() {
         <p><strong>AI-видео</strong><span>Reels и короткие ролики</span></p>
         <p><strong>10+ работ</strong><span>в готовом портфолио</span></p>
       </div>
-      <img className="countdown-chair" src="/assets/images/ai-creator-chair-mockup-v4.webp" alt="Кресло с ноутбуком, на экране которого Женя Коваленко рассказывает об AI" loading="lazy" decoding="async" />
+      <img className="countdown-chair" src="/assets/images/ai-creator-chair-mockup-v5.webp" alt="Кресло с ноутбуком, на экране которого Женя Коваленко рассказывает об AI" loading="lazy" decoding="async" />
     </section>
   );
 }

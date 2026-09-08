@@ -11,7 +11,7 @@ const formConfig = {
   presets: {
     smartsender: {
       title: 'Реєстрація на веб {{tomorrowDate}} — сайт №2',
-      stage: '97482948',
+      stage: '105820611',
       tag: 'Регистрация',
       product: 'Ai-creator',
       type_lead: 'Реєстрація',
