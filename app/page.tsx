@@ -14,6 +14,7 @@ import ReviewSlider from './ReviewSlider';
 import CountdownTimer from './CountdownTimer';
 import SiteHeader from './SiteHeader';
 import FaqList from './FaqList';
+import CareerShowcaseGallery from './CareerShowcaseGallery';
 
 export const dynamic = 'force-static';
 
@@ -78,26 +79,26 @@ const guarantees = [
 ];
 
 const mentorFacts = [
-  { text: 'Более 3 лет активно использую нейросети в работе', emphasis: 'Более 3 лет' },
-  { text: 'Более 1,5 лет стабильно зарабатываю на AI- и UGC-контенте', emphasis: 'Более 1,5 лет' },
-  { text: 'Моё обучение прошли более 2 000 девушек', emphasis: 'более 2 000 девушек' },
-  { text: 'Вместе с командой мы создали более 3 000 единиц коммерческого контента', emphasis: 'более 3 000 единиц коммерческого контента' },
-  { text: 'Развиваю собственную AI-агенцию в Испании', emphasis: 'собственную AI-агенцию в Испании' },
-  { text: 'За моими плечами 14 лет опыта в онлайн-коммерции и работе с международными поставщиками', emphasis: '14 лет опыта' },
+  { text: 'Более 3 лет активно использую нейросети в работе', emphasis: 'Более 3 лет' },
+  { text: 'Более 1,5 лет стабильно зарабатываю на AI‑ и UGC‑контенте', emphasis: 'Более 1,5 лет' },
+  { text: 'Моё обучение прошли более 2 000 девушек', emphasis: 'более 2 000 девушек' },
+  { text: 'Вместе с командой мы создали более 3 000 единиц коммерческого контента', emphasis: 'более 3 000 единиц коммерческого контента' },
+  { text: 'Развиваю собственную AI‑агенцию в Испании', emphasis: 'собственную AI‑агенцию в Испании' },
+  { text: 'За моими плечами 14 лет опыта в онлайн-коммерции и работе с международными поставщиками', emphasis: '14 лет опыта' },
   { text: 'Я жена и мама двоих детей, поэтому знаю, как совмещать семью и профессиональную реализацию', emphasis: 'жена и мама двоих детей' },
   { text: 'Покажу, как превратить интерес к нейросетям в востребованный навык и источник дохода', emphasis: 'востребованный навык и источник дохода' },
 ];
 
-const mentorCollage = Array.from({ length: 7 }, (_, index) => `/assets/images/mentor-collage/mentor-${String(index + 1).padStart(2, '0')}.webp`);
+const mentorCollage = Array.from({ length: 6 }, (_, index) => `/assets/images/mentor-collage/mentor-${String(index + 2).padStart(2, '0')}.webp`);
 
 const plans = [
-  { name: 'BASIC', label: 'самостоятельно', tone: 'blue', items: ['Модуль предобучения', '6 модулей', 'Практические домашние задания', 'Доступ к платформе на 1 месяц', 'База знаний — все шаблоны, инструкции и чек-листы'] },
-  { name: 'PRO', label: 'поддержка куратора', tone: 'dark', items: ['Всё из тарифа «Basic» +', '8 модулей', 'Модуль по созданию портфолио', 'Обратная связь от куратора', 'Проверка домашних заданий', 'Сертификат', 'Обучение 6 недель', 'Записи мастер-классов', 'Готовое портфолио', 'Доступ к платформе на 3 месяца', 'Доступ к компьюнити выпускниц'] },
+  { name: 'BASIC', label: 'самостоятельно', tone: 'dark', items: ['Модуль предобучения', '6 модулей', 'Практические домашние задания', 'Доступ к платформе на 1 месяц', 'База знаний — все шаблоны, инструкции и чек-листы'] },
+  { name: 'PRO', label: 'поддержка куратора', tone: 'blue', items: ['Всё из тарифа «Basic» +', '8 модулей', 'Модуль по созданию портфолио', 'Обратная связь от куратора', 'Проверка домашних заданий', 'Сертификат', 'Обучение 6 недель', 'Записи мастер-классов', 'Готовое портфолио', 'Доступ к платформе на 3 месяца', 'Доступ к компьюнити выпускниц'] },
   { name: 'VIP', label: 'поддержка команды', tone: 'yellow', featured: true, items: ['Всё из тарифа «Pro» +', 'Модули по работе с брендами и зарубежным рынком', 'Стажировка на реальных проектах', 'Обучение 8 недель', 'Доступ к платформе на 6 месяцев', 'Онлайн мастер-классы с привлеченными экспертами', 'HR — блок для присоединения к компании мечты', 'Личный чат с командой и Женей', 'Доступ к компьюнити выпускниц', 'Возможность попасть к нам в команду', 'Гарантия возврата'] },
 ];
 
 function Cta({ compact = false }: { compact?: boolean }) {
-  return <a className={compact ? 'cta cta--compact' : 'cta'} href="#start"><span>Начать путь AI‑креатора<br className="desktop-break" /> по нашей системе</span><i><img src="/assets/images/like.svg" alt="" /></i></a>;
+  return <a className={compact ? 'cta cta--compact' : 'cta'} href="#start" data-lead-popup><span>Начать путь AI‑креатора<br className="desktop-break" /> по нашей системе</span><i><img src="/assets/images/like.svg" alt="" /></i></a>;
 }
 
 function LayeredSystemGraphic({ src }: { src: string }) {
@@ -132,9 +133,11 @@ export default function Home() {
         <p className="eyebrow"><img src="/assets/images/work.svg" alt="" />Освойте профессию AI‑креатора</p>
         <h1>Создавайте AI-фото<br />и видео для брендов<br />и зарабатывайте</h1>
         <strong className="income">1000–2000<span className="euro">€</span>&nbsp;онлайн</strong>
-        <p className="hero-subline">Пошаговая система <strong>от первого AI-визуала до портфолио и первых заказов</strong> — без опыта, знания языка и навыков дизайна.</p>
-        <Cta />
-        <div className="proof"><span>{avatars.map((src) => <img src={src} alt="" loading="lazy" decoding="async" key={src} />)}</span><small>*Более 2 000 девушек уже прошли обучение и начали создавать AI-контент по системе Жени Коваленко.</small></div>
+        <div className="hero-action-card">
+          <p className="hero-subline">Пошаговая система <strong>от первого AI-визуала до портфолио и первых заказов</strong> — без опыта, знания языка и навыков дизайна.</p>
+          <Cta />
+          <div className="proof"><span>{avatars.map((src) => <img src={src} alt="" loading="lazy" decoding="async" key={src} />)}</span><small>*Более 2 000 девушек уже прошли обучение и начали создавать AI-контент по системе Жени Коваленко.</small></div>
+        </div>
       </div>
       <img className="hero-person" src="/assets/images/hero-person.webp" alt="Женя Коваленко" fetchPriority="high" decoding="async" />
       <div className="hero-gallery" aria-label="Примеры AI-контента">
@@ -171,7 +174,7 @@ export default function Home() {
     <section className="section guarantees wrap" id="guarantees">
       <div className="section-title guarantee-title"><h2>А какие у нас <span>гарантии?</span></h2><p>4 причины чувствовать себя уверенно во время обучения</p></div>
       <div className="guarantee-layout"><div className="guarantee-grid">{guarantees.map((item) => <article key={item.title}><span><img src={`/assets/images/${item.icon}`} alt="" loading="lazy" decoding="async" /></span><h3>{item.title}</h3><p><EmphasizedText text={item.text} emphasis={item.emphasis} /></p></article>)}</div><div className="guarantee-person guarantee-person--composite"><img src="/assets/images/guarantee-person.webp" alt="Женя Коваленко" loading="lazy" decoding="async" /></div></div>
-      <a className="cta cta--wide" href="#prices"><span>Выбрать обучение и начать создавать AI-контент</span><i><img src="/assets/images/like.svg" alt="" /></i></a>
+      <a className="cta cta--wide" href="#prices" data-lead-popup><span>Выбрать обучение и начать создавать AI-контент</span><i><img src="/assets/images/like.svg" alt="" /></i></a>
     </section>
 
     <section className="course-results" id="course"><div className="wrap">
@@ -212,7 +215,7 @@ export default function Home() {
         <div className="mentor-mobile-details">
           <div className="mentor-facts">{mentorFacts.map((fact) => <p key={fact.text}><img src="/assets/images/check.svg" alt="" loading="lazy" decoding="async" /><span><EmphasizedText text={fact.text} emphasis={fact.emphasis} /></span></p>)}</div>
           <div className="mentor-action-row">
-            <a className="cta cta--mentor" href="#prices"><span>Записаться на курс с<br /> индивидуальным подходом</span><i><img src="/assets/images/like.svg" alt="" /></i></a>
+            <a className="cta cta--mentor" href="#prices" data-lead-popup><span>Записаться на курс с<br /> индивидуальным подходом</span><i><img src="/assets/images/like.svg" alt="" /></i></a>
             <p className="mentor-action-note"><b>Готовы учиться у Жени Коваленко?</b><span>Выберите тариф и начните путь в AI‑креаторстве</span></p>
           </div>
         </div>
@@ -229,25 +232,12 @@ export default function Home() {
       <div className="program wrap" aria-label="Программа обучения">{courseModules.map((module) => <details className={[module.advanced && 'is-advanced', 'has-lessons'].filter(Boolean).join(' ')} key={module.number}><summary><b>{module.number}</b><span>{module.title}</span><em>Показать больше</em></summary><div className="program-content">{module.lessons.length > 0 && <ul>{module.lessons.map((lesson) => <li key={lesson}>{lesson}</li>)}</ul>}<div className="program-result"><span>Результат</span><p>{module.result}</p></div><ProgramCloseButton /></div></details>)}</div>
     </section>
 
-    <section className="prices" id="prices"><div className="wrap" id="start"><div className="section-title"><h2>Тарифы</h2><strong>участия</strong></div><div className="price-grid">{plans.map((plan) => <article className={plan.featured ? 'is-featured' : undefined} key={plan.name}><header className={`price-head price-head--${plan.tone}`}><h3>{plan.name}</h3><span>{plan.label}</span></header><ul>{plan.items.map((item) => <li key={item}><i className="price-check"><img src="/assets/images/price-check.svg" alt="" loading="lazy" decoding="async" /></i><span>{item}</span></li>)}</ul><a className="cta price-cta" href="#start"><span>Выбрать этот тариф</span><i><img src="/assets/images/like.svg" alt="" /></i></a></article>)}</div></div></section>
+    <section className="prices" id="prices"><div className="wrap" id="start"><div className="section-title"><h2>Тарифы</h2><strong>участия</strong></div><div className="price-grid">{plans.map((plan) => <article className={plan.featured ? 'is-featured' : undefined} key={plan.name}><header className={`price-head price-head--${plan.tone}`}><h3>{plan.name}</h3><span>{plan.label}</span></header><ul>{plan.items.map((item) => <li key={item}><i className="price-check"><img src="/assets/images/price-check.svg" alt="" loading="lazy" decoding="async" /></i><span>{item}</span></li>)}</ul><a className="cta price-cta" href="#start" data-lead-popup><span>Выбрать этот тариф</span><i><img src="/assets/images/like.svg" alt="" /></i></a></article>)}</div></div></section>
 
     <section className="career-showcase wrap" aria-label="Профессия AI‑креатора">
       <h2>Освойте профессию AI‑креатора<br /><mark>и начните зарабатывать</mark></h2>
       <p>Создавая фото и видео для брендов<br /><strong>С нуля до готового портфолио за 6–8 недель</strong></p>
-      <div className="career-showcase__gallery">
-        <div className="career-showcase__track">
-          {[0, 1].map((copy) => careerShowcaseImages.map((src, index) => (
-            <img
-              src={src}
-              alt={copy === 0 ? `Пример AI-контента ${index + 1}` : ''}
-              aria-hidden={copy === 1}
-              loading="lazy"
-              decoding="async"
-              key={`${copy}-${src}`}
-            />
-          )))}
-        </div>
-      </div>
+      <CareerShowcaseGallery images={careerShowcaseImages} />
     </section>
 
     <CountdownTimer />
@@ -282,7 +272,7 @@ export default function Home() {
           <div className="site-footer__column">
             <h3>Контакты</h3>
             <a href="mailto:info@kovalenko-ai.com">info@kovalenko-ai.com</a>
-            <a className="cta site-footer__callback" href="#start">Заказать звонок</a>
+            <a className="cta site-footer__callback" href="#start" data-lead-popup>Заказать звонок</a>
           </div>
           <div className="site-footer__column">
             <h3>Документы</h3>

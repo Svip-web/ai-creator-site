@@ -1,53 +1,54 @@
 'use client';
 
-import { useCallback, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useDragScroll } from './useDragSlider';
 
 /* oxlint-disable next/no-img-element */
 
-const works = Array.from(
-  { length: 11 },
-  (_, index) => `/assets/images/hero-${String(index + 1).padStart(2, '0')}.webp`,
-);
+const works = [
+  ...Array.from(
+    { length: 11 },
+    (_, index) => `/assets/images/hero-${String(index + 1).padStart(2, '0')}.webp`,
+  ),
+  '/assets/images/career-showcase/showcase-skincare.webp',
+  '/assets/images/career-showcase/showcase-jewelry.webp',
+  '/assets/images/career-showcase/showcase-coffee.webp',
+];
 
 export default function StudentWorks() {
+  const marqueeRef = useRef<HTMLDivElement>(null);
   const sliderRef = useRef<HTMLDivElement>(null);
   const pauseUntilRef = useRef(0);
-  useDragScroll(sliderRef, () => { pauseUntilRef.current = Date.now() + 7000; });
-
-  const move = useCallback((direction: -1 | 1, manual = false) => {
-    const slider = sliderRef.current;
-    const card = slider?.querySelector<HTMLElement>('.student-work-card');
-    if (!slider || !card) return;
-
-    if (manual) pauseUntilRef.current = Date.now() + 7000;
-
-    const gap = Number.parseFloat(getComputedStyle(slider).gap) || 0;
-    const step = card.offsetWidth + gap;
-    const cycle = step * works.length;
-
-    if (direction === 1 && slider.scrollLeft >= cycle - step / 2) {
-      slider.scrollLeft -= cycle;
-      requestAnimationFrame(() => slider.scrollBy({ left: step, behavior: 'smooth' }));
-    } else if (direction === -1 && slider.scrollLeft <= step / 2) {
-      slider.scrollLeft += cycle;
-      requestAnimationFrame(() => slider.scrollBy({ left: -step, behavior: 'smooth' }));
-    } else {
-      slider.scrollBy({ left: direction * step, behavior: 'smooth' });
-    }
-  }, []);
+  const pauseTicker = () => { pauseUntilRef.current = Date.now() + 3000; };
+  useDragScroll(marqueeRef);
+  useDragScroll(sliderRef, pauseTicker, pauseTicker);
 
   useEffect(() => {
     const media = window.matchMedia('(max-width: 900px)');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (!media.matches || reducedMotion.matches) return;
+    let animationFrame = 0;
+    let previousTime = performance.now();
 
-    const interval = window.setInterval(() => {
-      if (Date.now() >= pauseUntilRef.current) move(1);
-    }, 4200);
+    const tick = (currentTime: number) => {
+      const slider = sliderRef.current;
+      const elapsed = Math.min(currentTime - previousTime, 50);
+      previousTime = currentTime;
 
-    return () => window.clearInterval(interval);
-  }, [move]);
+      if (slider && media.matches && !reducedMotion.matches && !document.hidden && Date.now() >= pauseUntilRef.current) {
+        const card = slider.querySelector<HTMLElement>('.student-work-card');
+        const gap = Number.parseFloat(getComputedStyle(slider).gap) || 0;
+        const cycle = card ? (card.offsetWidth + gap) * works.length : 0;
+
+        slider.scrollLeft += elapsed * 0.098;
+        if (cycle > 0 && slider.scrollLeft >= cycle) slider.scrollLeft -= cycle;
+      }
+
+      animationFrame = requestAnimationFrame(tick);
+    };
+
+    animationFrame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(animationFrame);
+  }, []);
 
   const cards = works.map((src, index) => (
     <figure className="student-work-card" key={src}>
@@ -59,13 +60,9 @@ export default function StudentWorks() {
     <div className="student-works">
       <div className="student-works-head">
         <h3>Работы наших учениц</h3>
-        <div className="slider-arrows student-works-controls">
-          <button type="button" onClick={() => move(-1, true)} aria-label="Предыдущая работа"><img src="/assets/images/arrow-left.svg?v=solid-blue" alt="" /></button>
-          <button type="button" onClick={() => move(1, true)} aria-label="Следующая работа"><img src="/assets/images/arrow-right.svg?v=solid-blue" alt="" /></button>
-        </div>
       </div>
 
-      <div className="student-works-marquee" aria-label="Работы учениц">
+      <div className="student-works-marquee drag-scroll" ref={marqueeRef} aria-label="Работы учениц">
         <div className="student-works-track">
           <div className="student-works-group">{cards}</div>
           <div className="student-works-group" aria-hidden="true">{works.map((src) => <figure className="student-work-card" key={`${src}-copy`}><img src={src} alt="" loading="lazy" decoding="async" /></figure>)}</div>

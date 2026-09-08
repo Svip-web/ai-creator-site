@@ -124,7 +124,7 @@
 @media(max-width:900px){.program summary{grid-template-columns:58px minmax(0,1fr);gap:14px}.program summary em{grid-column:1/-1;width:100%;min-width:0}.program details>p{padding:0 20px 24px}}
 @media(max-width:520px){.program summary{grid-template-columns:48px minmax(0,1fr)}.program summary b{font-size:42px}.program summary span{font-size:21px}}
 
-.price-grid li{align-items:flex-start}.price-grid li .price-check{flex:0 0 22px;width:22px;height:22px;border-radius:7px;display:grid;place-items:center;background:var(--yellow)}.price-grid li .price-check img{width:14px;height:14px}.price-grid li>span{padding-top:2px;line-height:1.15}.price-grid>article:nth-child(2) .price-check{background:#96b5d9}.price-grid>article:nth-child(2) .price-check img{filter:invert(1)}
+.price-grid li{align-items:flex-start}.price-grid li .price-check{flex:0 0 22px;width:22px;height:22px;border-radius:7px;display:grid;place-items:center;background:var(--yellow)}.price-grid li .price-check img{width:14px;height:14px}.price-grid li>span{padding-top:2px;line-height:1.15}.price-grid>article:nth-child(1) .price-check{background:#96b5d9}.price-grid>article:nth-child(1) .price-check img{filter:invert(1)}
 
 .registration-toast{position:fixed;z-index:900;left:20px;bottom:20px;width:min(310px,calc(100vw - 40px));min-height:86px;padding:12px 48px 12px 24px;border:1px solid #10101014;border-radius:999px;display:flex;align-items:center;background:#fff;box-shadow:0 14px 35px #1d213326;opacity:0;pointer-events:none;transform:translateY(25px) scale(.96);transition:opacity .38s ease,transform .38s cubic-bezier(.2,.8,.2,1)}.registration-toast--visible{opacity:1;transform:none}.registration-toast>div{min-width:0}.registration-toast strong{display:block;font:700 17px/1 HelveticaNeue}.registration-toast p{margin:5px 0 4px;font:400 14px/1.05 Gilroy}.registration-toast small{display:block;color:#7c8294;font:400 12px/1 Gilroy}.registration-toast__verified{position:absolute;right:17px;top:50%;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:#139cea;color:#fff;transform:translateY(-50%);font:700 15px/1 Arial}
 @media(max-width:520px){.registration-toast{left:12px;bottom:12px;width:calc(100vw - 24px);min-height:76px;padding:10px 43px 10px 20px}.registration-toast strong{font-size:16px}.registration-toast p{font-size:13px}}
@@ -526,17 +526,16 @@
 
 /* Reviews presented as lightweight messenger mockups. */
 .review-cards{padding:18px 0 38px;align-items:flex-start}
-.review-card{aspect-ratio:auto;padding:12px;border:1px solid #31578226;border-radius:28px;background:#fff;box-shadow:0 18px 38px #31578229;overflow:visible;transform:rotate(.7deg) translateY(9px);transform-origin:center;transition:transform .3s ease,box-shadow .3s ease}
-.review-card:nth-child(even){transform:rotate(-.8deg)}
-.review-card:nth-child(3n){transform:rotate(.45deg) translateY(14px)}
-.review-card:hover{z-index:2;transform:rotate(0) translateY(-5px);box-shadow:0 25px 50px #3157823d}
+.review-card{aspect-ratio:auto;padding:12px;border:1px solid #31578226;border-radius:28px;background:#fff;box-shadow:0 18px 38px #31578229;overflow:visible;transform:none;transition:transform .3s ease,box-shadow .3s ease}
+.review-card:nth-child(even),.review-card:nth-child(3n){transform:none}
+.review-card:hover{z-index:2;transform:none;box-shadow:0 25px 50px #3157823d}
 .review-card-bar{height:36px;padding:0 5px 10px;display:flex;align-items:center;justify-content:space-between;color:#315782;font:700 12px/1 HelveticaNeue;text-transform:uppercase;letter-spacing:.06em}
 .review-card-bar>span{display:flex;gap:5px}
 .review-card-bar i{width:7px;height:7px;border-radius:50%;display:block;background:#ff3540}
 .review-card-bar i:nth-child(2){background:#ffd76a}
 .review-card-bar i:nth-child(3){background:#85b44b}
 .review-card>img{aspect-ratio:3/4;border-radius:18px}
-@media(max-width:900px){.review-cards{padding-top:12px;padding-bottom:28px}.review-card{padding:9px;border-radius:22px;transform:rotate(.5deg) translateY(4px)}.review-card:nth-child(even),.review-card:nth-child(3n){transform:rotate(-.5deg) translateY(4px)}.review-card-bar{height:31px;padding-bottom:8px;font-size:10px}.review-card>img{border-radius:14px}}
+@media(max-width:900px){.review-cards{padding-top:12px;padding-bottom:28px}.review-card,.review-card:nth-child(even),.review-card:nth-child(3n){padding:9px;border-radius:22px;transform:none}.review-card-bar{height:31px;padding-bottom:8px;font-size:10px}.review-card>img{border-radius:14px}}
 @media(prefers-reduced-motion:reduce){.review-card{transition:none}.review-card,.review-card:nth-child(even),.review-card:nth-child(3n),.review-card:hover{transform:none}}
 
 /* Use regular lesson copy and reserve bold weight for selected key phrases. */
@@ -728,8 +727,10 @@
 .career-showcase h2 mark{display:inline-block;margin-top:3px;padding:3px 14px 6px;border-radius:999px;background:var(--yellow);color:inherit}
 .career-showcase>p{margin:18px 0 0;font-size:18px;line-height:1.25}
 .career-showcase>p strong{font-weight:700}
-.career-showcase__gallery{margin-top:30px;overflow:hidden}
+.career-showcase__gallery{margin-top:30px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;overscroll-behavior-inline:contain}
+.career-showcase__gallery::-webkit-scrollbar{display:none}
 .career-showcase__track{display:flex;width:max-content;gap:12px;animation:career-showcase-marquee 118s linear infinite;will-change:transform}
+.career-showcase__gallery.is-dragging .career-showcase__track{animation-play-state:paused}
 .career-showcase__gallery img{display:block;flex:0 0 230px;width:230px;height:300px;border-radius:18px;object-fit:cover;object-position:center}
 @keyframes career-showcase-marquee{to{transform:translateX(calc(-50% - 6px))}}
 @media(max-width:900px){.career-showcase{width:100%;margin-top:48px;padding:40px 14px 0}.career-showcase h2{font-size:clamp(34px,9vw,48px)}.career-showcase>p{font-size:16px}.career-showcase__gallery{margin-top:26px}.career-showcase__track{gap:8px;animation-duration:94s}.career-showcase__gallery img{flex-basis:31vw;width:31vw;height:230px}@keyframes career-showcase-marquee{to{transform:translateX(calc(-50% - 4px))}}}
@@ -857,7 +858,7 @@
 @media(min-width:521px) and (max-width:900px){.guarantee-person--composite{display:none}.guarantee-layout{display:block}.guarantees>.cta--wide{margin-top:28px}}
 
 /* Canonical AI Growth Studio blue. */
-.price-grid>article:nth-child(2) .price-check,
+.price-grid>article:nth-child(1) .price-check,
 .result-client-chat__head>i,
 .result-leads__sidebar>span>i,
 .result-income__card,
@@ -938,8 +939,7 @@
 .mentor-collage--desktop img:nth-child(3){grid-column:3;grid-row:1;object-position:center 44%}
 .mentor-collage--desktop img:nth-child(4){grid-column:4;grid-row:1;object-position:center 37%}
 .mentor-collage--desktop img:nth-child(5){grid-column:5;grid-row:1;object-position:center 50%}
-.mentor-collage--desktop img:nth-child(6){grid-column:1/3;grid-row:2;object-position:center 38%}
-.mentor-collage--desktop img:nth-child(7){grid-column:3/6;grid-row:2;object-position:center 42%}
+.mentor-collage--desktop img:nth-child(6){grid-column:1/6;grid-row:2;object-position:center 42%}
 .mentor>.mentor-person{z-index:2}
 .mentor>.mentor-signature{z-index:3}
 .mentor>.mentor-desktop-stats{z-index:4}
@@ -955,8 +955,7 @@
   .mentor-collage--mobile img:nth-child(3){grid-column:3;grid-row:1;object-position:center 42%}
   .mentor-collage--mobile img:nth-child(4){grid-column:1;grid-row:2;object-position:center 38%}
   .mentor-collage--mobile img:nth-child(5){grid-column:3;grid-row:2;object-position:center 46%}
-  .mentor-collage--mobile img:nth-child(6){grid-column:1/3;grid-row:3;object-position:center 34%}
-  .mentor-collage--mobile img:nth-child(7){grid-column:3;grid-row:3;object-position:center 38%}
+  .mentor-collage--mobile img:nth-child(6){grid-column:1/4;grid-row:3;object-position:center 38%}
   .mentor-mobile-visual>img{z-index:1}
   .mentor-mobile-visual>span,.mentor-portrait-badges{z-index:3}
 }
@@ -1069,4 +1068,145 @@
   .program details[open] summary>em::after{content:"";position:absolute;left:50%;top:50%;width:18px;height:2px;border:0;border-radius:2px;display:block;background:#fff;transform:translate(-50%,-50%)}
   .program details:not([open]) summary>em::after{background:#fff;transform:translate(-50%,-50%) rotate(90deg)}
   .program details[open] summary>em::after{display:none}
+}
+
+/* Keep the audience card numbers static and blue on phones. */
+@media(max-width:520px){
+  .audience-card b,
+  .audience-card:hover b{
+    color:var(--brand-blue);
+    animation:none;
+    transition:none;
+    transform:none;
+  }
+}
+
+/* The module header already closes an open module on phones. */
+@media(max-width:520px){
+  .program-close{display:none}
+}
+
+/* Let the portfolio collage be swiped directly on touch screens. */
+@media(max-width:900px){
+  .career-showcase__gallery{
+    overflow-x:auto;
+    overflow-y:hidden;
+    overscroll-behavior-inline:contain;
+    scroll-snap-type:x mandatory;
+    scrollbar-width:none;
+    touch-action:pan-x;
+    -webkit-overflow-scrolling:touch;
+  }
+  .career-showcase__gallery::-webkit-scrollbar{display:none}
+  .career-showcase__track{animation:none;will-change:auto}
+  .career-showcase__gallery img{scroll-snap-align:start;scroll-snap-stop:always}
+}
+
+/* Mobile student works run continuously and remain freely draggable. */
+@media(max-width:900px){
+  .student-works-controls{display:none!important}
+  .student-works-slider{scroll-behavior:auto;scroll-snap-type:none}
+  .student-works-slider .student-work-card{scroll-snap-align:none;scroll-snap-stop:normal}
+}
+
+/* Match portfolio marquee speed and allow direct mouse dragging on desktop. */
+@media(min-width:901px){
+  .student-works-marquee{
+    overflow-x:auto;
+    overflow-y:hidden;
+    overscroll-behavior-inline:contain;
+    scrollbar-width:none;
+  }
+  .student-works-marquee::-webkit-scrollbar{display:none}
+  .student-works-marquee.is-dragging .student-works-track{animation-play-state:paused}
+  .career-showcase__track{animation-duration:25s}
+}
+
+/* Merge the mobile header into the hero background. */
+@media(max-width:900px){
+  main{padding-top:0}
+  .header,.header::before{background:#e8f3ff}
+  .header::before{box-shadow:none}
+  .mobile-menu{background:#e8f3ff}
+  .header-burger{border-color:#315782;color:#315782}
+  .hero{padding-top:104px;border-radius:0 0 28px 28px}
+  .eyebrow{display:none}
+}
+
+.hero-action-card{display:contents}
+.hero-action-card>.cta+.proof{margin-top:20px}
+@media(max-width:900px){
+  .hero-action-card{
+    position:absolute;
+    z-index:7;
+    top:calc(100% + 165px);
+    left:50%;
+    width:min(430px,100%);
+    padding:18px;
+    border:1px solid #31578220;
+    border-radius:26px;
+    display:block;
+    background:#fff;
+    box-shadow:0 18px 42px #3157822b;
+    transform:translateX(-50%);
+  }
+  .hero-action-card .hero-subline{margin:0 auto}
+  .hero-action-card>.cta{margin:16px auto 0}
+  .hero-action-card>.cta+.proof{margin-top:16px}
+  .hero-signature{display:none}
+}
+@media(max-width:520px){
+  .hero-action-card{top:calc(100% + 185px);padding:24px;border-radius:24px}
+  .hero-action-card .hero-subline{font-size:14px;line-height:1.14}
+  .hero-action-card>.cta{width:min(100%,290px);min-width:0;height:60px;margin-top:12px;padding-inline:14px;gap:8px;font-size:15px;line-height:1.05}
+  .hero-action-card>.cta i{flex-basis:32px;width:32px;height:32px;min-width:32px;min-height:32px}
+  .hero-action-card>.cta+.proof{margin-top:12px}
+  .hero-action-card .proof{gap:6px}
+  .hero-action-card .proof img{width:35px;height:35px}
+  .hero-action-card .proof small{max-width:270px;font-size:12px;line-height:1.12}
+}
+
+/* Open the mobile navigation immediately and keep the closed layer inert. */
+@media(max-width:900px){
+  .mobile-menu{
+    z-index:1;
+    pointer-events:none;
+    transition:opacity .2s ease,transform .2s ease;
+  }
+  .header--menu-open .mobile-menu{
+    visibility:visible;
+    pointer-events:auto;
+  }
+}
+
+/* Keep the highlighted career promise on one line on phones. */
+@media(max-width:520px){
+  .career-showcase h2{
+    font-size:clamp(19px,5.8vw,25px);
+    white-space:nowrap;
+  }
+  .career-showcase h2 mark{
+    padding-inline:12px;
+    font-size:clamp(23px,7.2vw,30px);
+    white-space:nowrap;
+  }
+}
+
+/* Reveal more of the mentor portrait above the mobile action card. */
+@media(max-width:520px){
+  .hero-person{bottom:50px}
+  .hero-action-card{top:calc(100% + 230px);width:calc(100% + 12px);max-width:none}
+  .hero-action-card .proof{
+    align-items:center;
+    justify-content:center;
+    flex-direction:row;
+    gap:8px;
+  }
+  .hero-action-card .proof>span{flex:0 0 auto;margin:0}
+  .hero-action-card .proof small{
+    flex:1 1 auto;
+    max-width:210px;
+    margin:0;
+    text-align:left;
+  }
 }

@@ -69,7 +69,7 @@ export default function SiteHeader() {
       <nav className="header-nav" aria-label="Навигация по странице">
         {links.map(([href, label]) => <a href={href} key={href}>{label}</a>)}
       </nav>
-      <div className="header-actions header-actions--desktop"><a href="#start">Получить консультацию</a><a href="#start">Оставить заявку</a></div>
+      <div className="header-actions header-actions--desktop"><a href="#start" data-lead-popup>Получить консультацию</a><a href="#start" data-lead-popup>Оставить заявку</a></div>
       <button className="header-burger" type="button" aria-expanded={menuOpen} aria-controls="mobile-menu" aria-label={menuOpen ? 'Закрыть меню' : 'Открыть меню'} onClick={toggleMenu}>
         <span /><span /><span />
       </button>
@@ -78,8 +78,8 @@ export default function SiteHeader() {
           {links.map(([href, label]) => <a href={href} key={href} onClick={closeMenu}>{label}</a>)}
         </nav>
         <div className="header-actions header-actions--mobile">
-          <a href="#start" onClick={closeMenu}>Получить консультацию</a>
-          <a href="#start" onClick={closeMenu}>Оставить заявку</a>
+          <a href="#start" data-lead-popup onClick={closeMenu}>Получить консультацию</a>
+          <a href="#start" data-lead-popup onClick={closeMenu}>Оставить заявку</a>
         </div>
       </div>
     </header>
