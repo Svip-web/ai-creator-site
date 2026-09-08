@@ -22,7 +22,22 @@ const formConfig = {
 
 const telegramEndpoint = process.env.NEXT_PUBLIC_TELEGRAM_ENDPOINT || '/api/telegram-lead';
 
-async function detectCountryByIp(): Promise<Iso2> {
+function trackAnalyticsEvent(eventName: 'phone_country_auto_detected' | 'phone_country_changed' | 'phone_empty_error' | 'form_submit_attempt' | 'form_submit_success') {
+  const analyticsWindow = window as Window & {
+    dataLayer?: Array<Record<string, unknown>>;
+    gtag?: (...args: unknown[]) => void;
+  };
+
+  if (typeof analyticsWindow.gtag === 'function') {
+    analyticsWindow.gtag('event', eventName);
+    return;
+  }
+
+  analyticsWindow.dataLayer ??= [];
+  analyticsWindow.dataLayer.push({ event: eventName });
+}
+
+async function detectCountryByIp(): Promise<Iso2 | undefined> {
   try {
     const response = await fetch('https://get.geojs.io/v1/ip/geo.json');
     if (!response.ok) throw new Error('GeoJS lookup failed');
@@ -39,10 +54,10 @@ async function detectCountryByIp(): Promise<Iso2> {
     const countryCode = (await response.text()).trim().toLowerCase();
     if (/^[a-z]{2}$/.test(countryCode)) return countryCode as Iso2;
   } catch {
-    // Fall back to Ukraine when neither lookup is available.
+    // Keep the neutral country state when neither lookup is available.
   }
 
-  return 'ua';
+  return undefined;
 }
 
 export default function LeadPopup() {
@@ -66,64 +81,43 @@ export default function LeadPopup() {
 
     let cancelled = false;
     let instance: Iti | null = null;
-    let resetPhoneForCountry: (() => void) | null = null;
-    let limitPhoneLength: (() => void) | null = null;
-    let updatePhoneLimit: (() => void) | null = null;
+    let handleCountryChange: (() => void) | null = null;
 
     void import('intl-tel-input').then(({ default: intlTelInput }) => {
       if (cancelled) return;
       instance = intlTelInput(input, {
         initialCountry: 'auto',
-        useFullscreenPopup: false,
+        useFullscreenPopup: window.matchMedia('(max-width: 900px)').matches,
         countryOrder: ['ua'],
         excludeCountries: ['ru', 'by'],
         separateDialCode: true,
         nationalMode: true,
         autoPlaceholder: 'aggressive',
         formatAsYouType: true,
-        geoIpLookup: (success) => {
-          void detectCountryByIp().then(success).catch(() => success('ua'));
+        geoIpLookup: (success, failure) => {
+          void detectCountryByIp().then((countryCode) => {
+            if (!countryCode) {
+              failure();
+              return;
+            }
+            success(countryCode);
+            trackAnalyticsEvent('phone_country_auto_detected');
+          }).catch(failure);
         },
         loadUtils: () => import('intl-tel-input/utils'),
       });
       phoneInstanceRef.current = instance;
 
-      let maxNationalDigits = 15;
-      updatePhoneLimit = () => {
-        window.setTimeout(() => {
-          const placeholderDigits = input.placeholder.match(/\d/g)?.length ?? 0;
-          const dialCodeDigits = instance?.getSelectedCountryData()?.dialCode?.length ?? 0;
-          maxNationalDigits = placeholderDigits || Math.max(7, 15 - dialCodeDigits);
-          input.maxLength = Math.max(input.placeholder.length, maxNationalDigits);
-        });
-      };
-
-      limitPhoneLength = () => {
-        let digitCount = 0;
-        const limitedValue = Array.from(input.value).filter((character) => {
-          if (!/\d/.test(character)) return true;
-          digitCount += 1;
-          return digitCount <= maxNationalDigits;
-        }).join('').trimEnd();
-
-        if (input.value !== limitedValue) input.value = limitedValue;
-      };
-
-      resetPhoneForCountry = () => {
-        input.value = '';
-        if (hiddenPhoneRef.current) hiddenPhoneRef.current.value = '';
+      handleCountryChange = () => {
         setPhoneError('');
-        updatePhoneLimit?.();
+        trackAnalyticsEvent('phone_country_changed');
       };
-      input.addEventListener('input', limitPhoneLength);
-      input.addEventListener('countrychange', resetPhoneForCountry);
-      updatePhoneLimit();
+      input.addEventListener('countrychange', handleCountryChange);
     });
 
     return () => {
       cancelled = true;
-      if (limitPhoneLength) input.removeEventListener('input', limitPhoneLength);
-      if (resetPhoneForCountry) input.removeEventListener('countrychange', resetPhoneForCountry);
+      if (handleCountryChange) input.removeEventListener('countrychange', handleCountryChange);
       instance?.destroy();
       phoneInstanceRef.current = null;
     };
@@ -161,6 +155,7 @@ export default function LeadPopup() {
       }
 
       setSubmitted(true);
+      trackAnalyticsEvent('form_submit_success');
       return data;
     };
 
@@ -210,8 +205,11 @@ export default function LeadPopup() {
   const validate = (event: SyntheticEvent<HTMLFormElement>) => {
     const email = emailRef.current?.value.trim() ?? '';
     const phoneInstance = phoneInstanceRef.current;
-    const phone = phoneInstance?.getNumber() ?? '';
+    const phoneInput = phoneInputRef.current;
+    const rawNumber = phoneInput?.value.trim() ?? '';
     let firstInvalid: HTMLInputElement | null = null;
+
+    trackAnalyticsEvent('form_submit_attempt');
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setEmailError('Введите корректный email, например name@example.com');
@@ -220,24 +218,24 @@ export default function LeadPopup() {
       setEmailError('');
     }
 
-    if (!phoneInstance || !phoneInstance.isValidNumber() || !/^\+[1-9]\d{7,14}$/.test(phone)) {
-      setPhoneError('Введите корректный номер телефона');
-      if (!firstInvalid) firstInvalid = phoneInputRef.current;
+    if (!rawNumber) {
+      setPhoneError('Введите номер телефона');
+      trackAnalyticsEvent('phone_empty_error');
       if (hiddenPhoneRef.current) hiddenPhoneRef.current.value = '';
+      if (!firstInvalid) firstInvalid = phoneInput;
     } else {
+      const normalizedNumber = phoneInstance?.getNumber()?.trim() ?? '';
+      const country = phoneInstance?.getSelectedCountryData();
+      const dialCode = country?.dialCode ? `+${country.dialCode}` : '';
+      const digits = rawNumber.replace(/\D/g, '');
+      const numberWithDialCode = dialCode && digits ? `${dialCode}${digits}` : '';
+
       setPhoneError('');
-      if (hiddenPhoneRef.current) hiddenPhoneRef.current.value = phone;
-      const selectedCountry = phoneInstance.getSelectedCountryData();
-      const dialPrefix = selectedCountry?.dialCode ? `+${selectedCountry.dialCode}` : '';
-      if (phoneInputRef.current && dialPrefix && phone.startsWith(dialPrefix)) {
-        phoneInputRef.current.value = phone.slice(dialPrefix.length);
-      }
+      if (hiddenPhoneRef.current) hiddenPhoneRef.current.value = normalizedNumber || numberWithDialCode || rawNumber;
     }
 
     if (firstInvalid) {
       event.preventDefault();
-      event.stopPropagation();
-      event.nativeEvent.stopImmediatePropagation();
       firstInvalid.focus();
     }
   };
