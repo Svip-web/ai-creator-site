@@ -59,16 +59,12 @@ export default function CountdownTimer() {
           <i><img src="/assets/images/like.svg" alt="" /></i>
         </a>
       </div>
-      <div className="countdown-facts" aria-label="Факты об обучении">
-        <p><strong>2 000+</strong><span>учениц прошли обучение</span></p>
-        <p><strong>3 000+</strong><span>единиц коммерческого контента</span></p>
-        <p><strong>6–8 недель</strong><span>до готового портфолио</span></p>
+      <div className="countdown-facts" aria-label="Что входит в обучение">
+        <p><strong>AI-фото</strong><span>для брендов и соцсетей</span></p>
+        <p><strong>AI-видео</strong><span>Reels и короткие ролики</span></p>
+        <p><strong>10+ работ</strong><span>в готовом портфолио</span></p>
       </div>
-      <svg className="countdown-arrow" viewBox="0 0 72 112" aria-hidden="true">
-        <path d="M12 8C16 35 23 69 52 99" />
-        <path d="M31 91L53 101L48 77" />
-      </svg>
-      <img className="countdown-chair" src="/assets/images/ai-creator-chair.webp" alt="Кресло с ноутбуком AI Creator" loading="lazy" decoding="async" />
+      <img className="countdown-chair" src="/assets/images/ai-creator-chair-mockup-v3.webp" alt="Кресло с ноутбуком, на экране которого Женя Коваленко рассказывает об AI" loading="lazy" decoding="async" />
     </section>
   );
 }

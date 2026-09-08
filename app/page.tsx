@@ -7,18 +7,29 @@ import LearningBenefits from './LearningBenefits';
 import StudySlider from './StudySlider';
 import BarrierSlider from './BarrierSlider';
 import StudentWorks from './StudentWorks';
-import { courseModules, faqs } from './courseContent';
+import { courseModules } from './courseContent';
 import AudienceSlider from './AudienceSlider';
 import ProgramCloseButton from './ProgramCloseButton';
 import ReviewSlider from './ReviewSlider';
 import CountdownTimer from './CountdownTimer';
 import SiteHeader from './SiteHeader';
+import FaqList from './FaqList';
 
 export const dynamic = 'force-static';
 
 /* oxlint-disable jsx-a11y/media-has-caption, next/no-img-element */
 const heroImages = Array.from({ length: 11 }, (_, index) => `/assets/images/hero-${String(index + 1).padStart(2, '0')}.webp`);
-const careerImages = Array.from({ length: 6 }, (_, index) => `/assets/images/career-${String(index + 1).padStart(2, '0')}-v2.webp`);
+const careerCollageImages = Array.from({ length: 6 }, (_, index) => `/assets/images/career-${String(index + 1).padStart(2, '0')}-v2.webp`);
+const careerShowcaseImages = [
+  'showcase-skincare.webp',
+  'showcase-jewelry.webp',
+  'showcase-coffee.webp',
+  'showcase-interior.webp',
+  'showcase-tech.webp',
+  'showcase-flowers.webp',
+  'showcase-travel.webp',
+  'showcase-activewear.webp',
+].map((image) => `/assets/images/career-showcase/${image}`);
 const avatars = Array.from({ length: 4 }, (_, index) => `/assets/images/avatar-0${index + 1}.webp`);
 const marqueeColumns = [
   [...heroImages],
@@ -39,34 +50,6 @@ function EmphasizedText({ text, emphasis }: { text: string; emphasis: string }) 
   const [before, after] = text.split(emphasis);
   return <>{before}<strong>{emphasis}</strong>{after}</>;
 }
-
-function ProgramTitle({ title, vip }: { title: string; vip?: boolean }) {
-  if (!vip) return <>{title}</>;
-  const splitAt = title.lastIndexOf(' ');
-  const before = splitAt >= 0 ? title.slice(0, splitAt + 1) : '';
-  const ending = splitAt >= 0 ? title.slice(splitAt + 1) : title;
-  return <>{before}<span className="program-title-ending">{ending}<i className="program-vip">VIP</i></span></>;
-}
-
-const programLessonEmphasis: Record<string, string> = {
-  'Стратегия и тактика в бизнесе': 'Стратегия и тактика',
-  'Бонусные уроки от кураторов': 'Бонусные уроки',
-  'Как использовать Erank на максимум': 'Erank',
-  'Как использовать Everbee': 'Everbee',
-  'Создание аккаунта и магазина на платформе ETSY': 'аккаунта и магазина',
-  'Работа с Printify и управление Etsy-магазином': 'Printify',
-  'Искусственный интеллект и его применение': 'Искусственный интеллект',
-  'Поиск своей ниши: Как выбрать целевую аудиторию': 'Поиск своей ниши',
-  'Обзор трендов и стратегий': 'трендов и стратегий',
-  'Как избежать слишком насыщенных ниш': 'слишком насыщенных ниш',
-  'Как правильно работать с отзывами': 'работать с отзывами',
-  'Практический эфир: Как создать продающий листинг — ключевые шаги + живые разборы': 'Практический эфир',
-  'Как найти подходящих людей для POD-бизнеса.': 'подходящих людей',
-  'Построение эффективной команды и распределение ролей.': 'эффективной команды',
-  'Тренинг и мотивация команды для достижения общих целей': 'мотивация команды',
-  'Организация процессов для удалённой работы.': 'процессов для удалённой работы',
-  'Создание культуры компании, которая вдохновляет на результат': 'культуры компании',
-};
 
 const barriers = [
   { icon: 'icon-settings.svg', title: 'Навыки дизайна или монтажа', text: 'Не нужно владеть Photoshop или профессиональными редакторами. Вы научитесь создавать AI-фото и видео с нуля по готовым схемам.', emphasis: 'AI-фото и видео с нуля' },
@@ -105,6 +88,8 @@ const mentorFacts = [
   { text: 'Покажу, как превратить интерес к нейросетям в востребованный навык и источник дохода', emphasis: 'востребованный навык и источник дохода' },
 ];
 
+const mentorCollage = Array.from({ length: 7 }, (_, index) => `/assets/images/mentor-collage/mentor-${String(index + 1).padStart(2, '0')}.webp`);
+
 const plans = [
   { name: 'BASIC', label: 'самостоятельно', tone: 'blue', items: ['Модуль предобучения', '6 модулей', 'Практические домашние задания', 'Доступ к платформе на 1 месяц', 'База знаний — все шаблоны, инструкции и чек-листы'] },
   { name: 'PRO', label: 'поддержка куратора', tone: 'dark', items: ['Всё из тарифа «Basic» +', '8 модулей', 'Модуль по созданию портфолио', 'Обратная связь от куратора', 'Проверка домашних заданий', 'Сертификат', 'Обучение 6 недель', 'Записи мастер-классов', 'Готовое портфолио', 'Доступ к платформе на 3 месяца', 'Доступ к компьюнити выпускниц'] },
@@ -119,7 +104,7 @@ function LayeredSystemGraphic({ src }: { src: string }) {
   if (src.includes('ai-collage')) {
     return <figure className="system-graphic system-graphic--collage" aria-label="Коллаж коммерческих AI-проектов AI Growth Studio">
       <span className="system-graphic__tiles" aria-hidden="true">
-        {careerImages.map((image) => <span className="system-graphic__tile" style={{ backgroundImage: `url(${image})` }} key={image} />)}
+        {careerCollageImages.map((image) => <span className="system-graphic__tile" style={{ backgroundImage: `url(${image})` }} key={image} />)}
       </span>
       <span className="system-graphic__brand" aria-hidden="true"><span className="brand-symbol" /><span className="brand-wordmark" /></span>
     </figure>;
@@ -200,21 +185,27 @@ export default function Home() {
     </section>
 
     <section className="mentor" id="expert">
+      <div className="mentor-collage mentor-collage--desktop" aria-hidden="true">
+        {mentorCollage.map((src) => <img src={src} alt="" loading="lazy" decoding="async" key={src} />)}
+      </div>
       <img className="mentor-person" src="/assets/images/expert-person.webp" alt="Женя Коваленко" loading="lazy" decoding="async" />
       <div className="mentor-desktop-stats" aria-label="Факты о Жене Коваленко">
-        <p><b>3+ года</b><span>в AI</span></p>
-        <p><b>2 000+</b><span>учениц</span></p>
         <p><b>3 000+</b><span>коммерческих работ</span></p>
+        <p><b>2 000+</b><span>учениц прошли обучение</span></p>
+        <p><b>3+ года</b><span>в AI‑креаторстве</span></p>
       </div>
       <span className="mentor-signature">Женя Коваленко</span>
       <div className="mentor-content">
         <div className="mentor-title"><h2>Ваш наставник</h2><strong>Женя Коваленко</strong></div>
         <div className="mentor-mobile-visual">
+          <div className="mentor-collage mentor-collage--mobile" aria-hidden="true">
+            {mentorCollage.map((src) => <img src={src} alt="" loading="lazy" decoding="async" key={src} />)}
+          </div>
           <img src="/assets/images/expert-person.webp" alt="Женя Коваленко" loading="lazy" decoding="async" />
           <div className="mentor-portrait-badges" aria-label="Факты о Жене Коваленко">
-            <p><b>3+ года</b><span>в AI</span></p>
-            <p><b>2 000+</b><span>учениц</span></p>
             <p><b>3 000+</b><span>коммерческих работ</span></p>
+            <p><b>2 000+</b><span>учениц прошли обучение</span></p>
+            <p><b>3+ года</b><span>в AI‑креаторстве</span></p>
           </div>
           <span>Женя Коваленко</span>
         </div>
@@ -222,7 +213,7 @@ export default function Home() {
           <div className="mentor-facts">{mentorFacts.map((fact) => <p key={fact.text}><img src="/assets/images/check.svg" alt="" loading="lazy" decoding="async" /><span><EmphasizedText text={fact.text} emphasis={fact.emphasis} /></span></p>)}</div>
           <div className="mentor-action-row">
             <a className="cta cta--mentor" href="#prices"><span>Записаться на курс с<br /> индивидуальным подходом</span><i><img src="/assets/images/like.svg" alt="" /></i></a>
-            <p className="mentor-action-note"><b>Готовы учиться у Жени?</b><span>Выберите тариф и начните путь в AI‑креаторстве</span></p>
+            <p className="mentor-action-note"><b>Готовы учиться у Жени Коваленко?</b><span>Выберите тариф и начните путь в AI‑креаторстве</span></p>
           </div>
         </div>
       </div>
@@ -235,7 +226,7 @@ export default function Home() {
 
     <section className="section program-section" id="program">
       <div className="section-title"><h2>Программа</h2><strong>обучения</strong></div>
-      <div className="program wrap" aria-label="Программа обучения">{courseModules.map((module) => <details className={[module.vip && 'is-vip', module.lessons.length > 0 && 'has-lessons'].filter(Boolean).join(' ')} key={module.number}><summary><b>{module.number}</b><span><ProgramTitle title={module.title} vip={module.vip} /></span><em>Показать больше</em></summary>{module.lessons.length > 0 && <div className="program-content"><ul>{module.lessons.map((lesson) => <li key={lesson}>{programLessonEmphasis[lesson] ? <EmphasizedText text={lesson} emphasis={programLessonEmphasis[lesson]} /> : lesson}</li>)}</ul><ProgramCloseButton /></div>}</details>)}</div>
+      <div className="program wrap" aria-label="Программа обучения">{courseModules.map((module) => <details className={[module.advanced && 'is-advanced', 'has-lessons'].filter(Boolean).join(' ')} key={module.number}><summary><b>{module.number}</b><span>{module.title}</span><em>Показать больше</em></summary><div className="program-content">{module.lessons.length > 0 && <ul>{module.lessons.map((lesson) => <li key={lesson}>{lesson}</li>)}</ul>}<div className="program-result"><span>Результат</span><p>{module.result}</p></div><ProgramCloseButton /></div></details>)}</div>
     </section>
 
     <section className="prices" id="prices"><div className="wrap" id="start"><div className="section-title"><h2>Тарифы</h2><strong>участия</strong></div><div className="price-grid">{plans.map((plan) => <article className={plan.featured ? 'is-featured' : undefined} key={plan.name}><header className={`price-head price-head--${plan.tone}`}><h3>{plan.name}</h3><span>{plan.label}</span></header><ul>{plan.items.map((item) => <li key={item}><i className="price-check"><img src="/assets/images/price-check.svg" alt="" loading="lazy" decoding="async" /></i><span>{item}</span></li>)}</ul><a className="cta price-cta" href="#start"><span>Выбрать этот тариф</span><i><img src="/assets/images/like.svg" alt="" /></i></a></article>)}</div></div></section>
@@ -245,7 +236,7 @@ export default function Home() {
       <p>Создавая фото и видео для брендов<br /><strong>С нуля до готового портфолио за 6–8 недель</strong></p>
       <div className="career-showcase__gallery">
         <div className="career-showcase__track">
-          {[0, 1].map((copy) => careerImages.map((src, index) => (
+          {[0, 1].map((copy) => careerShowcaseImages.map((src, index) => (
             <img
               src={src}
               alt={copy === 0 ? `Пример AI-контента ${index + 1}` : ''}
@@ -276,7 +267,7 @@ export default function Home() {
           </aside>
         </div>
         <div className="faq-content">
-          <div className="faq-list">{faqs.map(([question, answer], index) => <details key={question}><summary><b>{String(index + 1).padStart(2, '0')}</b><span>{question}</span><i aria-hidden="true" /></summary><p>{answer}</p></details>)}</div>
+          <FaqList />
         </div>
       </div>
     </section>
@@ -290,14 +281,13 @@ export default function Home() {
           </div>
           <div className="site-footer__column">
             <h3>Контакты</h3>
-            <a href="mailto:info@stony.store">info@stony.store</a>
+            <a href="mailto:info@kovalenko-ai.com">info@kovalenko-ai.com</a>
             <a className="cta site-footer__callback" href="#start">Заказать звонок</a>
-            <span>Stony LLC</span>
           </div>
           <div className="site-footer__column">
             <h3>Документы</h3>
             <Link href="/offer-aicreator">Публичная оферта</Link>
-            <Link href="/policy-aicreator">Политика конфиденциальности</Link>
+            <span>Stony LLC</span>
             <address>300 Kings Point Dr, office 1507,<br />Sunny Isles Beach, FL 33160, USA</address>
           </div>
           <div className="site-footer__column site-footer__facts">
@@ -310,8 +300,10 @@ export default function Home() {
             <span className="payment-mark payment-mark--visa">VISA</span>
             <span className="payment-mark payment-mark--stripe">stripe</span>
             <span className="payment-mark payment-mark--mastercard" aria-label="Mastercard"><i /><i /></span>
-            <span className="payment-mark payment-mark--r">R</span>
-            <span className="payment-mark payment-mark--way">↗</span>
+            <span className="payment-mark payment-mark--revolut" aria-label="Revolut">REVOLUT</span>
+            <span className="payment-mark payment-mark--wise" aria-label="Wise"><i>↗</i>WISE</span>
+            <span className="payment-mark payment-mark--mono" aria-label="monobank">mono</span>
+            <span className="payment-mark payment-mark--paypal" aria-label="PayPal"><i>P</i><span>PayPal</span></span>
           </div>
           <p>Copyright © 2026. AI GROWTH STUDIO</p>
         </div>
