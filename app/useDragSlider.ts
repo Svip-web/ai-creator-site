@@ -19,6 +19,7 @@ export function useDragScroll<T extends HTMLElement>(ref: RefObject<T | null>, o
     let startX = 0;
     let startY = 0;
     let startScroll = 0;
+    let dragMultiplier = 1;
     let dragging = false;
     let suppressClick = false;
 
@@ -28,6 +29,7 @@ export function useDragScroll<T extends HTMLElement>(ref: RefObject<T | null>, o
       startX = event.clientX;
       startY = event.clientY;
       startScroll = element.scrollLeft;
+      dragMultiplier = event.pointerType === 'touch' ? 1.7 : 1;
       dragging = false;
     };
 
@@ -44,7 +46,7 @@ export function useDragScroll<T extends HTMLElement>(ref: RefObject<T | null>, o
         startCallbackRef.current?.();
       }
       event.preventDefault();
-      element.scrollLeft = startScroll - deltaX;
+      element.scrollLeft = startScroll - deltaX * dragMultiplier;
     };
 
     const pointerUp = (event: PointerEvent) => {
@@ -81,11 +83,11 @@ export function useDragScroll<T extends HTMLElement>(ref: RefObject<T | null>, o
 export function usePageSwipe(onMove: (direction: -1 | 1) => void) {
   const [offset, setOffset] = useState(0);
   const [dragging, setDragging] = useState(false);
-  const start = useRef({ pointerId: -1, x: 0, y: 0, horizontal: false });
+  const start = useRef({ pointerId: -1, pointerType: '', x: 0, y: 0, horizontal: false });
 
   const onPointerDown = (event: ReactPointerEvent<HTMLElement>) => {
     if (!event.isPrimary || event.button !== 0) return;
-    start.current = { pointerId: event.pointerId, x: event.clientX, y: event.clientY, horizontal: false };
+    start.current = { pointerId: event.pointerId, pointerType: event.pointerType, x: event.clientX, y: event.clientY, horizontal: false };
   };
 
   const onPointerMove = (event: ReactPointerEvent<HTMLElement>) => {
@@ -109,7 +111,8 @@ export function usePageSwipe(onMove: (direction: -1 | 1) => void) {
     start.current.pointerId = -1;
     setDragging(false);
     setOffset(0);
-    if (didDrag && Math.abs(deltaX) >= 48) onMove(deltaX < 0 ? 1 : -1);
+    const moveThreshold = start.current.pointerType === 'touch' ? 22 : 48;
+    if (didDrag && Math.abs(deltaX) >= moveThreshold) onMove(deltaX < 0 ? 1 : -1);
   };
 
   return { offset, dragging, handlers: { onPointerDown, onPointerMove, onPointerUp: finish, onPointerCancel: finish } };

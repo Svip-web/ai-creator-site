@@ -366,7 +366,9 @@
 .price-consultation__copy h2{margin:18px 0 0;font:700 clamp(38px,4.2vw,60px)/.96 HelveticaNeue;letter-spacing:-.035em}
 .price-consultation__copy p{max-width:580px;margin:20px 0 0;color:#3f4650;font-size:19px;line-height:1.25}
 .consultant-card{position:relative;padding:30px;border:1px solid #31578220;border-radius:28px;background:#fff;box-shadow:0 18px 46px #3157821f;transform:rotate(1deg)}
-.consultant-card::before{content:"";position:absolute;right:26px;top:25px;width:11px;height:11px;border:4px solid #dff6e3;border-radius:50%;background:#39b957;box-sizing:content-box}
+.consultant-card::before{content:"";position:absolute;right:26px;top:25px;width:11px;height:11px;border:4px solid #dff6e3;border-radius:50%;background:#39b957;box-sizing:content-box;transform-origin:center;animation:consultant-status-pulse 2.4s ease-in-out infinite}
+@keyframes consultant-status-pulse{0%,100%{box-shadow:0 0 0 0 #39b95700;transform:scale(.96)}50%{box-shadow:0 0 0 7px #39b9571f;transform:scale(1.06)}}
+@media(prefers-reduced-motion:reduce){.consultant-card::before{animation:none}}
 .consultant-card__person{display:flex;align-items:center;gap:16px}
 .consultant-card__avatar{flex:0 0 82px;width:82px;height:82px;border:4px solid #dcecff;border-radius:50%;overflow:hidden}
 .consultant-card__avatar img{width:100%;height:100%;object-fit:cover}
@@ -1092,14 +1094,17 @@
     overflow-x:auto;
     overflow-y:hidden;
     overscroll-behavior-inline:contain;
-    scroll-snap-type:x mandatory;
+    scroll-snap-type:none;
     scrollbar-width:none;
-    touch-action:pan-x;
+    touch-action:pan-y;
     -webkit-overflow-scrolling:touch;
   }
   .career-showcase__gallery::-webkit-scrollbar{display:none}
-  .career-showcase__track{animation:none;will-change:auto}
-  .career-showcase__gallery img{scroll-snap-align:start;scroll-snap-stop:always}
+  .career-showcase__track{animation:career-showcase-marquee 34s linear infinite;will-change:transform}
+  .career-showcase__gallery img{scroll-snap-align:none;scroll-snap-stop:normal}
+}
+@media(max-width:900px) and (prefers-reduced-motion:reduce){
+  .career-showcase__track{animation:none}
 }
 
 /* Mobile student works run continuously and remain freely draggable. */
