@@ -762,7 +762,7 @@
 @media(max-width:520px){.career-showcase__gallery img{flex-basis:58vw;width:58vw;height:270px}}
 
 /* Mouse drag and touch swipe affordances shared by every slider. */
-.drag-scroll,.drag-pages{cursor:grab;touch-action:pan-y;-webkit-user-drag:none}
+.drag-scroll,.drag-pages{cursor:grab;touch-action:pan-y pinch-zoom;-webkit-user-drag:none}
 .drag-scroll img,.drag-pages img{user-select:none;-webkit-user-drag:none}
 .drag-scroll.is-dragging,.drag-pages.is-dragging{cursor:grabbing;user-select:none}
 .drag-scroll.is-dragging{scroll-behavior:auto;scroll-snap-type:none}
@@ -1112,6 +1112,9 @@
   .student-works-controls{display:none!important}
   .student-works-slider{scroll-behavior:auto;scroll-snap-type:none}
   .student-works-slider .student-work-card{scroll-snap-align:none;scroll-snap-stop:normal}
+  .review-cards{scroll-behavior:auto;scroll-snap-type:none;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}
+  .review-card{scroll-snap-align:none;scroll-snap-stop:normal}
+  .review-card-open{touch-action:pan-y pinch-zoom;-webkit-user-select:none;user-select:none}
 }
 
 /* Match portfolio marquee speed and allow direct mouse dragging on desktop. */
@@ -1199,9 +1202,10 @@
 
 /* Reveal more of the mentor portrait above the mobile action card. */
 @media(max-width:520px){
-  .hero h1{font-size:clamp(24px,8.4vw,34px);line-height:1;white-space:nowrap}
+  .hero h1{position:relative;top:-12px;font-size:clamp(24px,8.4vw,34px);line-height:1;white-space:nowrap}
   .hero h1 br{display:block}
-  .hero-person{bottom:-20px;width:108%;height:520px}
+  .income{position:relative;top:-12px;height:46px;margin-top:0}
+  .hero-person{bottom:0;width:122%;height:640px}
   .hero-action-card{top:calc(100% + 230px);width:calc(100% + 12px);max-width:none}
   .hero-action-card .proof{
     align-items:center;
@@ -1216,4 +1220,15 @@
     margin:0;
     text-align:left;
   }
+}
+
+/* Restore the playful desktop review-card tilt and straighten on interaction. */
+@media(min-width:901px) and (hover:hover) and (pointer:fine){
+  .review-card{transform:rotate(-1.15deg);transform-origin:center;transition:transform .32s cubic-bezier(.2,.8,.2,1)}
+  .review-card:nth-child(even){transform:rotate(1.15deg)}
+  .review-card:nth-child(3n){transform:rotate(-.75deg)}
+  .review-card:hover,.review-card:focus-within{z-index:2;transform:translateY(-4px) rotate(0) scale(1.01)}
+}
+@media(prefers-reduced-motion:reduce){
+  .review-card,.review-card:nth-child(even),.review-card:nth-child(3n),.review-card:hover,.review-card:focus-within{transform:none;transition:none}
 }

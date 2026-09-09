@@ -18,7 +18,7 @@ export function useDragScroll<T extends HTMLElement>(ref: RefObject<T | null>, o
     let pointerId: number | null = null;
     let startX = 0;
     let startY = 0;
-    let startScroll = 0;
+    let lastX = 0;
     let dragMultiplier = 1;
     let dragging = false;
     let suppressClick = false;
@@ -28,9 +28,10 @@ export function useDragScroll<T extends HTMLElement>(ref: RefObject<T | null>, o
       pointerId = event.pointerId;
       startX = event.clientX;
       startY = event.clientY;
-      startScroll = element.scrollLeft;
-      dragMultiplier = event.pointerType === 'touch' ? 1.7 : 1;
+      lastX = event.clientX;
+      dragMultiplier = event.pointerType === 'touch' ? 2.15 : event.pointerType === 'pen' ? 1.35 : 1;
       dragging = false;
+      element.setPointerCapture?.(event.pointerId);
     };
 
     const pointerMove = (event: PointerEvent) => {
@@ -38,15 +39,16 @@ export function useDragScroll<T extends HTMLElement>(ref: RefObject<T | null>, o
       const deltaX = event.clientX - startX;
       const deltaY = event.clientY - startY;
       if (!dragging) {
-        if (Math.abs(deltaX) < 6 || Math.abs(deltaX) <= Math.abs(deltaY)) return;
+        if (Math.abs(deltaX) < 4 || Math.abs(deltaX) <= Math.abs(deltaY)) return;
         dragging = true;
         suppressClick = true;
         element.classList.add('is-dragging');
-        element.setPointerCapture?.(event.pointerId);
         startCallbackRef.current?.();
       }
       event.preventDefault();
-      element.scrollLeft = startScroll - deltaX * dragMultiplier;
+      const movementX = event.clientX - lastX;
+      element.scrollLeft -= movementX * dragMultiplier;
+      lastX = event.clientX;
     };
 
     const pointerUp = (event: PointerEvent) => {
