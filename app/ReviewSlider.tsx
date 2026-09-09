@@ -12,12 +12,7 @@ const reviews = Array.from(
 export default function ReviewSlider() {
   const trackRef = useRef<HTMLDivElement>(null);
   const [expandedReview, setExpandedReview] = useState<number | null>(null);
-  useDragScroll(trackRef, {
-    touchMultiplier: 2.45,
-    activationDistance: 2,
-    momentum: true,
-    momentumFriction: 0.91,
-  });
+  useDragScroll(trackRef);
 
   useEffect(() => {
     if (expandedReview === null) return;

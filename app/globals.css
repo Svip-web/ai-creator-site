@@ -810,8 +810,9 @@
 
 /* Keep audience cards fully inside the viewport with an exact 12px gap. */
 .audience-slider{overflow:hidden;overflow-clip-margin:0}
-.audience-slider-track{align-items:flex-start;transition:transform .5s cubic-bezier(.2,.75,.25,1),height .3s ease}
-.audience-slide{gap:12px}
+.audience-slider-track{display:flex;align-items:stretch;gap:12px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+.audience-slider-track::-webkit-scrollbar{display:none}
+.audience-card{flex:0 0 calc((100% - 12px)/2);scroll-snap-align:start;scroll-snap-stop:always}
 
 /* Global mobile slider rule: one complete card, never clipped at either edge. */
 @media(max-width:520px){
@@ -819,6 +820,7 @@
   .story-videos article,.review-card,.benefit-grid article,.student-works-slider .student-work-card,.barrier-grid article{flex-basis:100%;width:100%;max-width:100%}
   .story-videos,.review-cards,.benefit-grid,.student-works-slider,.barrier-grid{scroll-snap-type:x mandatory;scroll-padding-inline:0}
   .story-videos article,.review-card,.benefit-grid article,.student-works-slider .student-work-card,.barrier-grid article{scroll-snap-align:start;scroll-snap-stop:always}
+  .audience-card{flex-basis:100%;width:100%;max-width:100%}
 }
 
 /* Mobile guarantee composition ends flush at the next section; CTA stays over the portrait. */
@@ -1112,8 +1114,7 @@
   .student-works-controls{display:none!important}
   .student-works-slider{scroll-behavior:auto;scroll-snap-type:none}
   .student-works-slider .student-work-card{scroll-snap-align:none;scroll-snap-stop:normal}
-  .review-cards{scroll-behavior:auto;scroll-snap-type:none;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}
-  .review-card{scroll-snap-align:none;scroll-snap-stop:normal}
+  .review-cards{overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}
   .review-card-open{touch-action:pan-y pinch-zoom;-webkit-user-select:none;user-select:none}
 }
 
