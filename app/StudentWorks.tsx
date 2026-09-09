@@ -5,15 +5,10 @@ import { useDragScroll } from './useDragSlider';
 
 /* oxlint-disable next/no-img-element */
 
-const works = [
-  ...Array.from(
-    { length: 11 },
-    (_, index) => `/assets/images/hero-${String(index + 1).padStart(2, '0')}.webp`,
-  ),
-  '/assets/images/career-showcase/showcase-skincare.webp',
-  '/assets/images/career-showcase/showcase-jewelry.webp',
-  '/assets/images/career-showcase/showcase-coffee.webp',
-];
+const works = Array.from(
+  { length: 14 },
+  (_, index) => `/assets/images/student-work-${String(index + 1).padStart(2, '0')}.webp`,
+);
 
 export default function StudentWorks() {
   const marqueeRef = useRef<HTMLDivElement>(null);
@@ -37,7 +32,7 @@ export default function StudentWorks() {
         const gap = Number.parseFloat(getComputedStyle(slider).gap) || 0;
         const cycle = card ? (card.offsetWidth + gap) * works.length : 0;
 
-        slider.scrollLeft += elapsed * 0.085;
+        slider.scrollLeft += elapsed * 0.1;
         if (cycle > 0 && slider.scrollLeft >= cycle) slider.scrollLeft -= cycle;
       }
 

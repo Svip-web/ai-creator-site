@@ -20,6 +20,7 @@ export const dynamic = 'force-static';
 
 /* oxlint-disable jsx-a11y/media-has-caption, next/no-img-element */
 const heroImages = Array.from({ length: 11 }, (_, index) => `/assets/images/hero-${String(index + 1).padStart(2, '0')}.webp`);
+const heroFirstRowImages = Array.from({ length: 11 }, (_, index) => `/assets/images/hero-row1-${String(index + 1).padStart(2, '0')}.webp`);
 const careerCollageImages = Array.from({ length: 6 }, (_, index) => `/assets/images/career-${String(index + 1).padStart(2, '0')}-v2.webp`);
 const careerShowcaseImages = [
   'showcase-skincare.webp',
@@ -33,8 +34,8 @@ const careerShowcaseImages = [
 ].map((image) => `/assets/images/career-showcase/${image}`);
 const avatars = Array.from({ length: 4 }, (_, index) => `/assets/images/avatar-0${index + 1}.webp`);
 const marqueeColumns = [
-  [...heroImages],
-  [...heroImages.slice(4), ...heroImages.slice(0, 4)],
+  heroFirstRowImages,
+  heroImages,
 ];
 
 type Step = { number: string; title: string; emphasis: string; image?: string; video?: string; featured?: boolean };

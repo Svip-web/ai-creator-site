@@ -26,7 +26,7 @@ export default function CareerShowcaseGallery({ images }: CareerShowcaseGalleryP
 
       if (gallery && mobile.matches && !reducedMotion.matches && !document.hidden && !gallery.classList.contains('is-dragging')) {
         const cycle = gallery.scrollWidth / 2;
-        gallery.scrollLeft += elapsed * 0.075;
+        gallery.scrollLeft += elapsed * 0.088;
         if (cycle > 0 && gallery.scrollLeft >= cycle) gallery.scrollLeft -= cycle;
       }
 
