@@ -2,7 +2,26 @@
 
 import { PointerEvent as ReactPointerEvent, RefObject, useEffect, useRef, useState } from 'react';
 
-export function useDragScroll<T extends HTMLElement>(ref: RefObject<T | null>, onDragStart?: () => void, onDragEnd?: (scrollLeft: number) => void) {
+type DragScrollOptions = {
+  touchMultiplier?: number;
+  activationDistance?: number;
+  momentum?: boolean;
+  momentumFriction?: number;
+  loop?: boolean;
+  onDragStart?: () => void;
+  onDragEnd?: (scrollLeft: number) => void;
+};
+
+export function useDragScroll<T extends HTMLElement>(ref: RefObject<T | null>, options: DragScrollOptions = {}) {
+  const {
+    touchMultiplier = 2.6,
+    activationDistance = 3,
+    momentum = false,
+    momentumFriction = 0.9,
+    loop = false,
+    onDragStart,
+    onDragEnd,
+  } = options;
   const startCallbackRef = useRef(onDragStart);
   const endCallbackRef = useRef(onDragEnd);
 
@@ -19,17 +38,25 @@ export function useDragScroll<T extends HTMLElement>(ref: RefObject<T | null>, o
     let startX = 0;
     let startY = 0;
     let lastX = 0;
+    let lastTime = 0;
+    let velocity = 0;
+    let pointerType = '';
+    let momentumFrame = 0;
     let dragMultiplier = 1;
     let dragging = false;
     let suppressClick = false;
 
     const pointerDown = (event: PointerEvent) => {
       if (!event.isPrimary || event.button !== 0) return;
+      cancelAnimationFrame(momentumFrame);
       pointerId = event.pointerId;
+      pointerType = event.pointerType;
       startX = event.clientX;
       startY = event.clientY;
       lastX = event.clientX;
-      dragMultiplier = event.pointerType === 'touch' ? 2.15 : event.pointerType === 'pen' ? 1.35 : 1;
+      lastTime = performance.now();
+      velocity = 0;
+      dragMultiplier = event.pointerType === 'touch' ? touchMultiplier : event.pointerType === 'pen' ? 1.35 : 1;
       dragging = false;
       element.setPointerCapture?.(event.pointerId);
     };
@@ -39,16 +66,39 @@ export function useDragScroll<T extends HTMLElement>(ref: RefObject<T | null>, o
       const deltaX = event.clientX - startX;
       const deltaY = event.clientY - startY;
       if (!dragging) {
-        if (Math.abs(deltaX) < 4 || Math.abs(deltaX) <= Math.abs(deltaY)) return;
+        if (Math.abs(deltaX) < activationDistance || Math.abs(deltaX) <= Math.abs(deltaY) * 0.75) return;
         dragging = true;
         suppressClick = true;
         element.classList.add('is-dragging');
         startCallbackRef.current?.();
       }
       event.preventDefault();
+      const currentTime = performance.now();
       const movementX = event.clientX - lastX;
-      element.scrollLeft -= movementX * dragMultiplier;
+      const movement = -movementX * dragMultiplier;
+      const elapsed = Math.max(8, currentTime - lastTime);
+      element.scrollLeft += movement;
+      if (loop) {
+        const cycle = element.scrollWidth / 2;
+        if (cycle > 0 && element.scrollLeft <= 1) element.scrollLeft += cycle;
+        else if (cycle > 0 && element.scrollLeft >= cycle) element.scrollLeft -= cycle;
+      }
+      velocity = velocity * 0.35 + (movement / elapsed) * 0.65;
       lastX = event.clientX;
+      lastTime = currentTime;
+    };
+
+    const startMomentum = () => {
+      if (!momentum || pointerType !== 'touch' || Math.abs(velocity) < 0.08 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      let previousTime = performance.now();
+      const glide = (currentTime: number) => {
+        const elapsed = Math.min(currentTime - previousTime, 32);
+        previousTime = currentTime;
+        element.scrollLeft += velocity * elapsed;
+        velocity *= Math.pow(momentumFriction, elapsed / 16.67);
+        if (Math.abs(velocity) >= 0.025) momentumFrame = requestAnimationFrame(glide);
+      };
+      momentumFrame = requestAnimationFrame(glide);
     };
 
     const pointerUp = (event: PointerEvent) => {
@@ -58,6 +108,7 @@ export function useDragScroll<T extends HTMLElement>(ref: RefObject<T | null>, o
       element.classList.remove('is-dragging');
       if (element.hasPointerCapture?.(event.pointerId)) element.releasePointerCapture(event.pointerId);
       if (didDrag) endCallbackRef.current?.(element.scrollLeft);
+      if (didDrag && event.type !== 'pointercancel') startMomentum();
       window.setTimeout(() => { suppressClick = false; }, 180);
     };
 
@@ -73,13 +124,14 @@ export function useDragScroll<T extends HTMLElement>(ref: RefObject<T | null>, o
     element.addEventListener('pointercancel', pointerUp);
     element.addEventListener('click', click, true);
     return () => {
+      cancelAnimationFrame(momentumFrame);
       element.removeEventListener('pointerdown', pointerDown);
       element.removeEventListener('pointermove', pointerMove);
       element.removeEventListener('pointerup', pointerUp);
       element.removeEventListener('pointercancel', pointerUp);
       element.removeEventListener('click', click, true);
     };
-  }, [ref]);
+  }, [activationDistance, loop, momentum, momentumFriction, ref, touchMultiplier]);
 }
 
 export function usePageSwipe(onMove: (direction: -1 | 1) => void) {

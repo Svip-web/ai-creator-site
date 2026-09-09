@@ -11,7 +11,7 @@ type CareerShowcaseGalleryProps = {
 
 export default function CareerShowcaseGallery({ images }: CareerShowcaseGalleryProps) {
   const galleryRef = useRef<HTMLDivElement>(null);
-  useDragScroll(galleryRef);
+  useDragScroll(galleryRef, { touchMultiplier: 3.2, activationDistance: 2, loop: true });
 
   useEffect(() => {
     const mobile = window.matchMedia('(max-width: 900px)');
@@ -24,9 +24,9 @@ export default function CareerShowcaseGallery({ images }: CareerShowcaseGalleryP
       const elapsed = Math.min(currentTime - previousTime, 50);
       previousTime = currentTime;
 
-      if (gallery && mobile.matches && !reducedMotion.matches && !document.hidden) {
+      if (gallery && mobile.matches && !reducedMotion.matches && !document.hidden && !gallery.classList.contains('is-dragging')) {
         const cycle = gallery.scrollWidth / 2;
-        gallery.scrollLeft += elapsed * 0.098;
+        gallery.scrollLeft += elapsed * 0.075;
         if (cycle > 0 && gallery.scrollLeft >= cycle) gallery.scrollLeft -= cycle;
       }
 
