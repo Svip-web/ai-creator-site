@@ -1205,8 +1205,23 @@
   .hero h1{position:relative;top:-12px;font-size:clamp(24px,8.4vw,34px);line-height:1;white-space:nowrap}
   .hero h1 br{display:block}
   .income{position:relative;top:-12px;height:46px;margin-top:0}
-  .hero-person{bottom:0;width:122%;height:640px}
-  .hero-action-card{top:calc(100% + 230px);width:calc(100% + 12px);max-width:none}
+  .hero-person{
+    top:calc(139px + clamp(72px,25.2vw,102px));
+    bottom:auto;
+    width:460px;
+    max-width:none;
+    height:585px;
+  }
+  .hero-action-card{top:calc(100% + 250px);width:calc(100% + 12px);max-width:none}
+  .hero-signature{
+    display:block;
+    left:50%;
+    bottom:18px;
+    color:#fff;
+    font-size:30px;
+    transform:translateX(-50%);
+    text-shadow:0 2px 12px #000a;
+  }
   .hero-action-card .proof{
     align-items:center;
     justify-content:center;
