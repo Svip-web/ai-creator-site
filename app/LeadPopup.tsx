@@ -264,7 +264,6 @@ export default function LeadPopup() {
               <input ref={phoneInputRef} id="lead-phone" type="tel" name="phone_intlTelInput" autoComplete="tel" inputMode="tel" aria-invalid={Boolean(phoneError)} aria-describedby={phoneError ? 'lead-phone-error' : undefined} onInput={() => setPhoneError('')} required />
             </span>
             <input ref={hiddenPhoneRef} type="hidden" name="phone" />
-            <input type="hidden" name="source" value={source} readOnly />
             {phoneError && <small id="lead-phone-error">{phoneError}</small>}
               {submitError && <small role="alert">{submitError}</small>}
               <button type="submit" disabled={submitting}><span>{submitting ? 'Отправляем…' : isConsultation ? 'Получить консультацию' : 'Отправить заявку'}</span><i><img src="/assets/images/like.svg" alt="" /></i></button>
