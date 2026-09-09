@@ -3,7 +3,6 @@
 /* oxlint-disable next/no-img-element */
 
 import { useEffect, useRef } from 'react';
-import { useDragScroll } from './useDragSlider';
 
 type CareerShowcaseGalleryProps = {
   images: string[];
@@ -11,7 +10,6 @@ type CareerShowcaseGalleryProps = {
 
 export default function CareerShowcaseGallery({ images }: CareerShowcaseGalleryProps) {
   const galleryRef = useRef<HTMLDivElement>(null);
-  useDragScroll(galleryRef, { touchMultiplier: 3.2, activationDistance: 2, loop: true });
 
   useEffect(() => {
     const mobile = window.matchMedia('(max-width: 900px)');
@@ -38,7 +36,7 @@ export default function CareerShowcaseGallery({ images }: CareerShowcaseGalleryP
   }, []);
 
   return (
-    <div className="career-showcase__gallery drag-scroll" ref={galleryRef} aria-label="Примеры AI-контента">
+    <div className="career-showcase__gallery" ref={galleryRef} aria-label="Примеры AI-контента">
       <div className="career-showcase__track">
         {[0, 1].map((copy) => images.map((src, index) => (
           <img

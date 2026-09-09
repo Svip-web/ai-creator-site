@@ -1090,16 +1090,13 @@
   .program-close{display:none}
 }
 
-/* Let the portfolio collage be swiped directly on touch screens. */
+/* Keep the mobile portfolio collage automatic, without horizontal touch dragging. */
 @media(max-width:900px){
   .career-showcase__gallery{
-    overflow-x:auto;
-    overflow-y:hidden;
-    overscroll-behavior-inline:contain;
+    overflow:hidden;
     scroll-snap-type:none;
     scrollbar-width:none;
     touch-action:pan-y;
-    -webkit-overflow-scrolling:touch;
   }
   .career-showcase__gallery::-webkit-scrollbar{display:none}
   .career-showcase__track{animation:none;will-change:auto;transform:none}
@@ -1109,25 +1106,22 @@
   .career-showcase__track{animation:none}
 }
 
-/* Mobile student works run continuously and remain freely draggable. */
+/* Mobile student works run continuously without manual horizontal dragging. */
 @media(max-width:900px){
   .student-works-controls{display:none!important}
-  .student-works-slider{scroll-behavior:auto;scroll-snap-type:none}
-  .student-works-slider .student-work-card{scroll-snap-align:none;scroll-snap-stop:normal}
+  .student-works-slider{overflow-x:hidden;scroll-behavior:auto;scroll-snap-type:none;touch-action:pan-y}
+  .student-works-slider .student-work-card{flex:0 0 74%;width:74%;max-width:74%;height:320px;scroll-snap-align:none;scroll-snap-stop:normal}
   .review-cards{overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}
   .review-card-open{touch-action:pan-y pinch-zoom;-webkit-user-select:none;user-select:none}
 }
 
-/* Match portfolio marquee speed and allow direct mouse dragging on desktop. */
+/* Match portfolio marquee speed while keeping the marquee automatic. */
 @media(min-width:901px){
   .student-works-marquee{
-    overflow-x:auto;
-    overflow-y:hidden;
-    overscroll-behavior-inline:contain;
+    overflow:hidden;
     scrollbar-width:none;
   }
   .student-works-marquee::-webkit-scrollbar{display:none}
-  .student-works-marquee.is-dragging .student-works-track{animation-play-state:paused}
   .career-showcase__track{animation-duration:25s}
 }
 

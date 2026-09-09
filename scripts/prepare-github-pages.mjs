@@ -21,7 +21,10 @@ async function patchDirectory(directory) {
     const patched = source
       .replaceAll(/(?<!\/ai-creator-site)\/assets\//g, `${repositoryBasePath}/assets/`)
       .replaceAll(/(?<!\/ai-creator-site)\/_next\//g, `${repositoryBasePath}/_next/`)
-      .replaceAll(/(?<!\/ai-creator-site)\/favicon\.svg/g, `${repositoryBasePath}/favicon.svg`);
+      .replaceAll(
+        /(?<!\/ai-creator-site)\/favicon\.(svg|png|ico)/g,
+        (_, extension) => `${repositoryBasePath}/favicon.${extension}`,
+      );
     if (patched !== source) await writeFile(path, patched);
   }
 }

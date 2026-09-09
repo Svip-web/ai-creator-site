@@ -10,12 +10,12 @@ const formConfig = {
   url: 'https://mufiksoft.com/shopifyband/amo-panel/forms.php',
   presets: {
     smartsender: {
-      title: 'Реєстрація на веб {{tomorrowDate}} — сайт №2',
+      title: 'Консультация сайт (без цены)',
       stage: '105820611',
-      tag: 'Регистрация',
+      tag: 'консультация;сайт;дожим',
       product: 'Ai-creator',
-      type_lead: 'Реєстрація',
-      req: 'reg-web',
+      type_lead: 'Теплый',
+      req: 'etsy_no_pay_4',
     },
   },
 };

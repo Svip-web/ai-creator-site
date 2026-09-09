@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { useDragScroll } from './useDragSlider';
 
 /* oxlint-disable next/no-img-element */
 
@@ -11,10 +10,7 @@ const works = Array.from(
 );
 
 export default function StudentWorks() {
-  const marqueeRef = useRef<HTMLDivElement>(null);
   const sliderRef = useRef<HTMLDivElement>(null);
-  useDragScroll(marqueeRef, { touchMultiplier: 3.2, activationDistance: 2, loop: true });
-  useDragScroll(sliderRef, { touchMultiplier: 3.2, activationDistance: 2, loop: true });
 
   useEffect(() => {
     const media = window.matchMedia('(max-width: 900px)');
@@ -55,14 +51,14 @@ export default function StudentWorks() {
         <h3>Работы наших учениц</h3>
       </div>
 
-      <div className="student-works-marquee drag-scroll" ref={marqueeRef} aria-label="Работы учениц">
+      <div className="student-works-marquee" aria-label="Работы учениц">
         <div className="student-works-track">
           <div className="student-works-group">{cards}</div>
           <div className="student-works-group" aria-hidden="true">{works.map((src) => <figure className="student-work-card" key={`${src}-copy`}><img src={src} alt="" loading="lazy" decoding="async" /></figure>)}</div>
         </div>
       </div>
 
-      <div className="student-works-slider drag-scroll" ref={sliderRef} aria-label="Слайдер работ учениц">
+      <div className="student-works-slider" ref={sliderRef} aria-label="Слайдер работ учениц">
         {cards}
         {works.map((src) => <figure className="student-work-card" aria-hidden="true" key={`${src}-mobile-copy`}><img src={src} alt="" loading="lazy" decoding="async" /></figure>)}
       </div>
